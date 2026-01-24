@@ -103,8 +103,12 @@
             font-size: 13px;
             overflow: auto;
             background: #fff;
+        }
+        .output-area pre {
+            margin: 0;
             white-space: pre-wrap;
-            word-break: break-all;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .action-buttons {
@@ -279,7 +283,7 @@
             try {
                 const obj = JSON.parse(input.value);
                 const minified = JSON.stringify(obj);
-                output.innerHTML = '<pre style="word-break:break-all">' + syntaxHighlight(minified) + '</pre>';
+                output.innerHTML = '<pre>' + syntaxHighlight(minified) + '</pre>';
                 showStatus('압축 완료 (' + minified.length + '자)');
             } catch (e) {
                 showStatus(e.message, true);
