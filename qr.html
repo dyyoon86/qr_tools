@@ -245,25 +245,6 @@
     </footer>
 
     <script>
-        function loadQRCodeLib(callback) {
-            var script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-            script.onload = callback;
-            script.onerror = function() {
-                var fallback = document.createElement('script');
-                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
-                fallback.onload = callback;
-                document.head.appendChild(fallback);
-            };
-            document.head.appendChild(script);
-        }
-
-        loadQRCodeLib(function() {
-            if (typeof QRCode !== 'undefined') {
-                setTimeout(generateQR, 100);
-            }
-        });
-
         function setType(type, btn) {
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -341,6 +322,24 @@
                 URL.revokeObjectURL(url);
             });
         }
+
+        // 라이브러리 로드
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            script.onload = function() {
+                setTimeout(generateQR, 100);
+            };
+            script.onerror = function() {
+                var fallback = document.createElement('script');
+                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+                fallback.onload = function() {
+                    setTimeout(generateQR, 100);
+                };
+                document.head.appendChild(fallback);
+            };
+            document.head.appendChild(script);
+        })();
     </script>
 </body>
 </html>

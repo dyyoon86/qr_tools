@@ -311,21 +311,6 @@
     </footer>
 
     <script>
-        function loadQRCodeLib(callback) {
-            var script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-            script.onload = callback;
-            script.onerror = function() {
-                var fallback = document.createElement('script');
-                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
-                fallback.onload = callback;
-                document.head.appendChild(fallback);
-            };
-            document.head.appendChild(script);
-        }
-        loadQRCodeLib(function() {});
-    </script>
-    <script>
         let wifiData = '';
 
         function togglePassword() {
@@ -434,6 +419,18 @@
             ctx.fillText('WiFi 정보를 입력하고', 128, 120);
             ctx.fillText('생성 버튼을 클릭하세요', 128, 140);
         });
+
+        // 라이브러리 로드
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            script.onerror = function() {
+                var fallback = document.createElement('script');
+                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+                document.head.appendChild(fallback);
+            };
+            document.head.appendChild(script);
+        })();
     </script>
 </body>
 </html>
