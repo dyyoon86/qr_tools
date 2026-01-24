@@ -267,11 +267,34 @@
             const size = parseInt(document.getElementById('qr-size').value);
             const canvas = document.getElementById('qr-canvas');
 
-            if (!input) return;
+            if (!input || input === 'https://') {
+                // 빈 입력일 때 안내 메시지 표시
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#f5f5f7';
+                ctx.fillRect(0, 0, size, size);
+                ctx.fillStyle = '#86868b';
+                ctx.font = '14px Pretendard';
+                ctx.textAlign = 'center';
+                ctx.fillText('URL 또는 텍스트를 입력하고', size/2, size/2 - 10);
+                ctx.fillText('생성 버튼을 클릭하세요', size/2, size/2 + 10);
+                return;
+            }
+
+            if (typeof QRCode === 'undefined') {
+                alert('QR코드 라이브러리를 불러오지 못했습니다. 페이지를 새로고침해주세요.');
+                return;
+            }
 
             QRCode.toCanvas(canvas, input, {
                 width: size, margin: 2,
                 color: { dark: color, light: bgColor }
+            }, function(error) {
+                if (error) {
+                    console.error(error);
+                    alert('QR코드 생성 중 오류가 발생했습니다: ' + error.message);
+                }
             });
         }
 
