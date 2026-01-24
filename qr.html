@@ -244,16 +244,21 @@
         <p>Copyright © 2026 ionflow.xyz</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
-        // CDN 폴백
-        if (typeof QRCode === 'undefined') {
-            document.write('<script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"><\/script>');
+        function loadQRCodeLib(callback) {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            script.onload = callback;
+            script.onerror = function() {
+                var fallback = document.createElement('script');
+                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+                fallback.onload = callback;
+                document.head.appendChild(fallback);
+            };
+            document.head.appendChild(script);
         }
-    </script>
-    <script>
-        // 페이지 로드 후 초기화
-        window.addEventListener('load', function() {
+
+        loadQRCodeLib(function() {
             if (typeof QRCode !== 'undefined') {
                 setTimeout(generateQR, 100);
             }
