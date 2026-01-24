@@ -281,6 +281,7 @@
         <p>Copyright © 2026 ionflow.xyz</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
         let vcardData = '';
 
@@ -395,17 +396,6 @@
             ctx.fillText('생성 버튼을 클릭하세요', 128, 140);
         });
 
-        // 라이브러리 로드
-        (function() {
-            var script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-            script.onerror = function() {
-                var fallback = document.createElement('script');
-                fallback.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
-                document.head.appendChild(fallback);
-            };
-            document.head.appendChild(script);
-        })();
     </script>
 </body>
 </html>
