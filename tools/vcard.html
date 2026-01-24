@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiFi QR코드 생성기 - ionflow.xyz</title>
-    <meta name="description" content="WiFi 네트워크 정보를 QR코드로 만들어 손쉽게 공유하세요.">
+    <title>명함 QR코드 생성기 - ionflow.xyz</title>
+    <meta name="description" content="명함에 넣을 QR코드를 무료로 생성하세요. 연락처를 vCard 형식으로 변환합니다.">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
         crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
 
     <style>
         .page-header {
@@ -39,10 +39,12 @@
 
         .input-group { margin-bottom: 16px; }
         .input-group label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         input[type="text"],
-        input[type="password"],
-        select {
+        input[type="tel"],
+        input[type="email"],
+        input[type="url"] {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid #d2d2d7;
@@ -50,31 +52,7 @@
             font-size: 15px;
             background: #fff;
         }
-        input:focus, select:focus { outline: none; border-color: #86868b; }
-
-        .password-wrapper {
-            position: relative;
-        }
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #1d1d1f;
-            cursor: pointer;
-        }
-        .checkbox-label input { width: 16px; height: 16px; }
+        input:focus { outline: none; border-color: #86868b; }
 
         .color-row { display: flex; gap: 16px; }
         .color-row > div { flex: 1; }
@@ -111,6 +89,23 @@
             min-height: 280px;
         }
 
+        .placeholder-text {
+            color: #86868b;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .vcard-preview {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fff;
+            border-radius: 12px;
+            display: none;
+        }
+        .vcard-preview.show { display: block; }
+        .vcard-preview h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .vcard-preview p { font-size: 13px; color: #86868b; margin-bottom: 4px; }
+
         .download-buttons { display: flex; gap: 12px; margin-top: 20px; }
         .download-btn {
             flex: 1;
@@ -126,23 +121,6 @@
         .download-btn.png:hover { background: #2db350; }
         .download-btn.svg { background: #af52de; color: #fff; }
         .download-btn.svg:hover { background: #9b3fd1; }
-
-        .info-section {
-            background: #f5f5f7;
-            border-radius: 18px;
-            padding: 32px;
-            margin-bottom: 32px;
-        }
-        .info-section h2 { font-size: 21px; font-weight: 600; margin-bottom: 20px; }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-        .info-item { text-align: center; }
-        .info-item .icon { font-size: 32px; margin-bottom: 12px; }
-        .info-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-        .info-item p { font-size: 13px; color: #86868b; line-height: 1.5; }
 
         .ad-space {
             max-width: 728px;
@@ -169,50 +147,66 @@
             .tool-container { grid-template-columns: 1fr; }
             .page-header h1 { font-size: 32px; }
             nav { display: none; }
-            .info-grid { grid-template-columns: 1fr; }
+            .input-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="page-header">
-        <h1>WiFi QR코드</h1>
-        <p>WiFi 정보를 QR코드로 만들어 간편하게 공유하세요</p>
+        <h1>명함 QR코드</h1>
+        <p>연락처 정보를 QR코드로 만들어 명함에 활용하세요</p>
     </div>
 
     <main>
         <div class="tool-container">
             <div class="panel">
-                <div class="panel-title">WiFi 정보 입력</div>
+                <div class="panel-title">연락처 정보</div>
 
-                <div class="input-group">
-                    <label>네트워크 이름 (SSID) *</label>
-                    <input type="text" id="wifi-ssid" placeholder="WiFi 이름을 입력하세요">
+                <div class="input-row input-group">
+                    <div>
+                        <label>성 *</label>
+                        <input type="text" id="last-name" placeholder="홍">
+                    </div>
+                    <div>
+                        <label>이름 *</label>
+                        <input type="text" id="first-name" placeholder="길동">
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label>비밀번호</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="wifi-password" placeholder="비밀번호를 입력하세요">
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
-                            <span id="eye-icon">◉</span>
-                        </button>
+                <div class="input-row input-group">
+                    <div>
+                        <label>회사</label>
+                        <input type="text" id="company" placeholder="(주)회사명">
+                    </div>
+                    <div>
+                        <label>직책</label>
+                        <input type="text" id="title" placeholder="대리">
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>암호화 방식</label>
-                    <select id="wifi-encryption">
-                        <option value="WPA">WPA/WPA2/WPA3 (권장)</option>
-                        <option value="WEP">WEP (구형)</option>
-                        <option value="nopass">암호 없음</option>
-                    </select>
+                    <label>휴대폰 *</label>
+                    <input type="tel" id="phone" placeholder="010-1234-5678">
                 </div>
 
                 <div class="input-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="wifi-hidden">
-                        숨겨진 네트워크 (Hidden SSID)
-                    </label>
+                    <label>회사전화</label>
+                    <input type="tel" id="work-phone" placeholder="02-123-4567">
+                </div>
+
+                <div class="input-group">
+                    <label>이메일</label>
+                    <input type="email" id="email" placeholder="email@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label>웹사이트</label>
+                    <input type="url" id="website" placeholder="https://example.com">
+                </div>
+
+                <div class="input-group">
+                    <label>주소</label>
+                    <input type="text" id="address" placeholder="서울시 강남구 테헤란로 123">
                 </div>
 
                 <div class="color-row input-group">
@@ -226,40 +220,25 @@
                     </div>
                 </div>
 
-                <button class="generate-btn" onclick="generateWifiQR()">QR코드 생성</button>
+                <button class="generate-btn" onclick="generateVCardQR()">명함 QR코드 생성</button>
             </div>
 
             <div class="panel">
                 <div class="panel-title">미리보기</div>
                 <div class="qr-preview">
-                    <div id="qr-container"></div>
+                    <div id="qr-container">
+                        <div class="placeholder-text">연락처 정보를 입력하고<br>생성 버튼을 클릭하세요</div>
+                    </div>
                 </div>
+
+                <div id="vcard-preview" class="vcard-preview">
+                    <h3>저장될 정보</h3>
+                    <div id="preview-content"></div>
+                </div>
+
                 <div class="download-buttons">
                     <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
                     <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="ad-space">광고</div>
-
-        <div class="info-section">
-            <h2>WiFi QR코드 사용 방법</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="icon">◲</div>
-                    <h3>1. QR코드 생성</h3>
-                    <p>WiFi 이름과 비밀번호를 입력하고 QR코드를 생성합니다</p>
-                </div>
-                <div class="info-item">
-                    <div class="icon">⬇</div>
-                    <h3>2. 다운로드/인쇄</h3>
-                    <p>PNG 또는 SVG로 다운로드하여 인쇄하거나 화면에 표시합니다</p>
-                </div>
-                <div class="info-item">
-                    <div class="icon">◎</div>
-                    <h3>3. 스캔하여 연결</h3>
-                    <p>스마트폰 카메라로 스캔하면 자동으로 WiFi에 연결됩니다</p>
                 </div>
             </div>
         </div>
@@ -271,37 +250,27 @@
     <script>
         let qrcode = null;
 
-        function togglePassword() {
-            const input = document.getElementById('wifi-password');
-            const icon = document.getElementById('eye-icon');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.textContent = '○';
-            } else {
-                input.type = 'password';
-                icon.textContent = '◉';
-            }
-        }
-
-        function escapeWifiString(str) {
-            return str.replace(/\\/g, '\\\\')
-                      .replace(/;/g, '\\;')
-                      .replace(/:/g, '\\:')
-                      .replace(/,/g, '\\,')
-                      .replace(/"/g, '\\"');
-        }
-
-        function generateWifiQR() {
-            const ssid = document.getElementById('wifi-ssid').value.trim();
-            const password = document.getElementById('wifi-password').value;
-            const encryption = document.getElementById('wifi-encryption').value;
-            const hidden = document.getElementById('wifi-hidden').checked;
+        function generateVCardQR() {
+            const lastName = document.getElementById('last-name').value.trim();
+            const firstName = document.getElementById('first-name').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const workPhone = document.getElementById('work-phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const website = document.getElementById('website').value.trim();
+            const address = document.getElementById('address').value.trim();
             const color = document.getElementById('qr-color').value;
             const bgColor = document.getElementById('bg-color').value;
             const container = document.getElementById('qr-container');
 
-            if (!ssid) {
-                alert('네트워크 이름(SSID)을 입력해주세요.');
+            if (!lastName || !firstName) {
+                alert('성과 이름을 입력해주세요.');
+                return;
+            }
+
+            if (!phone) {
+                alert('휴대폰 번호를 입력해주세요.');
                 return;
             }
 
@@ -310,33 +279,47 @@
                 return;
             }
 
-            let wifiString = 'WIFI:';
-            wifiString += `T:${encryption};`;
-            wifiString += `S:${escapeWifiString(ssid)};`;
+            let vcard = 'BEGIN:VCARD\n';
+            vcard += 'VERSION:3.0\n';
+            vcard += `N:${lastName};${firstName};;;\n`;
+            vcard += `FN:${lastName}${firstName}\n`;
 
-            if (encryption !== 'nopass' && password) {
-                wifiString += `P:${escapeWifiString(password)};`;
-            }
+            if (company) vcard += `ORG:${company}\n`;
+            if (title) vcard += `TITLE:${title}\n`;
+            vcard += `TEL;TYPE=CELL:${phone}\n`;
+            if (workPhone) vcard += `TEL;TYPE=WORK:${workPhone}\n`;
+            if (email) vcard += `EMAIL:${email}\n`;
+            if (website) vcard += `URL:${website}\n`;
+            if (address) vcard += `ADR;TYPE=WORK:;;${address};;;;\n`;
 
-            if (hidden) {
-                wifiString += 'H:true;';
-            }
+            vcard += 'END:VCARD';
 
-            wifiString += ';';
+            const previewContent = document.getElementById('preview-content');
+            previewContent.innerHTML = `
+                <p><strong>이름:</strong> ${lastName}${firstName}</p>
+                ${company ? `<p><strong>회사:</strong> ${company}</p>` : ''}
+                ${title ? `<p><strong>직책:</strong> ${title}</p>` : ''}
+                <p><strong>휴대폰:</strong> ${phone}</p>
+                ${workPhone ? `<p><strong>회사전화:</strong> ${workPhone}</p>` : ''}
+                ${email ? `<p><strong>이메일:</strong> ${email}</p>` : ''}
+                ${website ? `<p><strong>웹사이트:</strong> ${website}</p>` : ''}
+                ${address ? `<p><strong>주소:</strong> ${address}</p>` : ''}
+            `;
+            document.getElementById('vcard-preview').classList.add('show');
 
             container.innerHTML = '';
 
             try {
                 qrcode = new QRCode(container, {
-                    text: wifiString,
+                    text: vcard,
                     width: 256,
                     height: 256,
                     colorDark: color,
                     colorLight: bgColor,
-                    correctLevel: QRCode.CorrectLevel.M
+                    correctLevel: QRCode.CorrectLevel.L
                 });
             } catch (e) {
-                container.innerHTML = '<div style="color:#ff3b30;text-align:center;font-size:14px;">QR코드 생성 실패</div>';
+                container.innerHTML = '<div class="placeholder-text" style="color:#ff3b30;">QR코드 생성 실패<br>입력 데이터가 너무 깁니다.</div>';
                 console.error('QR Code generation failed:', e);
             }
         }
@@ -351,7 +334,7 @@
             }
 
             const link = document.createElement('a');
-            link.download = 'wifi-qrcode.png';
+            link.download = 'vcard-qrcode.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
@@ -381,12 +364,12 @@
             const blob = new Blob([svgData], { type: 'image/svg+xml' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.download = 'wifi-qrcode.svg';
+            link.download = 'vcard-qrcode.svg';
             link.href = url;
             link.click();
             URL.revokeObjectURL(url);
         }
     </script>
-    <script src="layout.js"></script>
+    <script src="/assets/js/layout.js"></script>
 </body>
 </html>

@@ -6,18 +6,18 @@
 
     // Navigation items
     const navItems = [
-        { href: '/qr.html', label: 'QR 생성기' },
-        { href: '/json.html', label: 'JSON' },
-        { href: '/base64.html', label: 'Base64' },
-        { href: '/hash.html', label: 'Hash' }
+        { href: '/tools/qr.html', label: 'QR 생성기' },
+        { href: '/tools/json.html', label: 'JSON' },
+        { href: '/tools/base64.html', label: 'Base64' },
+        { href: '/tools/hash.html', label: 'Hash' }
     ];
 
     // Footer links
     const footerLinks = [
-        { href: '/about.html', label: '소개' },
-        { href: '/contact.html', label: '문의' },
-        { href: '/privacy.html', label: '개인정보처리방침' },
-        { href: '/terms.html', label: '이용약관' }
+        { href: '/pages/about.html', label: '소개' },
+        { href: '/pages/contact.html', label: '문의' },
+        { href: '/pages/privacy.html', label: '개인정보처리방침' },
+        { href: '/pages/terms.html', label: '이용약관' }
     ];
 
     // Create header HTML with inline styles to ensure consistency
