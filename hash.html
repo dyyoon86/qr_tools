@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash 생성기 - ionflow.xyz</title>
+    <meta name="description" content="온라인 Hash 생성기. MD5, SHA-1, SHA-256, SHA-512 해시를 즉시 생성하세요.">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+
+        header {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 21px; font-weight: 600; }
+        nav { display: flex; gap: 28px; }
+        nav a { font-size: 12px; opacity: 0.8; }
+        nav a:hover { opacity: 1; }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 22px 40px;
+            background: #fbfbfd;
+        }
+        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 19px; color: #86868b; }
+
+        main { max-width: 800px; margin: 0 auto; padding: 40px 22px 80px; }
+
+        .panel {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .panel-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 15px;
+            resize: none;
+            background: #fff;
+        }
+        textarea:focus { outline: none; border-color: #86868b; }
+
+        .hash-results { margin-top: 24px; }
+        .hash-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .hash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .hash-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        .hash-label .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            background: #34c759;
+            color: #fff;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        .hash-label .badge.warn {
+            background: #ff9500;
+        }
+        .hash-label .badge.danger {
+            background: #ff3b30;
+        }
+        .copy-btn {
+            padding: 6px 12px;
+            background: #e8e8ed;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #d2d2d7; }
+        .hash-value {
+            width: 100%;
+            padding: 10px;
+            background: #f5f5f7;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .options {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #86868b;
+            cursor: pointer;
+        }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.show { display: block; background: #d1f5d3; color: #1d7324; }
+
+        .info-section {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 32px;
+        }
+        .info-section h2 { font-size: 21px; font-weight: 600; margin-bottom: 16px; }
+        .info-section p { font-size: 15px; color: #86868b; margin-bottom: 16px; line-height: 1.6; }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table th,
+        .info-table td {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .info-table th {
+            background: #e8e8ed;
+            font-weight: 600;
+        }
+        .info-table th:first-child { border-radius: 8px 0 0 8px; }
+        .info-table th:last-child { border-radius: 0 8px 8px 0; }
+        .info-table td { color: #86868b; border-bottom: 1px solid #e8e8ed; }
+        .info-table tr:last-child td { border-bottom: none; }
+        .status-safe { color: #34c759; }
+        .status-warn { color: #ff9500; }
+        .status-danger { color: #ff3b30; }
+
+        .ad-space {
+            max-width: 728px;
+            margin: 40px auto;
+            height: 90px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #f5f5f7;
+            padding: 20px 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">ionflow</a>
+            <nav>
+                <a href="/qr.html">QR 생성기</a>
+                <a href="/json.html">JSON</a>
+                <a href="/password.html">비밀번호</a>
+                <a href="/hash.html">Hash</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>Hash Generator</h1>
+        <p>MD5, SHA-1, SHA-256, SHA-512 해시를 생성하세요</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="panel-title">입력 텍스트</div>
+            <textarea id="hash-input" placeholder="해시를 생성할 텍스트를 입력하세요..." oninput="generateHashes()"></textarea>
+
+            <div class="options">
+                <label>
+                    <input type="checkbox" id="uppercase" onchange="generateHashes()">
+                    대문자 출력
+                </label>
+            </div>
+
+            <div class="hash-results">
+                <div class="hash-item">
+                    <div class="hash-header">
+                        <span class="hash-label">MD5 (128-bit) <span class="badge danger">취약</span></span>
+                        <button class="copy-btn" onclick="copy('md5')">복사</button>
+                    </div>
+                    <input type="text" id="hash-md5" class="hash-value code-font" readonly>
+                </div>
+
+                <div class="hash-item">
+                    <div class="hash-header">
+                        <span class="hash-label">SHA-1 (160-bit) <span class="badge warn">취약</span></span>
+                        <button class="copy-btn" onclick="copy('sha1')">복사</button>
+                    </div>
+                    <input type="text" id="hash-sha1" class="hash-value code-font" readonly>
+                </div>
+
+                <div class="hash-item">
+                    <div class="hash-header">
+                        <span class="hash-label">SHA-256 (256-bit) <span class="badge">권장</span></span>
+                        <button class="copy-btn" onclick="copy('sha256')">복사</button>
+                    </div>
+                    <input type="text" id="hash-sha256" class="hash-value code-font" readonly>
+                </div>
+
+                <div class="hash-item">
+                    <div class="hash-header">
+                        <span class="hash-label">SHA-512 (512-bit)</span>
+                        <button class="copy-btn" onclick="copy('sha512')">복사</button>
+                    </div>
+                    <input type="text" id="hash-sha512" class="hash-value code-font" readonly style="font-size: 10px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+
+        <div class="info-section">
+            <h2>Hash란?</h2>
+            <p>해시 함수는 임의 길이의 데이터를 고정 길이의 값으로 변환합니다. 같은 입력은 항상 같은 해시를 생성하지만, 해시에서 원본을 복원할 수 없습니다.</p>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>알고리즘</th>
+                        <th>비트</th>
+                        <th>용도</th>
+                        <th>보안</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MD5</td>
+                        <td>128</td>
+                        <td>체크섬</td>
+                        <td class="status-danger">취약</td>
+                    </tr>
+                    <tr>
+                        <td>SHA-1</td>
+                        <td>160</td>
+                        <td>레거시</td>
+                        <td class="status-warn">취약</td>
+                    </tr>
+                    <tr>
+                        <td>SHA-256</td>
+                        <td>256</td>
+                        <td>범용</td>
+                        <td class="status-safe">안전</td>
+                    </tr>
+                    <tr>
+                        <td>SHA-512</td>
+                        <td>512</td>
+                        <td>고보안</td>
+                        <td class="status-safe">안전</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 ionflow.xyz</p>
+    </footer>
+
+    <script>
+        // Simple MD5 implementation
+        function md5(string) {
+            function rotateLeft(x, n) { return (x << n) | (x >>> (32 - n)); }
+            function addUnsigned(x, y) {
+                const x4 = x & 0x80000000, y4 = y & 0x80000000;
+                const x8 = x & 0x40000000, y8 = y & 0x40000000;
+                const result = (x & 0x3FFFFFFF) + (y & 0x3FFFFFFF);
+                if (x8 & y8) return result ^ 0x80000000 ^ x4 ^ y4;
+                if (x8 | y8) return result & 0x40000000 ? result ^ 0xC0000000 ^ x4 ^ y4 : result ^ 0x40000000 ^ x4 ^ y4;
+                return result ^ x4 ^ y4;
+            }
+            function F(x, y, z) { return (x & y) | (~x & z); }
+            function G(x, y, z) { return (x & z) | (y & ~z); }
+            function H(x, y, z) { return x ^ y ^ z; }
+            function I(x, y, z) { return y ^ (x | ~z); }
+            function FF(a, b, c, d, x, s, ac) { return addUnsigned(rotateLeft(addUnsigned(addUnsigned(a, F(b, c, d)), addUnsigned(x, ac)), s), b); }
+            function GG(a, b, c, d, x, s, ac) { return addUnsigned(rotateLeft(addUnsigned(addUnsigned(a, G(b, c, d)), addUnsigned(x, ac)), s), b); }
+            function HH(a, b, c, d, x, s, ac) { return addUnsigned(rotateLeft(addUnsigned(addUnsigned(a, H(b, c, d)), addUnsigned(x, ac)), s), b); }
+            function II(a, b, c, d, x, s, ac) { return addUnsigned(rotateLeft(addUnsigned(addUnsigned(a, I(b, c, d)), addUnsigned(x, ac)), s), b); }
+            function convertToWordArray(s) {
+                const lWordCount = (((s.length + 8) - ((s.length + 8) % 64)) / 64 + 1) * 16;
+                const lWordArray = Array(lWordCount - 1).fill(0);
+                for (let i = 0; i < s.length; i++) lWordArray[(i - (i % 4)) / 4] |= s.charCodeAt(i) << ((i % 4) * 8);
+                lWordArray[(s.length - (s.length % 4)) / 4] |= 0x80 << ((s.length % 4) * 8);
+                lWordArray[lWordCount - 2] = s.length * 8;
+                return lWordArray;
+            }
+            function wordToHex(v) {
+                let result = '';
+                for (let i = 0; i <= 3; i++) result += ((v >>> (i * 8)) & 255).toString(16).padStart(2, '0');
+                return result;
+            }
+            const S = [7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21];
+            const T = [0xD76AA478,0xE8C7B756,0x242070DB,0xC1BDCEEE,0xF57C0FAF,0x4787C62A,0xA8304613,0xFD469501,0x698098D8,0x8B44F7AF,0xFFFF5BB1,0x895CD7BE,0x6B901122,0xFD987193,0xA679438E,0x49B40821,0xF61E2562,0xC040B340,0x265E5A51,0xE9B6C7AA,0xD62F105D,0x02441453,0xD8A1E681,0xE7D3FBC8,0x21E1CDE6,0xC33707D6,0xF4D50D87,0x455A14ED,0xA9E3E905,0xFCEFA3F8,0x676F02D9,0x8D2A4C8A,0xFFFA3942,0x8771F681,0x6D9D6122,0xFDE5380C,0xA4BEEA44,0x4BDECFA9,0xF6BB4B60,0xBEBFBC70,0x289B7EC6,0xEAA127FA,0xD4EF3085,0x04881D05,0xD9D4D039,0xE6DB99E5,0x1FA27CF8,0xC4AC5665,0xF4292244,0x432AFF97,0xAB9423A7,0xFC93A039,0x655B59C3,0x8F0CCC92,0xFFEFF47D,0x85845DD1,0x6FA87E4F,0xFE2CE6E0,0xA3014314,0x4E0811A1,0xF7537E82,0xBD3AF235,0x2AD7D2BB,0xEB86D391];
+            const x = convertToWordArray(unescape(encodeURIComponent(string)));
+            let [a, b, c, d] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476];
+            for (let k = 0; k < x.length; k += 16) {
+                const [AA, BB, CC, DD] = [a, b, c, d];
+                for (let i = 0; i < 64; i++) {
+                    const fn = [FF, GG, HH, II][Math.floor(i / 16)];
+                    const idx = [i, (5*i+1)%16, (3*i+5)%16, 7*i%16][Math.floor(i / 16)];
+                    a = fn(a, b, c, d, x[k + idx], S[Math.floor(i / 16) * 4 + (i % 4)], T[i]);
+                    [a, b, c, d] = [d, a, b, c];
+                }
+                [a, b, c, d] = [addUnsigned(a, AA), addUnsigned(b, BB), addUnsigned(c, CC), addUnsigned(d, DD)];
+            }
+            return wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+        }
+
+        async function sha(algo, text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hash = await crypto.subtle.digest(algo, data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function generateHashes() {
+            const input = document.getElementById('hash-input').value;
+            const upper = document.getElementById('uppercase').checked;
+
+            if (!input) {
+                document.getElementById('hash-md5').value = '';
+                document.getElementById('hash-sha1').value = '';
+                document.getElementById('hash-sha256').value = '';
+                document.getElementById('hash-sha512').value = '';
+                return;
+            }
+
+            let md5Hash = md5(input);
+            let sha1Hash = await sha('SHA-1', input);
+            let sha256Hash = await sha('SHA-256', input);
+            let sha512Hash = await sha('SHA-512', input);
+
+            if (upper) {
+                md5Hash = md5Hash.toUpperCase();
+                sha1Hash = sha1Hash.toUpperCase();
+                sha256Hash = sha256Hash.toUpperCase();
+                sha512Hash = sha512Hash.toUpperCase();
+            }
+
+            document.getElementById('hash-md5').value = md5Hash;
+            document.getElementById('hash-sha1').value = sha1Hash;
+            document.getElementById('hash-sha256').value = sha256Hash;
+            document.getElementById('hash-sha512').value = sha512Hash;
+        }
+
+        function copy(type) {
+            const value = document.getElementById('hash-' + type).value;
+            if (!value) return;
+            navigator.clipboard.writeText(value).then(() => {
+                const s = document.getElementById('status');
+                s.textContent = '복사되었습니다';
+                s.classList.add('show');
+                setTimeout(() => s.classList.remove('show'), 3000);
+            });
+        }
+    </script>
+</body>
+</html>

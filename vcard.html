@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>명함 QR코드 생성기 - ionflow.xyz</title>
+    <meta name="description" content="명함에 넣을 QR코드를 무료로 생성하세요. 연락처를 vCard 형식으로 변환합니다.">
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        header {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 21px; font-weight: 600; }
+        nav { display: flex; gap: 28px; }
+        nav a { font-size: 12px; opacity: 0.8; }
+        nav a:hover { opacity: 1; }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 22px 40px;
+            background: #fbfbfd;
+        }
+        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 19px; color: #86868b; }
+
+        main { max-width: 980px; margin: 0 auto; padding: 40px 22px 80px; }
+
+        .tool-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .panel {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 28px;
+        }
+        .panel-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; }
+
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fff;
+        }
+        input:focus { outline: none; border-color: #86868b; }
+
+        .color-row { display: flex; gap: 16px; }
+        .color-row > div { flex: 1; }
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .generate-btn:hover { background: #424245; }
+
+        .qr-preview {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .vcard-preview {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fff;
+            border-radius: 12px;
+            display: none;
+        }
+        .vcard-preview.show { display: block; }
+        .vcard-preview h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .vcard-preview p { font-size: 13px; color: #86868b; margin-bottom: 4px; }
+
+        .download-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        .download-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .download-btn.png { background: #34c759; color: #fff; }
+        .download-btn.png:hover { background: #2db350; }
+        .download-btn.svg { background: #af52de; color: #fff; }
+        .download-btn.svg:hover { background: #9b3fd1; }
+
+        .ad-space {
+            max-width: 728px;
+            margin: 40px auto;
+            height: 90px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #f5f5f7;
+            padding: 20px 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 32px; }
+            nav { display: none; }
+            .input-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">ionflow</a>
+            <nav>
+                <a href="/qr.html">QR 생성기</a>
+                <a href="/wifi.html">WiFi QR</a>
+                <a href="/vcard.html">명함 QR</a>
+                <a href="/json.html">JSON</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>명함 QR코드</h1>
+        <p>연락처 정보를 QR코드로 만들어 명함에 활용하세요</p>
+    </div>
+
+    <main>
+        <div class="tool-container">
+            <div class="panel">
+                <div class="panel-title">연락처 정보</div>
+
+                <div class="input-row input-group">
+                    <div>
+                        <label>성 *</label>
+                        <input type="text" id="last-name" placeholder="홍">
+                    </div>
+                    <div>
+                        <label>이름 *</label>
+                        <input type="text" id="first-name" placeholder="길동">
+                    </div>
+                </div>
+
+                <div class="input-row input-group">
+                    <div>
+                        <label>회사</label>
+                        <input type="text" id="company" placeholder="(주)회사명">
+                    </div>
+                    <div>
+                        <label>직책</label>
+                        <input type="text" id="title" placeholder="대리">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>휴대폰 *</label>
+                    <input type="tel" id="phone" placeholder="010-1234-5678">
+                </div>
+
+                <div class="input-group">
+                    <label>회사전화</label>
+                    <input type="tel" id="work-phone" placeholder="02-123-4567">
+                </div>
+
+                <div class="input-group">
+                    <label>이메일</label>
+                    <input type="email" id="email" placeholder="email@example.com">
+                </div>
+
+                <div class="input-group">
+                    <label>웹사이트</label>
+                    <input type="url" id="website" placeholder="https://example.com">
+                </div>
+
+                <div class="input-group">
+                    <label>주소</label>
+                    <input type="text" id="address" placeholder="서울시 강남구 테헤란로 123">
+                </div>
+
+                <div class="color-row input-group">
+                    <div>
+                        <label>QR 색상</label>
+                        <input type="color" id="qr-color" value="#000000">
+                    </div>
+                    <div>
+                        <label>배경 색상</label>
+                        <input type="color" id="bg-color" value="#FFFFFF">
+                    </div>
+                </div>
+
+                <button class="generate-btn" onclick="generateVCardQR()">명함 QR코드 생성</button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">미리보기</div>
+                <div class="qr-preview">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+
+                <div id="vcard-preview" class="vcard-preview">
+                    <h3>저장될 정보</h3>
+                    <div id="preview-content"></div>
+                </div>
+
+                <div class="download-buttons">
+                    <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
+                    <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 ionflow.xyz</p>
+    </footer>
+
+    <script>
+        let vcardData = '';
+
+        function generateVCardQR() {
+            const lastName = document.getElementById('last-name').value.trim();
+            const firstName = document.getElementById('first-name').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const workPhone = document.getElementById('work-phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const website = document.getElementById('website').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const color = document.getElementById('qr-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+            const canvas = document.getElementById('qr-canvas');
+
+            if (!lastName || !firstName) {
+                alert('성과 이름을 입력해주세요.');
+                return;
+            }
+
+            if (!phone) {
+                alert('휴대폰 번호를 입력해주세요.');
+                return;
+            }
+
+            let vcard = 'BEGIN:VCARD\n';
+            vcard += 'VERSION:3.0\n';
+            vcard += `N:${lastName};${firstName};;;\n`;
+            vcard += `FN:${lastName}${firstName}\n`;
+
+            if (company) vcard += `ORG:${company}\n`;
+            if (title) vcard += `TITLE:${title}\n`;
+            vcard += `TEL;TYPE=CELL:${phone}\n`;
+            if (workPhone) vcard += `TEL;TYPE=WORK:${workPhone}\n`;
+            if (email) vcard += `EMAIL:${email}\n`;
+            if (website) vcard += `URL:${website}\n`;
+            if (address) vcard += `ADR;TYPE=WORK:;;${address};;;;\n`;
+
+            vcard += 'END:VCARD';
+            vcardData = vcard;
+
+            const previewContent = document.getElementById('preview-content');
+            previewContent.innerHTML = `
+                <p><strong>이름:</strong> ${lastName}${firstName}</p>
+                ${company ? `<p><strong>회사:</strong> ${company}</p>` : ''}
+                ${title ? `<p><strong>직책:</strong> ${title}</p>` : ''}
+                <p><strong>휴대폰:</strong> ${phone}</p>
+                ${workPhone ? `<p><strong>회사전화:</strong> ${workPhone}</p>` : ''}
+                ${email ? `<p><strong>이메일:</strong> ${email}</p>` : ''}
+                ${website ? `<p><strong>웹사이트:</strong> ${website}</p>` : ''}
+                ${address ? `<p><strong>주소:</strong> ${address}</p>` : ''}
+            `;
+            document.getElementById('vcard-preview').classList.add('show');
+
+            QRCode.toCanvas(canvas, vcard, {
+                width: 256,
+                margin: 2,
+                color: { dark: color, light: bgColor }
+            });
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById('qr-canvas');
+            const link = document.createElement('a');
+            link.download = 'vcard-qrcode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadSVG() {
+            if (!vcardData) {
+                alert('먼저 QR코드를 생성해주세요.');
+                return;
+            }
+
+            const color = document.getElementById('qr-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+
+            QRCode.toString(vcardData, {
+                type: 'svg',
+                color: { dark: color, light: bgColor }
+            }, function(error, svg) {
+                if (error) return;
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = 'vcard-qrcode.svg';
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('qr-canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#f5f5f7';
+            ctx.fillRect(0, 0, 256, 256);
+            ctx.fillStyle = '#86868b';
+            ctx.font = '14px Pretendard';
+            ctx.textAlign = 'center';
+            ctx.fillText('연락처 정보를 입력하고', 128, 120);
+            ctx.fillText('생성 버튼을 클릭하세요', 128, 140);
+        });
+    </script>
+</body>
+</html>

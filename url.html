@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL 인코더/디코더 - ionflow.xyz</title>
+    <meta name="description" content="URL 인코딩/디코딩 도구. URL에서 특수문자를 안전하게 인코딩하세요.">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+
+        header {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 21px; font-weight: 600; }
+        nav { display: flex; gap: 28px; }
+        nav a { font-size: 12px; opacity: 0.8; }
+        nav a:hover { opacity: 1; }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 22px 40px;
+            background: #fbfbfd;
+        }
+        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 19px; color: #86868b; }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 40px 22px 80px; }
+
+        .panel {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .tool-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .panel-title { font-size: 17px; font-weight: 600; }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 13px;
+            resize: none;
+            background: #fff;
+        }
+        textarea:focus { outline: none; border-color: #86868b; }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        .action-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn.primary { background: #1d1d1f; color: #fff; }
+        .action-btn.primary:hover { background: #424245; }
+        .action-btn.success { background: #34c759; color: #fff; }
+        .action-btn.success:hover { background: #2db350; }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #86868b;
+            cursor: pointer;
+        }
+
+        .examples {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .examples h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+        .example-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f7;
+        }
+        .example-item:last-child { border-bottom: none; }
+        .example-btn {
+            padding: 6px 12px;
+            background: #e8e8ed;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .example-btn:hover { background: #d2d2d7; }
+        .example-code { font-size: 12px; color: #86868b; }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.show { display: block; background: #d1f5d3; color: #1d7324; }
+
+        .info-section {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 32px;
+        }
+        .info-section h2 { font-size: 21px; font-weight: 600; margin-bottom: 16px; }
+        .info-section p { font-size: 15px; color: #86868b; margin-bottom: 16px; line-height: 1.6; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .info-grid h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .info-grid ul { list-style: none; }
+        .info-grid li { font-size: 13px; color: #86868b; margin-bottom: 4px; }
+        .info-grid li::before { content: "•"; margin-right: 8px; }
+
+        .ad-space {
+            max-width: 728px;
+            margin: 40px auto;
+            height: 90px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #f5f5f7;
+            padding: 20px 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 32px; }
+            nav { display: none; }
+            .info-grid { grid-template-columns: 1fr; }
+            .options { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">ionflow</a>
+            <nav>
+                <a href="/qr.html">QR 생성기</a>
+                <a href="/json.html">JSON</a>
+                <a href="/base64.html">Base64</a>
+                <a href="/url.html">URL</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>URL Encoder</h1>
+        <p>URL의 특수문자를 인코딩하거나 디코딩하세요</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="tool-container">
+                <div>
+                    <div class="panel-header">
+                        <span class="panel-title">원본 텍스트/URL</span>
+                    </div>
+                    <textarea id="decoded" class="code-font" placeholder="인코딩할 텍스트 입력...&#10;예: https://example.com/검색?q=테스트"></textarea>
+                </div>
+                <div>
+                    <div class="panel-header">
+                        <span class="panel-title">인코딩된 URL</span>
+                    </div>
+                    <textarea id="encoded" class="code-font" placeholder="디코딩할 URL 입력...&#10;예: https%3A%2F%2Fexample.com"></textarea>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="encode()">인코딩 →</button>
+                <button class="action-btn success" onclick="decode()">← 디코딩</button>
+            </div>
+
+            <div class="options">
+                <label>
+                    <input type="radio" name="mode" value="component" checked>
+                    encodeURIComponent (권장)
+                </label>
+                <label>
+                    <input type="radio" name="mode" value="uri">
+                    encodeURI (전체 URL)
+                </label>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="examples">
+                <h3>예시</h3>
+                <div class="example-item">
+                    <button class="example-btn" onclick="setExample('공백 테스트')">공백</button>
+                    <code class="example-code code-font">공백 테스트 → %EA%B3%B5%EB%B0%B1%20%ED%85%8C%EC%8A%A4%ED%8A%B8</code>
+                </div>
+                <div class="example-item">
+                    <button class="example-btn" onclick="setExample('Hello&World=Test')">& =</button>
+                    <code class="example-code code-font">Hello&World=Test → Hello%26World%3DTest</code>
+                </div>
+                <div class="example-item">
+                    <button class="example-btn" onclick="setExample('https://example.com/path?q=검색')">URL</button>
+                    <code class="example-code code-font">한글 URL 인코딩</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+
+        <div class="info-section">
+            <h2>URL 인코딩이란?</h2>
+            <p>URL에는 영문, 숫자, 일부 특수문자만 사용할 수 있습니다. 한글이나 특수문자는 %XX 형태로 인코딩해야 합니다.</p>
+            <div class="info-grid">
+                <div>
+                    <h3>인코딩이 필요한 문자</h3>
+                    <ul>
+                        <li>공백 → %20 또는 +</li>
+                        <li>한글 → %XX%XX%XX</li>
+                        <li>& → %26</li>
+                        <li>= → %3D</li>
+                        <li>? → %3F</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>encodeURI vs encodeURIComponent</h3>
+                    <ul>
+                        <li>encodeURI: 전체 URL용 (:/? 유지)</li>
+                        <li>encodeURIComponent: 쿼리 파라미터용 (모두 인코딩)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 ionflow.xyz</p>
+    </footer>
+
+    <script>
+        function getMode() {
+            return document.querySelector('input[name="mode"]:checked').value;
+        }
+
+        function showStatus(msg) {
+            const s = document.getElementById('status');
+            s.textContent = msg;
+            s.classList.add('show');
+            setTimeout(() => s.classList.remove('show'), 3000);
+        }
+
+        function encode() {
+            const input = document.getElementById('decoded').value;
+            try {
+                const mode = getMode();
+                const encoded = mode === 'uri' ? encodeURI(input) : encodeURIComponent(input);
+                document.getElementById('encoded').value = encoded;
+                showStatus('인코딩 완료');
+            } catch (e) {
+                showStatus('오류: ' + e.message);
+            }
+        }
+
+        function decode() {
+            const input = document.getElementById('encoded').value;
+            try {
+                const mode = getMode();
+                const decoded = mode === 'uri' ? decodeURI(input) : decodeURIComponent(input);
+                document.getElementById('decoded').value = decoded;
+                showStatus('디코딩 완료');
+            } catch (e) {
+                showStatus('오류: 유효하지 않은 인코딩');
+            }
+        }
+
+        function setExample(text) {
+            document.getElementById('decoded').value = text;
+            encode();
+        }
+    </script>
+</body>
+</html>

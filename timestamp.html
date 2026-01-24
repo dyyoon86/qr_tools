@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix Timestamp 변환기 - ionflow.xyz</title>
+    <meta name="description" content="Unix Timestamp를 날짜로 변환하거나, 날짜를 Timestamp로 변환하세요.">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+
+        header {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 21px; font-weight: 600; }
+        nav { display: flex; gap: 28px; }
+        nav a { font-size: 12px; opacity: 0.8; }
+        nav a:hover { opacity: 1; }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 22px 40px;
+            background: #fbfbfd;
+        }
+        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 19px; color: #86868b; }
+
+        main { max-width: 800px; margin: 0 auto; padding: 40px 22px 80px; }
+
+        .panel {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .panel-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+
+        .current-time {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .time-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .time-label { font-size: 13px; color: #86868b; margin-bottom: 8px; }
+        .time-value { font-size: 24px; font-weight: 600; }
+        .time-value.primary { color: #007aff; }
+
+        .converter-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .converter-row input,
+        .converter-row select {
+            padding: 12px 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fff;
+        }
+        .converter-row input { flex: 1; }
+        .converter-row select { width: auto; }
+        .converter-row input:focus { outline: none; border-color: #86868b; }
+
+        .convert-btn {
+            padding: 12px 24px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .convert-btn:hover { background: #424245; }
+        .convert-btn.success { background: #34c759; }
+        .convert-btn.success:hover { background: #2db350; }
+
+        .result-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            display: none;
+        }
+        .result-box.show { display: block; }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .result-item { font-size: 14px; }
+        .result-item span:first-child { color: #86868b; margin-right: 8px; }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .date-inputs input {
+            padding: 12px 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fff;
+        }
+        .date-inputs input:focus { outline: none; border-color: #86868b; }
+
+        .info-section {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 32px;
+        }
+        .info-section h2 { font-size: 21px; font-weight: 600; margin-bottom: 16px; }
+        .info-section p { font-size: 15px; color: #86868b; margin-bottom: 16px; line-height: 1.6; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .info-grid h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .info-grid ul { list-style: none; }
+        .info-grid li { font-size: 13px; color: #86868b; margin-bottom: 4px; }
+        .info-grid li::before { content: "•"; margin-right: 8px; }
+
+        .ad-space {
+            max-width: 728px;
+            margin: 40px auto;
+            height: 90px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #f5f5f7;
+            padding: 20px 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            nav { display: none; }
+            .current-time { grid-template-columns: 1fr; }
+            .result-grid { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; }
+            .date-inputs { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">ionflow</a>
+            <nav>
+                <a href="/qr.html">QR 생성기</a>
+                <a href="/json.html">JSON</a>
+                <a href="/timestamp.html">Timestamp</a>
+                <a href="/color.html">색상</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>Timestamp Converter</h1>
+        <p>Timestamp와 날짜를 서로 변환하세요</p>
+    </div>
+
+    <main>
+        <div class="panel">
+            <div class="panel-title">현재 시간</div>
+            <div class="current-time">
+                <div class="time-box">
+                    <div class="time-label">Unix Timestamp (초)</div>
+                    <div class="time-value primary code-font" id="current-ts"></div>
+                </div>
+                <div class="time-box">
+                    <div class="time-label">현재 날짜/시간</div>
+                    <div class="time-value" id="current-date"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Timestamp → 날짜</div>
+            <div class="converter-row">
+                <input type="text" id="ts-input" class="code-font" placeholder="1706108400">
+                <select id="ts-unit">
+                    <option value="s">초 (seconds)</option>
+                    <option value="ms">밀리초 (milliseconds)</option>
+                </select>
+                <button class="convert-btn" onclick="tsToDate()">변환</button>
+            </div>
+            <div id="ts-result" class="result-box">
+                <div class="result-grid">
+                    <div class="result-item"><span>로컬:</span><span id="ts-local" class="code-font"></span></div>
+                    <div class="result-item"><span>UTC:</span><span id="ts-utc" class="code-font"></span></div>
+                    <div class="result-item"><span>ISO 8601:</span><span id="ts-iso" class="code-font"></span></div>
+                    <div class="result-item"><span>상대 시간:</span><span id="ts-relative"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">날짜 → Timestamp</div>
+            <div class="date-inputs">
+                <input type="date" id="date-input">
+                <input type="time" id="time-input" step="1">
+                <button class="convert-btn success" onclick="dateToTs()">변환</button>
+            </div>
+            <div id="date-result" class="result-box">
+                <div class="result-grid">
+                    <div class="result-item"><span>초:</span><span id="date-ts-s" class="code-font" style="font-weight:600;"></span></div>
+                    <div class="result-item"><span>밀리초:</span><span id="date-ts-ms" class="code-font"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+
+        <div class="info-section">
+            <h2>Unix Timestamp란?</h2>
+            <p>Unix Timestamp(Epoch Time)는 1970년 1월 1일 00:00:00 UTC부터 경과한 초(또는 밀리초)입니다. 시간대에 관계없이 전 세계적으로 동일한 시점을 나타내므로, 프로그래밍에서 널리 사용됩니다.</p>
+            <div class="info-grid">
+                <div>
+                    <h3>특징</h3>
+                    <ul>
+                        <li>시간대 독립적</li>
+                        <li>정수로 표현 가능</li>
+                        <li>비교/정렬 용이</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>주요 시점</h3>
+                    <ul>
+                        <li>0: 1970-01-01 00:00:00 UTC</li>
+                        <li>1000000000: 2001-09-09</li>
+                        <li>2000000000: 2033-05-18</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 ionflow.xyz</p>
+    </footer>
+
+    <script>
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('current-ts').textContent = Math.floor(now.getTime() / 1000);
+            document.getElementById('current-date').textContent = now.toLocaleString('ko-KR');
+        }
+
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+
+            if (diff < 0) {
+                const absDiff = Math.abs(diff);
+                if (absDiff < 60) return `${absDiff}초 후`;
+                if (absDiff < 3600) return `${Math.floor(absDiff / 60)}분 후`;
+                if (absDiff < 86400) return `${Math.floor(absDiff / 3600)}시간 후`;
+                return `${Math.floor(absDiff / 86400)}일 후`;
+            }
+
+            if (diff < 60) return `${diff}초 전`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+            if (diff < 2592000) return `${Math.floor(diff / 86400)}일 전`;
+            if (diff < 31536000) return `${Math.floor(diff / 2592000)}개월 전`;
+            return `${Math.floor(diff / 31536000)}년 전`;
+        }
+
+        function tsToDate() {
+            const input = document.getElementById('ts-input').value.trim();
+            const unit = document.getElementById('ts-unit').value;
+
+            if (!input || isNaN(input)) {
+                alert('유효한 숫자를 입력하세요');
+                return;
+            }
+
+            const ts = parseInt(input);
+            const ms = unit === 'ms' ? ts : ts * 1000;
+            const date = new Date(ms);
+
+            if (isNaN(date.getTime())) {
+                alert('유효하지 않은 timestamp입니다');
+                return;
+            }
+
+            document.getElementById('ts-local').textContent = date.toLocaleString('ko-KR');
+            document.getElementById('ts-utc').textContent = date.toUTCString();
+            document.getElementById('ts-iso').textContent = date.toISOString();
+            document.getElementById('ts-relative').textContent = getRelativeTime(date);
+            document.getElementById('ts-result').classList.add('show');
+        }
+
+        function dateToTs() {
+            const dateStr = document.getElementById('date-input').value;
+            const timeStr = document.getElementById('time-input').value || '00:00:00';
+
+            if (!dateStr) {
+                alert('날짜를 선택하세요');
+                return;
+            }
+
+            const date = new Date(dateStr + 'T' + timeStr);
+            const tsMs = date.getTime();
+            const tsS = Math.floor(tsMs / 1000);
+
+            document.getElementById('date-ts-s').textContent = tsS;
+            document.getElementById('date-ts-ms').textContent = tsMs;
+            document.getElementById('date-result').classList.add('show');
+        }
+
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 1000);
+
+        const now = new Date();
+        document.getElementById('date-input').value = now.toISOString().split('T')[0];
+        document.getElementById('time-input').value = now.toTimeString().split(' ')[0];
+    </script>
+</body>
+</html>

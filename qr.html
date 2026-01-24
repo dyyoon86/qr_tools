@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR코드 생성기 - ionflow.xyz</title>
+    <meta name="description" content="무료 온라인 QR코드 생성기. URL, 텍스트를 QR코드로 변환하세요.">
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        header {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+        }
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 21px; font-weight: 600; }
+        nav { display: flex; gap: 28px; }
+        nav a { font-size: 12px; opacity: 0.8; }
+        nav a:hover { opacity: 1; }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 22px 40px;
+            background: #fbfbfd;
+        }
+        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 19px; color: #86868b; }
+
+        main { max-width: 980px; margin: 0 auto; padding: 40px 22px 80px; }
+
+        .tool-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .panel {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 28px;
+        }
+        .panel-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
+
+        .type-buttons { display: flex; gap: 8px; margin-bottom: 20px; }
+        .type-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #e8e8ed;
+            color: #1d1d1f;
+            transition: all 0.2s;
+        }
+        .type-btn.active { background: #1d1d1f; color: #fff; }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 15px;
+            resize: none;
+            font-family: inherit;
+        }
+        textarea:focus { outline: none; border-color: #86868b; }
+
+        .color-row { display: flex; gap: 16px; }
+        .color-row > div { flex: 1; }
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .size-slider { margin-bottom: 20px; }
+        input[type="range"] { width: 100%; }
+
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .generate-btn:hover { background: #424245; }
+
+        .qr-preview {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .download-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        .download-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .download-btn.png { background: #34c759; color: #fff; }
+        .download-btn.png:hover { background: #2db350; }
+        .download-btn.svg { background: #af52de; color: #fff; }
+        .download-btn.svg:hover { background: #9b3fd1; }
+
+        .ad-space {
+            max-width: 728px;
+            margin: 40px auto;
+            height: 90px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 12px;
+        }
+
+        footer {
+            background: #f5f5f7;
+            padding: 20px 22px;
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 32px; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">ionflow</a>
+            <nav>
+                <a href="/qr.html">QR 생성기</a>
+                <a href="/json.html">JSON</a>
+                <a href="/base64.html">Base64</a>
+                <a href="/password.html">비밀번호</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>QR코드 생성기</h1>
+        <p>URL, 텍스트를 QR코드로 변환합니다.</p>
+    </div>
+
+    <main>
+        <div class="tool-container">
+            <div class="panel">
+                <div class="panel-title">내용 입력</div>
+
+                <div class="type-buttons">
+                    <button class="type-btn active" onclick="setType('url', this)">URL</button>
+                    <button class="type-btn" onclick="setType('text', this)">텍스트</button>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="qr-input" placeholder="URL 또는 텍스트를 입력하세요">https://</textarea>
+                </div>
+
+                <div class="color-row input-group">
+                    <div>
+                        <label>QR 색상</label>
+                        <input type="color" id="qr-color" value="#000000">
+                    </div>
+                    <div>
+                        <label>배경 색상</label>
+                        <input type="color" id="bg-color" value="#FFFFFF">
+                    </div>
+                </div>
+
+                <div class="size-slider input-group">
+                    <label>크기: <span id="size-label">256</span>px</label>
+                    <input type="range" id="qr-size" min="128" max="512" value="256" step="32" oninput="updateSize()">
+                </div>
+
+                <button class="generate-btn" onclick="generateQR()">QR코드 생성</button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">미리보기</div>
+                <div class="qr-preview">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+                <div class="download-buttons">
+                    <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
+                    <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 ionflow.xyz</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', generateQR);
+
+        function setType(type, btn) {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const input = document.getElementById('qr-input');
+            if (type === 'url' && !input.value) input.value = 'https://';
+            else if (type === 'text' && input.value === 'https://') input.value = '';
+        }
+
+        function updateSize() {
+            document.getElementById('size-label').textContent = document.getElementById('qr-size').value;
+        }
+
+        function generateQR() {
+            const input = document.getElementById('qr-input').value.trim();
+            const color = document.getElementById('qr-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+            const size = parseInt(document.getElementById('qr-size').value);
+            const canvas = document.getElementById('qr-canvas');
+
+            if (!input) return;
+
+            QRCode.toCanvas(canvas, input, {
+                width: size, margin: 2,
+                color: { dark: color, light: bgColor }
+            });
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById('qr-canvas');
+            const link = document.createElement('a');
+            link.download = 'qrcode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadSVG() {
+            const input = document.getElementById('qr-input').value.trim();
+            const color = document.getElementById('qr-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+            if (!input) return;
+
+            QRCode.toString(input, {
+                type: 'svg', color: { dark: color, light: bgColor }
+            }, function(err, svg) {
+                if (err) return;
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = 'qrcode.svg';
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>
