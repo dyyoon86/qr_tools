@@ -129,6 +129,19 @@
             justify-content: center;
             min-height: 280px;
         }
+        #qr-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #qr-container img {
+            display: block;
+        }
+        .placeholder-text {
+            color: #86868b;
+            font-size: 14px;
+            text-align: center;
+        }
 
         .download-buttons { display: flex; gap: 12px; margin-top: 20px; }
         .download-btn {
@@ -228,7 +241,9 @@
             <div class="panel">
                 <div class="panel-title">미리보기</div>
                 <div class="qr-preview">
-                    <canvas id="qr-canvas"></canvas>
+                    <div id="qr-container">
+                        <div class="placeholder-text">URL 또는 텍스트를 입력하고<br>생성 버튼을 클릭하세요</div>
+                    </div>
                 </div>
                 <div class="download-buttons">
                     <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
@@ -244,8 +259,10 @@
         <p>Copyright © 2026 ionflow.xyz</p>
     </footer>
 
-    <script src="https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
+        let qrcode = null;
+
         function setType(type, btn) {
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -263,20 +280,10 @@
             const color = document.getElementById('qr-color').value;
             const bgColor = document.getElementById('bg-color').value;
             const size = parseInt(document.getElementById('qr-size').value);
-            const canvas = document.getElementById('qr-canvas');
+            const container = document.getElementById('qr-container');
 
             if (!input || input === 'https://') {
-                // 빈 입력일 때 안내 메시지 표시
-                canvas.width = size;
-                canvas.height = size;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#f5f5f7';
-                ctx.fillRect(0, 0, size, size);
-                ctx.fillStyle = '#86868b';
-                ctx.font = '14px Pretendard';
-                ctx.textAlign = 'center';
-                ctx.fillText('URL 또는 텍스트를 입력하고', size/2, size/2 - 10);
-                ctx.fillText('생성 버튼을 클릭하세요', size/2, size/2 + 10);
+                container.innerHTML = '<div class="placeholder-text">URL 또는 텍스트를 입력하고<br>생성 버튼을 클릭하세요</div>';
                 return;
             }
 
@@ -285,49 +292,72 @@
                 return;
             }
 
-            QRCode.toCanvas(canvas, input, {
-                width: size, margin: 2,
-                color: { dark: color, light: bgColor }
-            }, function(error) {
-                if (error) {
-                    console.error(error);
-                    alert('QR코드 생성 중 오류가 발생했습니다: ' + error.message);
-                }
+            container.innerHTML = '';
+
+            qrcode = new QRCode(container, {
+                text: input,
+                width: size,
+                height: size,
+                colorDark: color,
+                colorLight: bgColor,
+                correctLevel: QRCode.CorrectLevel.H
             });
         }
 
         function downloadPNG() {
-            const canvas = document.getElementById('qr-canvas');
-            const link = document.createElement('a');
-            link.download = 'qrcode.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            const container = document.getElementById('qr-container');
+            const img = container.querySelector('img');
+            const canvas = container.querySelector('canvas');
+
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } else if (img) {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = img.src;
+                link.click();
+            } else {
+                alert('먼저 QR코드를 생성해주세요.');
+            }
         }
 
         function downloadSVG() {
-            const input = document.getElementById('qr-input').value.trim();
-            const color = document.getElementById('qr-color').value;
-            const bgColor = document.getElementById('bg-color').value;
-            if (!input) return;
+            const container = document.getElementById('qr-container');
+            const canvas = container.querySelector('canvas');
 
-            QRCode.toString(input, {
-                type: 'svg', color: { dark: color, light: bgColor }
-            }, function(err, svg) {
-                if (err) return;
-                const blob = new Blob([svg], { type: 'image/svg+xml' });
+            if (!canvas) {
+                alert('먼저 QR코드를 생성해주세요.');
+                return;
+            }
+
+            const img = new Image();
+            img.onload = function() {
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute("width", canvas.width);
+                svg.setAttribute("height", canvas.height);
+                svg.setAttribute("xmlns", svgNS);
+
+                const image = document.createElementNS(svgNS, "image");
+                image.setAttribute("width", canvas.width);
+                image.setAttribute("height", canvas.height);
+                image.setAttribute("href", canvas.toDataURL('image/png'));
+                svg.appendChild(image);
+
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const blob = new Blob([svgData], { type: 'image/svg+xml' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.download = 'qrcode.svg';
                 link.href = url;
                 link.click();
                 URL.revokeObjectURL(url);
-            });
+            };
+            img.src = canvas.toDataURL('image/png');
         }
-
-        // 페이지 로드 시 초기화
-        window.onload = function() {
-            setTimeout(generateQR, 200);
-        };
     </script>
 </body>
 </html>

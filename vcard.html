@@ -116,6 +116,12 @@
             min-height: 280px;
         }
 
+        .placeholder-text {
+            color: #86868b;
+            font-size: 14px;
+            text-align: center;
+        }
+
         .vcard-preview {
             margin-top: 16px;
             padding: 16px;
@@ -259,7 +265,9 @@
             <div class="panel">
                 <div class="panel-title">미리보기</div>
                 <div class="qr-preview">
-                    <canvas id="qr-canvas"></canvas>
+                    <div id="qr-container">
+                        <div class="placeholder-text">연락처 정보를 입력하고<br>생성 버튼을 클릭하세요</div>
+                    </div>
                 </div>
 
                 <div id="vcard-preview" class="vcard-preview">
@@ -281,9 +289,9 @@
         <p>Copyright © 2026 ionflow.xyz</p>
     </footer>
 
-    <script src="https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        let vcardData = '';
+        let qrcode = null;
 
         function generateVCardQR() {
             const lastName = document.getElementById('last-name').value.trim();
@@ -297,7 +305,7 @@
             const address = document.getElementById('address').value.trim();
             const color = document.getElementById('qr-color').value;
             const bgColor = document.getElementById('bg-color').value;
-            const canvas = document.getElementById('qr-canvas');
+            const container = document.getElementById('qr-container');
 
             if (!lastName || !firstName) {
                 alert('성과 이름을 입력해주세요.');
@@ -328,7 +336,6 @@
             if (address) vcard += `ADR;TYPE=WORK:;;${address};;;;\n`;
 
             vcard += 'END:VCARD';
-            vcardData = vcard;
 
             const previewContent = document.getElementById('preview-content');
             previewContent.innerHTML = `
@@ -343,15 +350,27 @@
             `;
             document.getElementById('vcard-preview').classList.add('show');
 
-            QRCode.toCanvas(canvas, vcard, {
+            container.innerHTML = '';
+
+            qrcode = new QRCode(container, {
+                text: vcard,
                 width: 256,
-                margin: 2,
-                color: { dark: color, light: bgColor }
+                height: 256,
+                colorDark: color,
+                colorLight: bgColor,
+                correctLevel: QRCode.CorrectLevel.H
             });
         }
 
         function downloadPNG() {
-            const canvas = document.getElementById('qr-canvas');
+            const container = document.getElementById('qr-container');
+            const canvas = container.querySelector('canvas');
+
+            if (!canvas) {
+                alert('먼저 QR코드를 생성해주세요.');
+                return;
+            }
+
             const link = document.createElement('a');
             link.download = 'vcard-qrcode.png';
             link.href = canvas.toDataURL('image/png');
@@ -359,43 +378,35 @@
         }
 
         function downloadSVG() {
-            if (!vcardData) {
+            const container = document.getElementById('qr-container');
+            const canvas = container.querySelector('canvas');
+
+            if (!canvas) {
                 alert('먼저 QR코드를 생성해주세요.');
                 return;
             }
 
-            const color = document.getElementById('qr-color').value;
-            const bgColor = document.getElementById('bg-color').value;
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+            svg.setAttribute("width", canvas.width);
+            svg.setAttribute("height", canvas.height);
+            svg.setAttribute("xmlns", svgNS);
 
-            QRCode.toString(vcardData, {
-                type: 'svg',
-                color: { dark: color, light: bgColor }
-            }, function(error, svg) {
-                if (error) return;
-                const blob = new Blob([svg], { type: 'image/svg+xml' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.download = 'vcard-qrcode.svg';
-                link.href = url;
-                link.click();
-                URL.revokeObjectURL(url);
-            });
+            const image = document.createElementNS(svgNS, "image");
+            image.setAttribute("width", canvas.width);
+            image.setAttribute("height", canvas.height);
+            image.setAttribute("href", canvas.toDataURL('image/png'));
+            svg.appendChild(image);
+
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = 'vcard-qrcode.svg';
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const canvas = document.getElementById('qr-canvas');
-            canvas.width = 256;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#f5f5f7';
-            ctx.fillRect(0, 0, 256, 256);
-            ctx.fillStyle = '#86868b';
-            ctx.font = '14px Pretendard';
-            ctx.textAlign = 'center';
-            ctx.fillText('연락처 정보를 입력하고', 128, 120);
-            ctx.fillText('생성 버튼을 클릭하세요', 128, 140);
-        });
-
     </script>
 </body>
 </html>
