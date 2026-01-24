@@ -282,7 +282,11 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+    <script>
+        if (typeof QRCode === 'undefined') {
+            document.write('<script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"><\/script>');
+        }
+    </script>
     <script>
         let vcardData = '';
 
@@ -307,6 +311,11 @@
 
             if (!phone) {
                 alert('휴대폰 번호를 입력해주세요.');
+                return;
+            }
+
+            if (typeof QRCode === 'undefined') {
+                alert('QR코드 라이브러리를 불러오지 못했습니다. 페이지를 새로고침해주세요.');
                 return;
             }
 

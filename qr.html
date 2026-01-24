@@ -245,11 +245,18 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+    <script>
+        // CDN 폴백
+        if (typeof QRCode === 'undefined') {
+            document.write('<script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"><\/script>');
+        }
+    </script>
     <script>
         // 페이지 로드 후 초기화
         window.addEventListener('load', function() {
-            setTimeout(generateQR, 100);
+            if (typeof QRCode !== 'undefined') {
+                setTimeout(generateQR, 100);
+            }
         });
 
         function setType(type, btn) {
