@@ -27,7 +27,7 @@
         ).join('');
 
         return `
-        <header style="background:rgba(255,255,255,0.8);backdrop-filter:saturate(180%) blur(20px);position:sticky;top:0;z-index:100;border-bottom:1px solid #d2d2d7;">
+        <header style="background:rgba(255,255,255,0.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);position:sticky;top:0;z-index:100;border-bottom:1px solid #d2d2d7;">
             <div style="max-width:1200px;margin:0 auto;padding:0 22px;height:48px;display:flex;align-items:center;justify-content:space-between;">
                 <a href="/" style="font-size:21px;font-weight:600;text-decoration:none;color:inherit;">ionflow</a>
                 <nav style="display:flex;gap:28px;">${navLinksHtml}</nav>
