@@ -8,57 +8,10 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            background: #fff;
-            color: #1d1d1f;
-            -webkit-font-smoothing: antialiased;
-        }
-        a { text-decoration: none; color: inherit; }
-        .code-font { font-family: 'JetBrains Mono', monospace; }
-
-        header {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: saturate(180%) blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #d2d2d7;
-        }
-        .nav-container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 0 22px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo { font-size: 21px; font-weight: 600; }
-        nav { display: flex; gap: 28px; }
-        nav a { font-size: 12px; opacity: 0.8; }
-        nav a:hover { opacity: 1; }
-
-        .page-header {
-            text-align: center;
-            padding: 60px 22px 40px;
-            background: #fbfbfd;
-        }
-        .page-header h1 { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
-        .page-header p { font-size: 19px; color: #86868b; }
-
-        main { max-width: 800px; margin: 0 auto; padding: 40px 22px 80px; }
-
-        .panel {
-            background: #f5f5f7;
-            border-radius: 18px;
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-        .panel-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+        main { max-width: 800px; }
 
         .color-preview-row {
             display: flex;
@@ -84,11 +37,7 @@
 
         .color-input-group { margin-bottom: 16px; }
         .color-input-group label { display: block; font-size: 14px; color: #86868b; margin-bottom: 8px; }
-        .color-input-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+        .color-input-row { display: flex; gap: 8px; align-items: center; }
         .color-input-row input[type="text"],
         .color-input-row input[type="number"] {
             padding: 12px 14px;
@@ -112,12 +61,7 @@
         }
         .copy-btn:hover { background: #d2d2d7; }
 
-        .css-output {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 16px;
-        }
+        .css-output { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
         .css-output input {
             padding: 12px;
             background: #fff;
@@ -126,11 +70,7 @@
             font-size: 12px;
         }
 
-        .palette-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
-        }
+        .palette-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
         .palette-item {
             height: 40px;
             border-radius: 8px;
@@ -139,54 +79,13 @@
         }
         .palette-item:hover { transform: scale(1.1); }
 
-        .status {
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            display: none;
-        }
-        .status.show { display: block; background: #d1f5d3; color: #1d7324; }
-
-        .info-section {
-            background: #f5f5f7;
-            border-radius: 18px;
-            padding: 32px;
-        }
+        .info-section { margin-top: 24px; }
         .info-section h2 { font-size: 21px; font-weight: 600; margin-bottom: 16px; }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         .info-grid h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
         .info-grid p { font-size: 13px; color: #86868b; line-height: 1.5; }
 
-        .ad-space {
-            max-width: 728px;
-            margin: 40px auto;
-            height: 90px;
-            background: #f5f5f7;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #86868b;
-            font-size: 12px;
-        }
-
-        footer {
-            background: #f5f5f7;
-            padding: 20px 22px;
-            text-align: center;
-            font-size: 12px;
-            color: #86868b;
-        }
-
         @media (max-width: 768px) {
-            .page-header h1 { font-size: 32px; }
-            nav { display: none; }
             .info-grid { grid-template-columns: 1fr; }
             .color-preview-row { flex-direction: column; }
             .color-preview { width: 100%; height: 80px; }
