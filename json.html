@@ -139,10 +139,12 @@
             border-radius: 8px;
             margin-bottom: 24px;
             font-size: 14px;
-            display: none;
+            height: 42px;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
-        .status.success { display: block; background: #d1f5d3; color: #1d7324; }
-        .status.error { display: block; background: #fce8e8; color: #c53030; }
+        .status.success { opacity: 1; background: #d1f5d3; color: #1d7324; }
+        .status.error { opacity: 1; background: #fce8e8; color: #c53030; }
 
         .json-key { color: #881391; }
         .json-string { color: #1a1aa6; }
