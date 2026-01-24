@@ -369,14 +369,19 @@
 
             container.innerHTML = '';
 
-            qrcode = new QRCode(container, {
-                text: wifiString,
-                width: 256,
-                height: 256,
-                colorDark: color,
-                colorLight: bgColor,
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            try {
+                qrcode = new QRCode(container, {
+                    text: wifiString,
+                    width: 256,
+                    height: 256,
+                    colorDark: color,
+                    colorLight: bgColor,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } catch (e) {
+                container.innerHTML = '<div style="color:#ff3b30;text-align:center;font-size:14px;">QR코드 생성 실패</div>';
+                console.error('QR Code generation failed:', e);
+            }
         }
 
         function downloadPNG() {

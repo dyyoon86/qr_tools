@@ -352,14 +352,19 @@
 
             container.innerHTML = '';
 
-            qrcode = new QRCode(container, {
-                text: vcard,
-                width: 256,
-                height: 256,
-                colorDark: color,
-                colorLight: bgColor,
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            try {
+                qrcode = new QRCode(container, {
+                    text: vcard,
+                    width: 256,
+                    height: 256,
+                    colorDark: color,
+                    colorLight: bgColor,
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            } catch (e) {
+                container.innerHTML = '<div class="placeholder-text" style="color:#ff3b30;">QR코드 생성 실패<br>입력 데이터가 너무 깁니다.</div>';
+                console.error('QR Code generation failed:', e);
+            }
         }
 
         function downloadPNG() {
