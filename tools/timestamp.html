@@ -164,50 +164,50 @@
 
     <main>
         <div class="panel">
-            <div class="panel-title">현재 시간</div>
+            <div class="panel-title" data-i18n="tsCurrentTime">현재 시간</div>
             <div class="current-time">
                 <div class="time-box">
-                    <div class="time-label">Unix Timestamp (초)</div>
+                    <div class="time-label" data-i18n="tsUnixSeconds">Unix Timestamp (초)</div>
                     <div class="time-value primary code-font" id="current-ts"></div>
                 </div>
                 <div class="time-box">
-                    <div class="time-label">현재 날짜/시간</div>
+                    <div class="time-label" data-i18n="tsCurrentDateTime">현재 날짜/시간</div>
                     <div class="time-value" id="current-date"></div>
                 </div>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-title">Timestamp → 날짜</div>
+            <div class="panel-title" data-i18n="tsTsToDate">Timestamp → 날짜</div>
             <div class="converter-row">
                 <input type="text" id="ts-input" class="code-font" placeholder="1706108400">
                 <select id="ts-unit">
-                    <option value="s">초 (seconds)</option>
-                    <option value="ms">밀리초 (milliseconds)</option>
+                    <option value="s" data-i18n="tsSeconds">초 (seconds)</option>
+                    <option value="ms" data-i18n="tsMilliseconds">밀리초 (milliseconds)</option>
                 </select>
-                <button class="convert-btn" onclick="tsToDate()">변환</button>
+                <button class="convert-btn" onclick="tsToDate()" data-i18n="convertBtn">변환</button>
             </div>
             <div id="ts-result" class="result-box">
                 <div class="result-grid">
-                    <div class="result-item"><span>로컬:</span><span id="ts-local" class="code-font"></span></div>
+                    <div class="result-item"><span data-i18n="tsLocal">로컬:</span><span id="ts-local" class="code-font"></span></div>
                     <div class="result-item"><span>UTC:</span><span id="ts-utc" class="code-font"></span></div>
                     <div class="result-item"><span>ISO 8601:</span><span id="ts-iso" class="code-font"></span></div>
-                    <div class="result-item"><span>상대 시간:</span><span id="ts-relative"></span></div>
+                    <div class="result-item"><span data-i18n="tsRelative">상대 시간:</span><span id="ts-relative"></span></div>
                 </div>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-title">날짜 → Timestamp</div>
+            <div class="panel-title" data-i18n="tsDateToTs">날짜 → Timestamp</div>
             <div class="date-inputs">
                 <input type="date" id="date-input">
                 <input type="time" id="time-input" step="1">
-                <button class="convert-btn success" onclick="dateToTs()">변환</button>
+                <button class="convert-btn success" onclick="dateToTs()" data-i18n="convertBtn">변환</button>
             </div>
             <div id="date-result" class="result-box">
                 <div class="result-grid">
-                    <div class="result-item"><span>초:</span><span id="date-ts-s" class="code-font" style="font-weight:600;"></span></div>
-                    <div class="result-item"><span>밀리초:</span><span id="date-ts-ms" class="code-font"></span></div>
+                    <div class="result-item"><span data-i18n="tsSecLabel">초:</span><span id="date-ts-s" class="code-font" style="font-weight:600;"></span></div>
+                    <div class="result-item"><span data-i18n="tsMsLabel">밀리초:</span><span id="date-ts-ms" class="code-font"></span></div>
                 </div>
             </div>
         </div>
@@ -215,19 +215,19 @@
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>Unix Timestamp란?</h2>
-            <p>Unix Timestamp(Epoch Time)는 1970년 1월 1일 00:00:00 UTC부터 경과한 초(또는 밀리초)입니다. 시간대에 관계없이 전 세계적으로 동일한 시점을 나타내므로, 프로그래밍에서 널리 사용됩니다.</p>
+            <h2 data-i18n="tsInfoTitle">Unix Timestamp란?</h2>
+            <p data-i18n="tsInfoDesc">Unix Timestamp(Epoch Time)는 1970년 1월 1일 00:00:00 UTC부터 경과한 초(또는 밀리초)입니다. 시간대에 관계없이 전 세계적으로 동일한 시점을 나타내므로, 프로그래밍에서 널리 사용됩니다.</p>
             <div class="info-grid">
                 <div>
-                    <h3>특징</h3>
+                    <h3 data-i18n="tsFeatures">특징</h3>
                     <ul>
-                        <li>시간대 독립적</li>
-                        <li>정수로 표현 가능</li>
-                        <li>비교/정렬 용이</li>
+                        <li data-i18n="tsFeature1">시간대 독립적</li>
+                        <li data-i18n="tsFeature2">정수로 표현 가능</li>
+                        <li data-i18n="tsFeature3">비교/정렬 용이</li>
                     </ul>
                 </div>
                 <div>
-                    <h3>주요 시점</h3>
+                    <h3 data-i18n="tsKeyMoments">주요 시점</h3>
                     <ul>
                         <li>0: 1970-01-01 00:00:00 UTC</li>
                         <li>1000000000: 2001-09-09</li>

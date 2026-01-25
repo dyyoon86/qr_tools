@@ -108,15 +108,15 @@
                 <div class="tool-container">
                     <div>
                         <div class="panel-header">
-                            <span class="panel-title">텍스트</span>
+                            <span class="panel-title" data-i18n="base64TextLabel">텍스트</span>
                         </div>
-                        <textarea id="text-input" class="code-font" placeholder="인코딩할 텍스트 입력..."></textarea>
+                        <textarea id="text-input" class="code-font" data-i18n-placeholder="base64TextPlaceholder" placeholder="인코딩할 텍스트 입력..."></textarea>
                     </div>
                     <div>
                         <div class="panel-header">
                             <span class="panel-title">Base64</span>
                         </div>
-                        <textarea id="base64-input" class="code-font" placeholder="디코딩할 Base64 입력..."></textarea>
+                        <textarea id="base64-input" class="code-font" data-i18n-placeholder="base64DecodePlaceholder" placeholder="디코딩할 Base64 입력..."></textarea>
                     </div>
                 </div>
 
@@ -133,21 +133,21 @@
                 <div class="tool-container">
                     <div>
                         <div class="panel-header">
-                            <span class="panel-title">이미지 업로드</span>
+                            <span class="panel-title" data-i18n="base64ImageUpload">이미지 업로드</span>
                         </div>
                         <div class="drop-zone" id="drop-zone">
                             <input type="file" id="image-input" accept="image/*" hidden onchange="imageToBase64(event)">
-                            <button onclick="document.getElementById('image-input').click()">파일 선택</button>
-                            <p>또는 이미지를 드래그 앤 드롭</p>
+                            <button onclick="document.getElementById('image-input').click()" data-i18n="base64SelectFile">파일 선택</button>
+                            <p data-i18n="base64DragDrop">또는 이미지를 드래그 앤 드롭</p>
                             <div id="image-preview"></div>
                         </div>
                     </div>
                     <div>
                         <div class="panel-header">
-                            <span class="panel-title">Base64 결과</span>
-                            <button onclick="copyImageBase64()" style="padding:6px 12px;background:#e8e8ed;border:none;border-radius:6px;font-size:12px;cursor:pointer;">복사</button>
+                            <span class="panel-title" data-i18n="base64Result">Base64 결과</span>
+                            <button onclick="copyImageBase64()" style="padding:6px 12px;background:#e8e8ed;border:none;border-radius:6px;font-size:12px;cursor:pointer;" data-i18n="copyBtn">복사</button>
                         </div>
-                        <textarea id="image-base64" class="code-font" readonly placeholder="이미지를 업로드하면 Base64가 표시됩니다..."></textarea>
+                        <textarea id="image-base64" class="code-font" readonly data-i18n-placeholder="base64ImagePlaceholder" placeholder="이미지를 업로드하면 Base64가 표시됩니다..."></textarea>
                     </div>
                 </div>
             </div>
@@ -156,23 +156,23 @@
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>Base64란?</h2>
-            <p>Base64는 바이너리 데이터를 ASCII 문자열로 인코딩하는 방식입니다. 이메일 첨부파일, 데이터 URL, API 통신 등에서 널리 사용됩니다.</p>
+            <h2 data-i18n="base64InfoTitle">Base64란?</h2>
+            <p data-i18n="base64InfoDesc">Base64는 바이너리 데이터를 ASCII 문자열로 인코딩하는 방식입니다. 이메일 첨부파일, 데이터 URL, API 통신 등에서 널리 사용됩니다.</p>
             <div class="info-grid">
                 <div>
-                    <h3>활용 사례</h3>
+                    <h3 data-i18n="base64UseCases">활용 사례</h3>
                     <ul>
-                        <li>이미지를 HTML/CSS에 직접 삽입</li>
-                        <li>API로 바이너리 데이터 전송</li>
-                        <li>이메일 첨부파일 인코딩</li>
+                        <li data-i18n="base64Use1">이미지를 HTML/CSS에 직접 삽입</li>
+                        <li data-i18n="base64Use2">API로 바이너리 데이터 전송</li>
+                        <li data-i18n="base64Use3">이메일 첨부파일 인코딩</li>
                     </ul>
                 </div>
                 <div>
-                    <h3>특징</h3>
+                    <h3 data-i18n="base64Features">특징</h3>
                     <ul>
-                        <li>크기가 약 33% 증가</li>
-                        <li>A-Z, a-z, 0-9, +, / 문자 사용</li>
-                        <li>패딩에 = 사용</li>
+                        <li data-i18n="base64Feature1">크기가 약 33% 증가</li>
+                        <li data-i18n="base64Feature2">A-Z, a-z, 0-9, +, / 문자 사용</li>
+                        <li data-i18n="base64Feature3">패딩에 = 사용</li>
                     </ul>
                 </div>
             </div>

@@ -182,17 +182,17 @@
     <main>
         <div class="tool-container">
             <div class="panel">
-                <div class="panel-title">WiFi 정보 입력</div>
+                <div class="panel-title" data-i18n="wifiInputTitle">WiFi 정보 입력</div>
 
                 <div class="input-group">
-                    <label>네트워크 이름 (SSID) *</label>
-                    <input type="text" id="wifi-ssid" placeholder="WiFi 이름을 입력하세요">
+                    <label data-i18n="wifiSsidLabel">네트워크 이름 (SSID) *</label>
+                    <input type="text" id="wifi-ssid" data-i18n-placeholder="wifiSsidPlaceholder" placeholder="WiFi 이름을 입력하세요">
                 </div>
 
                 <div class="input-group">
-                    <label>비밀번호</label>
+                    <label data-i18n="wifiPasswordLabel">비밀번호</label>
                     <div class="password-wrapper">
-                        <input type="password" id="wifi-password" placeholder="비밀번호를 입력하세요">
+                        <input type="password" id="wifi-password" data-i18n-placeholder="wifiPasswordPlaceholder" placeholder="비밀번호를 입력하세요">
                         <button type="button" class="password-toggle" onclick="togglePassword()">
                             <span id="eye-icon">◉</span>
                         </button>
@@ -200,43 +200,43 @@
                 </div>
 
                 <div class="input-group">
-                    <label>암호화 방식</label>
+                    <label data-i18n="wifiEncryptionLabel">암호화 방식</label>
                     <select id="wifi-encryption">
-                        <option value="WPA">WPA/WPA2/WPA3 (권장)</option>
-                        <option value="WEP">WEP (구형)</option>
-                        <option value="nopass">암호 없음</option>
+                        <option value="WPA" data-i18n="wifiEncWpa">WPA/WPA2/WPA3 (권장)</option>
+                        <option value="WEP" data-i18n="wifiEncWep">WEP (구형)</option>
+                        <option value="nopass" data-i18n="wifiEncNone">암호 없음</option>
                     </select>
                 </div>
 
                 <div class="input-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="wifi-hidden">
-                        숨겨진 네트워크 (Hidden SSID)
+                        <span data-i18n="wifiHiddenLabel">숨겨진 네트워크 (Hidden SSID)</span>
                     </label>
                 </div>
 
                 <div class="color-row input-group">
                     <div>
-                        <label>QR 색상</label>
+                        <label data-i18n="wifiQrColor">QR 색상</label>
                         <input type="color" id="qr-color" value="#000000">
                     </div>
                     <div>
-                        <label>배경 색상</label>
+                        <label data-i18n="wifiBgColor">배경 색상</label>
                         <input type="color" id="bg-color" value="#FFFFFF">
                     </div>
                 </div>
 
-                <button class="generate-btn" onclick="generateWifiQR()">QR코드 생성</button>
+                <button class="generate-btn" onclick="generateWifiQR()" data-i18n="wifiGenerateBtn">QR코드 생성</button>
             </div>
 
             <div class="panel">
-                <div class="panel-title">미리보기</div>
+                <div class="panel-title" data-i18n="wifiPreviewTitle">미리보기</div>
                 <div class="qr-preview">
                     <div id="qr-container"></div>
                 </div>
                 <div class="download-buttons">
-                    <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
-                    <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
+                    <button class="download-btn png" onclick="downloadPNG()" data-i18n="wifiDownloadPng">PNG 다운로드</button>
+                    <button class="download-btn svg" onclick="downloadSVG()" data-i18n="wifiDownloadSvg">SVG 다운로드</button>
                 </div>
             </div>
         </div>
@@ -244,22 +244,22 @@
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>WiFi QR코드 사용 방법</h2>
+            <h2 data-i18n="wifiInfoTitle">WiFi QR코드 사용 방법</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <div class="icon">◲</div>
-                    <h3>1. QR코드 생성</h3>
-                    <p>WiFi 이름과 비밀번호를 입력하고 QR코드를 생성합니다</p>
+                    <h3 data-i18n="wifiStep1Title">1. QR코드 생성</h3>
+                    <p data-i18n="wifiStep1Desc">WiFi 이름과 비밀번호를 입력하고 QR코드를 생성합니다</p>
                 </div>
                 <div class="info-item">
                     <div class="icon">⬇</div>
-                    <h3>2. 다운로드/인쇄</h3>
-                    <p>PNG 또는 SVG로 다운로드하여 인쇄하거나 화면에 표시합니다</p>
+                    <h3 data-i18n="wifiStep2Title">2. 다운로드/인쇄</h3>
+                    <p data-i18n="wifiStep2Desc">PNG 또는 SVG로 다운로드하여 인쇄하거나 화면에 표시합니다</p>
                 </div>
                 <div class="info-item">
                     <div class="icon">◎</div>
-                    <h3>3. 스캔하여 연결</h3>
-                    <p>스마트폰 카메라로 스캔하면 자동으로 WiFi에 연결됩니다</p>
+                    <h3 data-i18n="wifiStep3Title">3. 스캔하여 연결</h3>
+                    <p data-i18n="wifiStep3Desc">스마트폰 카메라로 스캔하면 자동으로 WiFi에 연결됩니다</p>
                 </div>
             </div>
         </div>

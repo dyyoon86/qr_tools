@@ -181,85 +181,85 @@
     <main>
         <div class="tool-container">
             <div class="panel">
-                <div class="panel-title">연락처 정보</div>
+                <div class="panel-title" data-i18n="vcardInputTitle">연락처 정보</div>
 
                 <div class="input-row input-group">
                     <div>
-                        <label>성 *</label>
-                        <input type="text" id="last-name" placeholder="홍">
+                        <label data-i18n="vcardLastName">성 *</label>
+                        <input type="text" id="last-name" data-i18n-placeholder="vcardLastNamePh" placeholder="홍">
                     </div>
                     <div>
-                        <label>이름 *</label>
-                        <input type="text" id="first-name" placeholder="길동">
+                        <label data-i18n="vcardFirstName">이름 *</label>
+                        <input type="text" id="first-name" data-i18n-placeholder="vcardFirstNamePh" placeholder="길동">
                     </div>
                 </div>
 
                 <div class="input-row input-group">
                     <div>
-                        <label>회사</label>
-                        <input type="text" id="company" placeholder="(주)회사명">
+                        <label data-i18n="vcardCompany">회사</label>
+                        <input type="text" id="company" data-i18n-placeholder="vcardCompanyPh" placeholder="(주)회사명">
                     </div>
                     <div>
-                        <label>직책</label>
-                        <input type="text" id="title" placeholder="대리">
+                        <label data-i18n="vcardJobTitle">직책</label>
+                        <input type="text" id="title" data-i18n-placeholder="vcardJobTitlePh" placeholder="대리">
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>휴대폰 *</label>
+                    <label data-i18n="vcardPhone">휴대폰 *</label>
                     <input type="tel" id="phone" placeholder="010-1234-5678">
                 </div>
 
                 <div class="input-group">
-                    <label>회사전화</label>
+                    <label data-i18n="vcardWorkPhone">회사전화</label>
                     <input type="tel" id="work-phone" placeholder="02-123-4567">
                 </div>
 
                 <div class="input-group">
-                    <label>이메일</label>
+                    <label data-i18n="vcardEmail">이메일</label>
                     <input type="email" id="email" placeholder="email@example.com">
                 </div>
 
                 <div class="input-group">
-                    <label>웹사이트</label>
+                    <label data-i18n="vcardWebsite">웹사이트</label>
                     <input type="url" id="website" placeholder="https://example.com">
                 </div>
 
                 <div class="input-group">
-                    <label>주소</label>
-                    <input type="text" id="address" placeholder="서울시 강남구 테헤란로 123">
+                    <label data-i18n="vcardAddress">주소</label>
+                    <input type="text" id="address" data-i18n-placeholder="vcardAddressPh" placeholder="서울시 강남구 테헤란로 123">
                 </div>
 
                 <div class="color-row input-group">
                     <div>
-                        <label>QR 색상</label>
+                        <label data-i18n="vcardQrColor">QR 색상</label>
                         <input type="color" id="qr-color" value="#000000">
                     </div>
                     <div>
-                        <label>배경 색상</label>
+                        <label data-i18n="vcardBgColor">배경 색상</label>
                         <input type="color" id="bg-color" value="#FFFFFF">
                     </div>
                 </div>
 
-                <button class="generate-btn" onclick="generateVCardQR()">명함 QR코드 생성</button>
+                <button class="generate-btn" onclick="generateVCardQR()" data-i18n="vcardGenerateBtn">명함 QR코드 생성</button>
             </div>
 
             <div class="panel">
-                <div class="panel-title">미리보기</div>
+                <div class="panel-title" data-i18n="vcardPreviewTitle">미리보기</div>
                 <div class="qr-preview">
                     <div id="qr-container">
-                        <div class="placeholder-text">연락처 정보를 입력하고<br>생성 버튼을 클릭하세요</div>
+                        <div class="placeholder-text" data-i18n="vcardPlaceholder">연락처 정보를 입력하고<br>생성 버튼을 클릭하세요</div>
                     </div>
                 </div>
 
                 <div id="vcard-preview" class="vcard-preview">
-                    <h3>저장될 정보</h3>
+                    <h3 data-i18n="vcardSavedInfo">저장될 정보</h3>
                     <div id="preview-content"></div>
                 </div>
 
                 <div class="download-buttons">
-                    <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
-                    <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
+                    <button class="download-btn png" onclick="downloadPNG()" data-i18n="vcardDownloadPng">PNG 다운로드</button>
+                    <button class="download-btn svg" onclick="downloadSVG()" data-i18n="vcardDownloadSvg">SVG 다운로드</button>
                 </div>
             </div>
         </div>

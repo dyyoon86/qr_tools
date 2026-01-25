@@ -109,7 +109,7 @@
             <div class="color-preview-row">
                 <div id="color-preview" class="color-preview" style="background: #3B82F6;"></div>
                 <div class="color-picker-wrapper">
-                    <label>색상 선택</label>
+                    <label data-i18n="colorPickerLabel">색상 선택</label>
                     <input type="color" id="color-picker" value="#3B82F6" onchange="fromPicker()">
                 </div>
             </div>
@@ -118,7 +118,7 @@
                 <label>HEX</label>
                 <div class="color-input-row">
                     <input type="text" id="hex-input" class="code-font" value="#3B82F6" placeholder="#RRGGBB" oninput="fromHex()">
-                    <button class="copy-btn" onclick="copy('hex')">복사</button>
+                    <button class="copy-btn" onclick="copy('hex')" data-i18n="copyBtn">복사</button>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                     <input type="number" id="g-input" min="0" max="255" value="130" class="code-font" oninput="fromRgb()">
                     <input type="number" id="b-input" min="0" max="255" value="246" class="code-font" oninput="fromRgb()">
                     <input type="text" id="rgb-output" class="code-font" readonly value="rgb(59, 130, 246)" style="flex:1;">
-                    <button class="copy-btn" onclick="copy('rgb')">복사</button>
+                    <button class="copy-btn" onclick="copy('rgb')" data-i18n="copyBtn">복사</button>
                 </div>
             </div>
 
@@ -143,7 +143,7 @@
                     <input type="number" id="l-input" min="0" max="100" value="60" class="code-font" oninput="fromHsl()">
                     <span>%</span>
                     <input type="text" id="hsl-output" class="code-font" readonly value="hsl(217, 91%, 60%)" style="flex:1;">
-                    <button class="copy-btn" onclick="copy('hsl')">복사</button>
+                    <button class="copy-btn" onclick="copy('hsl')" data-i18n="copyBtn">복사</button>
                 </div>
             </div>
 
@@ -154,26 +154,26 @@
         </div>
 
         <div class="panel">
-            <div class="panel-title">색상 팔레트</div>
+            <div class="panel-title" data-i18n="colorPalette">색상 팔레트</div>
             <div id="palette" class="palette-grid"></div>
         </div>
 
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>색상 형식 설명</h2>
+            <h2 data-i18n="colorInfoTitle">색상 형식 설명</h2>
             <div class="info-grid">
                 <div>
                     <h3>HEX</h3>
-                    <p>#RRGGBB 형식. 16진수로 빨강, 초록, 파랑을 표현. 웹에서 가장 많이 사용.</p>
+                    <p data-i18n="colorHexDesc">#RRGGBB 형식. 16진수로 빨강, 초록, 파랑을 표현. 웹에서 가장 많이 사용.</p>
                 </div>
                 <div>
                     <h3>RGB</h3>
-                    <p>rgb(R, G, B) 형식. 0-255 범위의 10진수. 투명도는 rgba()로.</p>
+                    <p data-i18n="colorRgbDesc">rgb(R, G, B) 형식. 0-255 범위의 10진수. 투명도는 rgba()로.</p>
                 </div>
                 <div>
                     <h3>HSL</h3>
-                    <p>hsl(H, S%, L%) 형식. 색상(Hue), 채도(Saturation), 명도(Lightness).</p>
+                    <p data-i18n="colorHslDesc">hsl(H, S%, L%) 형식. 색상(Hue), 채도(Saturation), 명도(Lightness).</p>
                 </div>
             </div>
         </div>

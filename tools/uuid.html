@@ -98,55 +98,55 @@
         <div id="status" class="status"></div>
 
         <div class="panel">
-            <div class="panel-title">단일 UUID 생성</div>
+            <div class="panel-title" data-i18n="uuidSingleTitle">단일 UUID 생성</div>
             <div class="single-uuid">
                 <input type="text" id="single-uuid" class="code-font" readonly value="">
-                <button class="icon-btn primary" onclick="generateSingle()" title="생성">↻</button>
-                <button class="icon-btn" onclick="copySingle()" title="복사">◫</button>
+                <button class="icon-btn primary" onclick="generateSingle()" title="생성" data-i18n-title="uuidGenerateTitle">↻</button>
+                <button class="icon-btn" onclick="copySingle()" title="복사" data-i18n-title="uuidCopyTitle">◫</button>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-title">대량 UUID 생성</div>
+            <div class="panel-title" data-i18n="uuidBulkTitle">대량 UUID 생성</div>
             <div class="bulk-controls">
-                <label>개수:</label>
+                <label data-i18n="uuidCountLabel">개수:</label>
                 <input type="number" id="bulk-count" value="10" min="1" max="1000">
                 <select id="uuid-format">
-                    <option value="default">기본 (하이픈 포함)</option>
-                    <option value="nohyphen">하이픈 제거</option>
-                    <option value="uppercase">대문자</option>
-                    <option value="braces">중괄호 포함</option>
+                    <option value="default" data-i18n="uuidFormatDefault">기본 (하이픈 포함)</option>
+                    <option value="nohyphen" data-i18n="uuidFormatNoHyphen">하이픈 제거</option>
+                    <option value="uppercase" data-i18n="uuidFormatUppercase">대문자</option>
+                    <option value="braces" data-i18n="uuidFormatBraces">중괄호 포함</option>
                 </select>
-                <button class="action-btn success" onclick="generateBulk()">대량 생성</button>
+                <button class="action-btn success" onclick="generateBulk()" data-i18n="uuidBulkBtn">대량 생성</button>
             </div>
-            <textarea id="bulk-output" class="code-font" readonly placeholder="생성된 UUID가 여기에 표시됩니다..."></textarea>
+            <textarea id="bulk-output" class="code-font" readonly data-i18n-placeholder="uuidBulkPlaceholder" placeholder="생성된 UUID가 여기에 표시됩니다..."></textarea>
             <div class="bulk-actions">
-                <button onclick="copyBulk()">전체 복사</button>
-                <button onclick="downloadBulk()">다운로드</button>
+                <button onclick="copyBulk()" data-i18n="uuidCopyAllBtn">전체 복사</button>
+                <button onclick="downloadBulk()" data-i18n="uuidDownloadBtn">다운로드</button>
             </div>
         </div>
 
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>UUID란?</h2>
-            <p>UUID(Universally Unique Identifier)는 128비트 고유 식별자입니다. GUID(Globally Unique Identifier)라고도 불립니다.</p>
+            <h2 data-i18n="uuidInfoTitle">UUID란?</h2>
+            <p data-i18n="uuidInfoDesc">UUID(Universally Unique Identifier)는 128비트 고유 식별자입니다. GUID(Globally Unique Identifier)라고도 불립니다.</p>
             <div class="info-grid">
                 <div>
-                    <h3>활용 사례</h3>
+                    <h3 data-i18n="uuidUseCases">활용 사례</h3>
                     <ul>
-                        <li>데이터베이스 기본키</li>
-                        <li>API 요청 식별자</li>
-                        <li>세션 ID</li>
-                        <li>파일명 생성</li>
+                        <li data-i18n="uuidUse1">데이터베이스 기본키</li>
+                        <li data-i18n="uuidUse2">API 요청 식별자</li>
+                        <li data-i18n="uuidUse3">세션 ID</li>
+                        <li data-i18n="uuidUse4">파일명 생성</li>
                     </ul>
                 </div>
                 <div>
-                    <h3>UUID v4 특징</h3>
+                    <h3 data-i18n="uuidFeatures">UUID v4 특징</h3>
                     <ul>
-                        <li>랜덤 생성 방식</li>
-                        <li>충돌 확률: 거의 0</li>
-                        <li>형식: 8-4-4-4-12</li>
+                        <li data-i18n="uuidFeature1">랜덤 생성 방식</li>
+                        <li data-i18n="uuidFeature2">충돌 확률: 거의 0</li>
+                        <li data-i18n="uuidFeature3">형식: 8-4-4-4-12</li>
                         <li>예: 550e8400-e29b-41d4-a716-446655440000</li>
                     </ul>
                 </div>

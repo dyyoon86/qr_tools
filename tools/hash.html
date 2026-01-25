@@ -101,37 +101,37 @@
         <div id="status" class="status"></div>
 
         <div class="panel">
-            <div class="panel-title">입력 텍스트</div>
-            <textarea id="hash-input" placeholder="해시를 생성할 텍스트를 입력하세요..." oninput="generateHashes()"></textarea>
+            <div class="panel-title" data-i18n="hashInputTitle">입력 텍스트</div>
+            <textarea id="hash-input" data-i18n-placeholder="hashInputPlaceholder" placeholder="해시를 생성할 텍스트를 입력하세요..." oninput="generateHashes()"></textarea>
 
             <div class="options">
                 <label>
                     <input type="checkbox" id="uppercase" onchange="generateHashes()">
-                    대문자 출력
+                    <span data-i18n="hashUppercase">대문자 출력</span>
                 </label>
             </div>
 
             <div class="hash-results">
                 <div class="hash-item">
                     <div class="hash-header">
-                        <span class="hash-label">MD5 (128-bit) <span class="badge danger">취약</span></span>
-                        <button class="copy-btn" onclick="copy('md5')">복사</button>
+                        <span class="hash-label">MD5 (128-bit) <span class="badge danger" data-i18n="hashVulnerable">취약</span></span>
+                        <button class="copy-btn" onclick="copy('md5')" data-i18n="copyBtn">복사</button>
                     </div>
                     <input type="text" id="hash-md5" class="hash-value code-font" readonly>
                 </div>
 
                 <div class="hash-item">
                     <div class="hash-header">
-                        <span class="hash-label">SHA-1 (160-bit) <span class="badge warn">취약</span></span>
-                        <button class="copy-btn" onclick="copy('sha1')">복사</button>
+                        <span class="hash-label">SHA-1 (160-bit) <span class="badge warn" data-i18n="hashVulnerable">취약</span></span>
+                        <button class="copy-btn" onclick="copy('sha1')" data-i18n="copyBtn">복사</button>
                     </div>
                     <input type="text" id="hash-sha1" class="hash-value code-font" readonly>
                 </div>
 
                 <div class="hash-item">
                     <div class="hash-header">
-                        <span class="hash-label">SHA-256 (256-bit) <span class="badge">권장</span></span>
-                        <button class="copy-btn" onclick="copy('sha256')">복사</button>
+                        <span class="hash-label">SHA-256 (256-bit) <span class="badge" data-i18n="hashRecommended">권장</span></span>
+                        <button class="copy-btn" onclick="copy('sha256')" data-i18n="copyBtn">복사</button>
                     </div>
                     <input type="text" id="hash-sha256" class="hash-value code-font" readonly>
                 </div>
@@ -139,7 +139,7 @@
                 <div class="hash-item">
                     <div class="hash-header">
                         <span class="hash-label">SHA-512 (512-bit)</span>
-                        <button class="copy-btn" onclick="copy('sha512')">복사</button>
+                        <button class="copy-btn" onclick="copy('sha512')" data-i18n="copyBtn">복사</button>
                     </div>
                     <input type="text" id="hash-sha512" class="hash-value code-font" readonly style="font-size: 10px;">
                 </div>
@@ -149,41 +149,41 @@
         <div class="ad-space" data-i18n="ad">광고</div>
 
         <div class="info-section">
-            <h2>Hash란?</h2>
-            <p>해시 함수는 임의 길이의 데이터를 고정 길이의 값으로 변환합니다. 같은 입력은 항상 같은 해시를 생성하지만, 해시에서 원본을 복원할 수 없습니다.</p>
+            <h2 data-i18n="hashInfoTitle">Hash란?</h2>
+            <p data-i18n="hashInfoDesc">해시 함수는 임의 길이의 데이터를 고정 길이의 값으로 변환합니다. 같은 입력은 항상 같은 해시를 생성하지만, 해시에서 원본을 복원할 수 없습니다.</p>
             <table class="info-table">
                 <thead>
                     <tr>
-                        <th>알고리즘</th>
-                        <th>비트</th>
-                        <th>용도</th>
-                        <th>보안</th>
+                        <th data-i18n="hashAlgorithm">알고리즘</th>
+                        <th data-i18n="hashBits">비트</th>
+                        <th data-i18n="hashUsage">용도</th>
+                        <th data-i18n="hashSecurity">보안</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>MD5</td>
                         <td>128</td>
-                        <td>체크섬</td>
-                        <td class="status-danger">취약</td>
+                        <td data-i18n="hashChecksum">체크섬</td>
+                        <td class="status-danger" data-i18n="hashVulnerable">취약</td>
                     </tr>
                     <tr>
                         <td>SHA-1</td>
                         <td>160</td>
-                        <td>레거시</td>
-                        <td class="status-warn">취약</td>
+                        <td data-i18n="hashLegacy">레거시</td>
+                        <td class="status-warn" data-i18n="hashVulnerable">취약</td>
                     </tr>
                     <tr>
                         <td>SHA-256</td>
                         <td>256</td>
-                        <td>범용</td>
-                        <td class="status-safe">안전</td>
+                        <td data-i18n="hashGeneral">범용</td>
+                        <td class="status-safe" data-i18n="hashSafe">안전</td>
                     </tr>
                     <tr>
                         <td>SHA-512</td>
                         <td>512</td>
-                        <td>고보안</td>
-                        <td class="status-safe">안전</td>
+                        <td data-i18n="hashHighSec">고보안</td>
+                        <td class="status-safe" data-i18n="hashSafe">안전</td>
                     </tr>
                 </tbody>
             </table>
