@@ -310,18 +310,18 @@
                 return;
             }
 
-            let vcard = 'BEGIN:VCARD\n';
-            vcard += 'VERSION:3.0\n';
-            vcard += `N:${lastName};${firstName};;;\n`;
+            // vCard 3.0 간결 포맷 (UTF-8 호환)
+            let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
+            vcard += `N:${lastName};${firstName}\n`;
             vcard += `FN:${lastName}${firstName}\n`;
 
             if (company) vcard += `ORG:${company}\n`;
             if (title) vcard += `TITLE:${title}\n`;
-            vcard += `TEL;TYPE=CELL:${phone}\n`;
-            if (workPhone) vcard += `TEL;TYPE=WORK:${workPhone}\n`;
+            vcard += `TEL:${phone}\n`;
+            if (workPhone) vcard += `TEL;WORK:${workPhone}\n`;
             if (email) vcard += `EMAIL:${email}\n`;
             if (website) vcard += `URL:${website}\n`;
-            if (address) vcard += `ADR;TYPE=WORK:;;${address};;;;\n`;
+            if (address) vcard += `ADR:;;${address}\n`;
 
             vcard += 'END:VCARD';
 
@@ -340,32 +340,33 @@
 
             container.innerHTML = '';
 
-            // 큰 사이즈로 시도 (vCard는 데이터가 많음)
-            const sizes = [320, 400, 512];
-            let success = false;
+            // vCard 데이터 크기 확인 (UTF-8 바이트)
+            const vcardBytes = new Blob([vcard]).size;
+            console.log('vCard size:', vcardBytes, 'bytes');
+            console.log('vCard content:', vcard);
 
-            for (const size of sizes) {
-                try {
-                    container.innerHTML = '';
-                    qrcode = new QRCode(container, {
-                        text: vcard,
-                        width: size,
-                        height: size,
-                        colorDark: color,
-                        colorLight: bgColor,
-                        correctLevel: QRCode.CorrectLevel.L
-                    });
-                    success = true;
-                    showToast('QR코드가 생성되었습니다');
-                    break;
-                } catch (e) {
-                    console.log(`Size ${size} failed, trying larger...`);
-                }
-            }
+            // QR코드 생성 (Error Correction L = 최대 용량)
+            try {
+                qrcode = new QRCode(container, {
+                    text: vcard,
+                    width: 280,
+                    height: 280,
+                    colorDark: color,
+                    colorLight: bgColor,
+                    correctLevel: QRCode.CorrectLevel.L
+                });
 
-            if (!success) {
+                // 생성 확인 (qrcodejs는 비동기로 canvas 생성)
+                setTimeout(() => {
+                    const canvas = container.querySelector('canvas');
+                    if (canvas) {
+                        showToast('QR코드가 생성되었습니다');
+                    }
+                }, 100);
+            } catch (e) {
+                console.error('QR generation error:', e);
                 container.innerHTML = '<div class="placeholder-text" style="color:#ff3b30;">QR코드 생성 실패<br>입력 데이터가 너무 깁니다.<br>일부 항목을 줄여보세요.</div>';
-                showToast('데이터가 너무 많습니다. 일부 항목을 줄여보세요.', true);
+                showToast('QR코드 생성 실패: ' + e.message, true);
             }
         }
 
