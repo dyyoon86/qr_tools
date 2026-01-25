@@ -86,6 +86,91 @@
             utf32Note: '고정 길이, 처리 용이',
             asciiNote: '영문/숫자만 지원',
 
+            // QR Code Page
+            qrPageTitle: 'QR코드 생성기 - ionflow.xyz',
+            qrPageDesc: '무료 온라인 QR코드 생성기. URL, 텍스트를 QR코드로 변환하세요.',
+            qrHeading: 'QR코드 생성기',
+            qrSubheading: 'URL, 텍스트를 QR코드로 변환합니다.',
+            qrInputTitle: '내용 입력',
+            qrTextBtn: '텍스트',
+            qrInputPlaceholder: 'URL 또는 텍스트를 입력하세요',
+            qrColor: 'QR 색상',
+            qrBgColor: '배경 색상',
+            qrSize: '크기',
+            qrGenerateBtn: 'QR코드 생성',
+            qrPreviewTitle: '미리보기',
+            qrPlaceholder: 'URL 또는 텍스트를 입력하고<br>생성 버튼을 클릭하세요',
+            qrDownloadPNG: 'PNG 다운로드',
+            qrDownloadSVG: 'SVG 다운로드',
+
+            // JSON Page
+            jsonPageTitle: 'JSON Formatter - ionflow.xyz',
+            jsonPageDesc: 'JSON을 보기 좋게 포맷팅하고 문법 오류를 검사합니다.',
+            jsonHeading: 'JSON Formatter',
+            jsonSubheading: 'JSON을 포맷팅하고 검증합니다',
+            jsonFormatBtn: '포맷팅',
+            jsonMinifyBtn: '압축',
+            jsonCopyBtn: '복사',
+            jsonClearBtn: '지우기',
+
+            // Base64 Page
+            base64PageTitle: 'Base64 인코더/디코더 - ionflow.xyz',
+            base64PageDesc: '온라인 Base64 인코딩/디코딩 도구. 텍스트, 이미지를 Base64로 변환하세요.',
+            base64Heading: 'Base64 Encoder',
+            base64Subheading: '텍스트를 Base64로 인코딩하거나 디코딩하세요',
+            base64TextTab: '텍스트',
+            base64ImageTab: '이미지',
+            encodeBtn: '인코딩 →',
+            decodeBtn: '← 디코딩',
+
+            // URL Page
+            urlPageTitle: 'URL 인코더/디코더 - ionflow.xyz',
+            urlPageDesc: 'URL 인코딩/디코딩 도구. URL에서 특수문자를 안전하게 인코딩하세요.',
+            urlHeading: 'URL Encoder',
+            urlSubheading: 'URL의 특수문자를 인코딩하거나 디코딩하세요',
+
+            // Hash Page
+            hashPageTitle: 'Hash 생성기 - ionflow.xyz',
+            hashPageDesc: '온라인 Hash 생성기. MD5, SHA-1, SHA-256, SHA-512 해시를 즉시 생성하세요.',
+            hashHeading: 'Hash Generator',
+            hashSubheading: 'MD5, SHA-1, SHA-256, SHA-512 해시를 생성하세요',
+
+            // Color Page
+            colorPageTitle: '색상 변환기 - ionflow.xyz',
+            colorPageDesc: 'HEX, RGB, HSL 색상 코드를 서로 변환하세요.',
+            colorHeading: 'Color Converter',
+            colorSubheading: 'HEX, RGB, HSL 색상 코드를 변환하세요',
+
+            // Timestamp Page
+            timestampPageTitle: 'Unix Timestamp 변환기 - ionflow.xyz',
+            timestampPageDesc: 'Unix Timestamp와 날짜/시간을 서로 변환합니다.',
+            timestampHeading: 'Timestamp Converter',
+            timestampSubheading: 'Unix Timestamp와 날짜를 변환합니다',
+
+            // UUID Page
+            uuidPageTitle: 'UUID 생성기 - ionflow.xyz',
+            uuidPageDesc: 'UUID v4를 생성합니다. 대량 생성과 다양한 포맷을 지원합니다.',
+            uuidHeading: 'UUID Generator',
+            uuidSubheading: 'UUID v4를 생성합니다',
+
+            // Password Page
+            passwordPageTitle: '비밀번호 생성기 - ionflow.xyz',
+            passwordPageDesc: '강력한 랜덤 비밀번호를 생성합니다.',
+            passwordHeading: 'Password Generator',
+            passwordSubheading: '안전한 비밀번호를 생성합니다',
+
+            // WiFi Page
+            wifiPageTitle: 'WiFi QR코드 생성기 - ionflow.xyz',
+            wifiPageDesc: 'WiFi 네트워크 정보를 QR코드로 만들어 손쉽게 공유하세요.',
+            wifiHeading: 'WiFi QR코드',
+            wifiSubheading: 'WiFi 정보를 QR코드로 만들어 간편하게 공유하세요',
+
+            // vCard Page
+            vcardPageTitle: '명함 QR코드 생성기 - ionflow.xyz',
+            vcardPageDesc: '명함에 넣을 QR코드를 무료로 생성하세요. 연락처를 vCard 형식으로 변환합니다.',
+            vcardHeading: '명함 QR코드',
+            vcardSubheading: '연락처 정보를 QR코드로 만들어 명함에 활용하세요',
+
             // Features
             featureNoServer: '서버 전송 없음',
             featureNoServerDesc: '모든 처리는 브라우저에서만 이루어집니다. 데이터가 외부로 전송되지 않습니다.',
@@ -181,6 +266,91 @@
             utf32Note: 'Fixed length, easy processing',
             asciiNote: 'English/numbers only',
 
+            // QR Code Page
+            qrPageTitle: 'QR Code Generator - ionflow.xyz',
+            qrPageDesc: 'Free online QR code generator. Convert URL or text to QR code.',
+            qrHeading: 'QR Code Generator',
+            qrSubheading: 'Convert URL or text to QR code.',
+            qrInputTitle: 'Input Content',
+            qrTextBtn: 'Text',
+            qrInputPlaceholder: 'Enter URL or text',
+            qrColor: 'QR Color',
+            qrBgColor: 'Background Color',
+            qrSize: 'Size',
+            qrGenerateBtn: 'Generate QR Code',
+            qrPreviewTitle: 'Preview',
+            qrPlaceholder: 'Enter URL or text and<br>click generate button',
+            qrDownloadPNG: 'Download PNG',
+            qrDownloadSVG: 'Download SVG',
+
+            // JSON Page
+            jsonPageTitle: 'JSON Formatter - ionflow.xyz',
+            jsonPageDesc: 'Format JSON nicely and validate syntax errors.',
+            jsonHeading: 'JSON Formatter',
+            jsonSubheading: 'Format and validate JSON',
+            jsonFormatBtn: 'Format',
+            jsonMinifyBtn: 'Minify',
+            jsonCopyBtn: 'Copy',
+            jsonClearBtn: 'Clear',
+
+            // Base64 Page
+            base64PageTitle: 'Base64 Encoder/Decoder - ionflow.xyz',
+            base64PageDesc: 'Online Base64 encoding/decoding tool. Convert text and images to Base64.',
+            base64Heading: 'Base64 Encoder',
+            base64Subheading: 'Encode or decode text to Base64',
+            base64TextTab: 'Text',
+            base64ImageTab: 'Image',
+            encodeBtn: 'Encode →',
+            decodeBtn: '← Decode',
+
+            // URL Page
+            urlPageTitle: 'URL Encoder/Decoder - ionflow.xyz',
+            urlPageDesc: 'URL encoding/decoding tool. Safely encode special characters in URLs.',
+            urlHeading: 'URL Encoder',
+            urlSubheading: 'Encode or decode URL special characters',
+
+            // Hash Page
+            hashPageTitle: 'Hash Generator - ionflow.xyz',
+            hashPageDesc: 'Online Hash generator. Generate MD5, SHA-1, SHA-256, SHA-512 hashes instantly.',
+            hashHeading: 'Hash Generator',
+            hashSubheading: 'Generate MD5, SHA-1, SHA-256, SHA-512 hashes',
+
+            // Color Page
+            colorPageTitle: 'Color Converter - ionflow.xyz',
+            colorPageDesc: 'Convert between HEX, RGB, HSL color codes.',
+            colorHeading: 'Color Converter',
+            colorSubheading: 'Convert HEX, RGB, HSL color codes',
+
+            // Timestamp Page
+            timestampPageTitle: 'Unix Timestamp Converter - ionflow.xyz',
+            timestampPageDesc: 'Convert between Unix Timestamp and date/time.',
+            timestampHeading: 'Timestamp Converter',
+            timestampSubheading: 'Convert Unix Timestamp and date',
+
+            // UUID Page
+            uuidPageTitle: 'UUID Generator - ionflow.xyz',
+            uuidPageDesc: 'Generate UUID v4. Supports bulk generation and various formats.',
+            uuidHeading: 'UUID Generator',
+            uuidSubheading: 'Generate UUID v4',
+
+            // Password Page
+            passwordPageTitle: 'Password Generator - ionflow.xyz',
+            passwordPageDesc: 'Generate strong random passwords.',
+            passwordHeading: 'Password Generator',
+            passwordSubheading: 'Generate secure passwords',
+
+            // WiFi Page
+            wifiPageTitle: 'WiFi QR Code Generator - ionflow.xyz',
+            wifiPageDesc: 'Create QR code for WiFi network to share easily.',
+            wifiHeading: 'WiFi QR Code',
+            wifiSubheading: 'Share WiFi easily with QR code',
+
+            // vCard Page
+            vcardPageTitle: 'vCard QR Code Generator - ionflow.xyz',
+            vcardPageDesc: 'Create QR code for business card. Convert contact info to vCard format.',
+            vcardHeading: 'vCard QR Code',
+            vcardSubheading: 'Create QR code for contact information',
+
             featureNoServer: 'No Server Upload',
             featureNoServerDesc: 'All processing happens in your browser. No data is sent externally.',
             featureFast: 'Fast Processing',
@@ -271,6 +441,91 @@
             utf16Note: 'Windows内部、Java String',
             utf32Note: '固定長、処理が容易',
             asciiNote: '英数字のみ対応',
+
+            // QR Code Page
+            qrPageTitle: 'QRコード生成 - ionflow.xyz',
+            qrPageDesc: '無料オンラインQRコード生成器。URLやテキストをQRコードに変換。',
+            qrHeading: 'QRコード生成',
+            qrSubheading: 'URLやテキストをQRコードに変換します。',
+            qrInputTitle: '内容入力',
+            qrTextBtn: 'テキスト',
+            qrInputPlaceholder: 'URLまたはテキストを入力',
+            qrColor: 'QR色',
+            qrBgColor: '背景色',
+            qrSize: 'サイズ',
+            qrGenerateBtn: 'QRコード生成',
+            qrPreviewTitle: 'プレビュー',
+            qrPlaceholder: 'URLまたはテキストを入力し<br>生成ボタンをクリック',
+            qrDownloadPNG: 'PNGダウンロード',
+            qrDownloadSVG: 'SVGダウンロード',
+
+            // JSON Page
+            jsonPageTitle: 'JSON Formatter - ionflow.xyz',
+            jsonPageDesc: 'JSONを整形し、構文エラーをチェックします。',
+            jsonHeading: 'JSON Formatter',
+            jsonSubheading: 'JSONを整形・検証',
+            jsonFormatBtn: 'フォーマット',
+            jsonMinifyBtn: '圧縮',
+            jsonCopyBtn: 'コピー',
+            jsonClearBtn: 'クリア',
+
+            // Base64 Page
+            base64PageTitle: 'Base64エンコーダー/デコーダー - ionflow.xyz',
+            base64PageDesc: 'オンラインBase64エンコード/デコードツール。テキストや画像をBase64に変換。',
+            base64Heading: 'Base64 Encoder',
+            base64Subheading: 'テキストをBase64でエンコード・デコード',
+            base64TextTab: 'テキスト',
+            base64ImageTab: '画像',
+            encodeBtn: 'エンコード →',
+            decodeBtn: '← デコード',
+
+            // URL Page
+            urlPageTitle: 'URLエンコーダー/デコーダー - ionflow.xyz',
+            urlPageDesc: 'URLエンコード/デコードツール。URL特殊文字を安全にエンコード。',
+            urlHeading: 'URLエンコーダー',
+            urlSubheading: 'URL特殊文字をエンコード・デコード',
+
+            // Hash Page
+            hashPageTitle: 'ハッシュ生成 - ionflow.xyz',
+            hashPageDesc: 'オンラインハッシュ生成器。MD5、SHA-1、SHA-256、SHA-512ハッシュを即座に生成。',
+            hashHeading: 'ハッシュ生成',
+            hashSubheading: 'MD5、SHA-1、SHA-256、SHA-512ハッシュを生成',
+
+            // Color Page
+            colorPageTitle: '色変換 - ionflow.xyz',
+            colorPageDesc: 'HEX、RGB、HSLカラーコードを相互変換。',
+            colorHeading: '色変換',
+            colorSubheading: 'HEX、RGB、HSLカラーコードを変換',
+
+            // Timestamp Page
+            timestampPageTitle: 'Unixタイムスタンプ変換 - ionflow.xyz',
+            timestampPageDesc: 'Unixタイムスタンプと日付/時刻を相互変換。',
+            timestampHeading: 'タイムスタンプ変換',
+            timestampSubheading: 'Unixタイムスタンプと日付を変換',
+
+            // UUID Page
+            uuidPageTitle: 'UUID生成 - ionflow.xyz',
+            uuidPageDesc: 'UUID v4を生成。一括生成と様々なフォーマットに対応。',
+            uuidHeading: 'UUID生成',
+            uuidSubheading: 'UUID v4を生成',
+
+            // Password Page
+            passwordPageTitle: 'パスワード生成 - ionflow.xyz',
+            passwordPageDesc: '強力なランダムパスワードを生成。',
+            passwordHeading: 'パスワード生成',
+            passwordSubheading: '安全なパスワードを生成',
+
+            // WiFi Page
+            wifiPageTitle: 'WiFi QRコード生成 - ionflow.xyz',
+            wifiPageDesc: 'WiFiネットワーク情報をQRコードで簡単に共有。',
+            wifiHeading: 'WiFi QRコード',
+            wifiSubheading: 'WiFi情報をQRコードで簡単に共有',
+
+            // vCard Page
+            vcardPageTitle: '名刺QRコード生成 - ionflow.xyz',
+            vcardPageDesc: '名刺用QRコードを無料で生成。連絡先をvCard形式に変換。',
+            vcardHeading: '名刺QRコード',
+            vcardSubheading: '連絡先情報をQRコードにして名刺に活用',
 
             featureNoServer: 'サーバー送信なし',
             featureNoServerDesc: 'すべての処理はブラウザ内で行われます。データは外部に送信されません。',
@@ -363,6 +618,91 @@
             utf32Note: '固定长度，易于处理',
             asciiNote: '仅支持英文/数字',
 
+            // QR Code Page
+            qrPageTitle: 'QR码生成器 - ionflow.xyz',
+            qrPageDesc: '免费在线QR码生成器。将URL或文本转换为QR码。',
+            qrHeading: 'QR码生成器',
+            qrSubheading: '将URL或文本转换为QR码。',
+            qrInputTitle: '输入内容',
+            qrTextBtn: '文本',
+            qrInputPlaceholder: '输入URL或文本',
+            qrColor: 'QR颜色',
+            qrBgColor: '背景颜色',
+            qrSize: '大小',
+            qrGenerateBtn: '生成QR码',
+            qrPreviewTitle: '预览',
+            qrPlaceholder: '输入URL或文本并<br>点击生成按钮',
+            qrDownloadPNG: '下载PNG',
+            qrDownloadSVG: '下载SVG',
+
+            // JSON Page
+            jsonPageTitle: 'JSON格式化 - ionflow.xyz',
+            jsonPageDesc: '美化JSON并检查语法错误。',
+            jsonHeading: 'JSON格式化',
+            jsonSubheading: '格式化和验证JSON',
+            jsonFormatBtn: '格式化',
+            jsonMinifyBtn: '压缩',
+            jsonCopyBtn: '复制',
+            jsonClearBtn: '清除',
+
+            // Base64 Page
+            base64PageTitle: 'Base64编码器/解码器 - ionflow.xyz',
+            base64PageDesc: '在线Base64编码/解码工具。将文本和图像转换为Base64。',
+            base64Heading: 'Base64编码器',
+            base64Subheading: '将文本编码或解码为Base64',
+            base64TextTab: '文本',
+            base64ImageTab: '图像',
+            encodeBtn: '编码 →',
+            decodeBtn: '← 解码',
+
+            // URL Page
+            urlPageTitle: 'URL编码器/解码器 - ionflow.xyz',
+            urlPageDesc: 'URL编码/解码工具。安全编码URL中的特殊字符。',
+            urlHeading: 'URL编码器',
+            urlSubheading: '编码或解码URL特殊字符',
+
+            // Hash Page
+            hashPageTitle: '哈希生成器 - ionflow.xyz',
+            hashPageDesc: '在线哈希生成器。即时生成MD5、SHA-1、SHA-256、SHA-512哈希。',
+            hashHeading: '哈希生成器',
+            hashSubheading: '生成MD5、SHA-1、SHA-256、SHA-512哈希',
+
+            // Color Page
+            colorPageTitle: '颜色转换器 - ionflow.xyz',
+            colorPageDesc: '在HEX、RGB、HSL颜色代码之间转换。',
+            colorHeading: '颜色转换器',
+            colorSubheading: '转换HEX、RGB、HSL颜色代码',
+
+            // Timestamp Page
+            timestampPageTitle: 'Unix时间戳转换器 - ionflow.xyz',
+            timestampPageDesc: 'Unix时间戳与日期/时间互相转换。',
+            timestampHeading: '时间戳转换器',
+            timestampSubheading: '转换Unix时间戳和日期',
+
+            // UUID Page
+            uuidPageTitle: 'UUID生成器 - ionflow.xyz',
+            uuidPageDesc: '生成UUID v4。支持批量生成和多种格式。',
+            uuidHeading: 'UUID生成器',
+            uuidSubheading: '生成UUID v4',
+
+            // Password Page
+            passwordPageTitle: '密码生成器 - ionflow.xyz',
+            passwordPageDesc: '生成强随机密码。',
+            passwordHeading: '密码生成器',
+            passwordSubheading: '生成安全密码',
+
+            // WiFi Page
+            wifiPageTitle: 'WiFi QR码生成器 - ionflow.xyz',
+            wifiPageDesc: '将WiFi网络信息生成QR码，方便分享。',
+            wifiHeading: 'WiFi QR码',
+            wifiSubheading: '用QR码轻松分享WiFi信息',
+
+            // vCard Page
+            vcardPageTitle: '名片QR码生成器 - ionflow.xyz',
+            vcardPageDesc: '免费生成名片用QR码。将联系人信息转换为vCard格式。',
+            vcardHeading: '名片QR码',
+            vcardSubheading: '将联系人信息制作成QR码用于名片',
+
             featureNoServer: '无服务器上传',
             featureNoServerDesc: '所有处理都在浏览器中完成。数据不会发送到外部。',
             featureFast: '快速处理',
@@ -454,6 +794,91 @@
             utf32Note: 'Longitud fija, fácil procesamiento',
             asciiNote: 'Solo inglés/números',
 
+            // QR Code Page
+            qrPageTitle: 'Generador de QR - ionflow.xyz',
+            qrPageDesc: 'Generador de códigos QR gratuito. Convierte URL o texto a código QR.',
+            qrHeading: 'Generador de QR',
+            qrSubheading: 'Convierte URL o texto a código QR.',
+            qrInputTitle: 'Contenido',
+            qrTextBtn: 'Texto',
+            qrInputPlaceholder: 'Ingresa URL o texto',
+            qrColor: 'Color QR',
+            qrBgColor: 'Color de Fondo',
+            qrSize: 'Tamaño',
+            qrGenerateBtn: 'Generar QR',
+            qrPreviewTitle: 'Vista Previa',
+            qrPlaceholder: 'Ingresa URL o texto y<br>haz clic en generar',
+            qrDownloadPNG: 'Descargar PNG',
+            qrDownloadSVG: 'Descargar SVG',
+
+            // JSON Page
+            jsonPageTitle: 'JSON Formatter - ionflow.xyz',
+            jsonPageDesc: 'Formatea JSON y verifica errores de sintaxis.',
+            jsonHeading: 'JSON Formatter',
+            jsonSubheading: 'Formatea y valida JSON',
+            jsonFormatBtn: 'Formatear',
+            jsonMinifyBtn: 'Minimizar',
+            jsonCopyBtn: 'Copiar',
+            jsonClearBtn: 'Limpiar',
+
+            // Base64 Page
+            base64PageTitle: 'Codificador/Decodificador Base64 - ionflow.xyz',
+            base64PageDesc: 'Herramienta de codificación/decodificación Base64. Convierte texto e imágenes a Base64.',
+            base64Heading: 'Codificador Base64',
+            base64Subheading: 'Codifica o decodifica texto a Base64',
+            base64TextTab: 'Texto',
+            base64ImageTab: 'Imagen',
+            encodeBtn: 'Codificar →',
+            decodeBtn: '← Decodificar',
+
+            // URL Page
+            urlPageTitle: 'Codificador/Decodificador URL - ionflow.xyz',
+            urlPageDesc: 'Herramienta de codificación/decodificación URL. Codifica caracteres especiales en URLs.',
+            urlHeading: 'Codificador URL',
+            urlSubheading: 'Codifica o decodifica caracteres especiales de URL',
+
+            // Hash Page
+            hashPageTitle: 'Generador de Hash - ionflow.xyz',
+            hashPageDesc: 'Generador de Hash en línea. Genera MD5, SHA-1, SHA-256, SHA-512 al instante.',
+            hashHeading: 'Generador de Hash',
+            hashSubheading: 'Genera hashes MD5, SHA-1, SHA-256, SHA-512',
+
+            // Color Page
+            colorPageTitle: 'Convertidor de Color - ionflow.xyz',
+            colorPageDesc: 'Convierte entre códigos de color HEX, RGB, HSL.',
+            colorHeading: 'Convertidor de Color',
+            colorSubheading: 'Convierte códigos de color HEX, RGB, HSL',
+
+            // Timestamp Page
+            timestampPageTitle: 'Convertidor de Timestamp Unix - ionflow.xyz',
+            timestampPageDesc: 'Convierte entre Timestamp Unix y fecha/hora.',
+            timestampHeading: 'Convertidor de Timestamp',
+            timestampSubheading: 'Convierte Timestamp Unix y fecha',
+
+            // UUID Page
+            uuidPageTitle: 'Generador de UUID - ionflow.xyz',
+            uuidPageDesc: 'Genera UUID v4. Generación masiva y varios formatos.',
+            uuidHeading: 'Generador de UUID',
+            uuidSubheading: 'Genera UUID v4',
+
+            // Password Page
+            passwordPageTitle: 'Generador de Contraseñas - ionflow.xyz',
+            passwordPageDesc: 'Genera contraseñas aleatorias seguras.',
+            passwordHeading: 'Generador de Contraseñas',
+            passwordSubheading: 'Genera contraseñas seguras',
+
+            // WiFi Page
+            wifiPageTitle: 'Generador de QR WiFi - ionflow.xyz',
+            wifiPageDesc: 'Crea código QR para compartir información de red WiFi fácilmente.',
+            wifiHeading: 'QR de WiFi',
+            wifiSubheading: 'Comparte WiFi fácilmente con código QR',
+
+            // vCard Page
+            vcardPageTitle: 'Generador de QR vCard - ionflow.xyz',
+            vcardPageDesc: 'Crea código QR para tarjeta de visita. Convierte contacto a formato vCard.',
+            vcardHeading: 'QR de Tarjeta',
+            vcardSubheading: 'Crea código QR para información de contacto',
+
             featureNoServer: 'Sin Envío al Servidor',
             featureNoServerDesc: 'Todo se procesa en tu navegador. Los datos no se envían externamente.',
             featureFast: 'Procesamiento Rápido',
@@ -544,6 +969,91 @@
             utf16Note: 'Windows داخلي، Java String',
             utf32Note: 'طول ثابت، معالجة سهلة',
             asciiNote: 'إنجليزي/أرقام فقط',
+
+            // QR Code Page
+            qrPageTitle: 'مولد رمز QR - ionflow.xyz',
+            qrPageDesc: 'مولد رمز QR مجاني. تحويل URL أو نص إلى رمز QR.',
+            qrHeading: 'مولد رمز QR',
+            qrSubheading: 'تحويل URL أو نص إلى رمز QR.',
+            qrInputTitle: 'إدخال المحتوى',
+            qrTextBtn: 'نص',
+            qrInputPlaceholder: 'أدخل URL أو نص',
+            qrColor: 'لون QR',
+            qrBgColor: 'لون الخلفية',
+            qrSize: 'الحجم',
+            qrGenerateBtn: 'إنشاء رمز QR',
+            qrPreviewTitle: 'معاينة',
+            qrPlaceholder: 'أدخل URL أو نص و<br>انقر على زر الإنشاء',
+            qrDownloadPNG: 'تحميل PNG',
+            qrDownloadSVG: 'تحميل SVG',
+
+            // JSON Page
+            jsonPageTitle: 'منسق JSON - ionflow.xyz',
+            jsonPageDesc: 'تنسيق JSON والتحقق من الأخطاء النحوية.',
+            jsonHeading: 'منسق JSON',
+            jsonSubheading: 'تنسيق والتحقق من JSON',
+            jsonFormatBtn: 'تنسيق',
+            jsonMinifyBtn: 'ضغط',
+            jsonCopyBtn: 'نسخ',
+            jsonClearBtn: 'مسح',
+
+            // Base64 Page
+            base64PageTitle: 'مشفر/فك تشفير Base64 - ionflow.xyz',
+            base64PageDesc: 'أداة ترميز/فك ترميز Base64. تحويل النص والصور إلى Base64.',
+            base64Heading: 'مشفر Base64',
+            base64Subheading: 'ترميز أو فك ترميز النص إلى Base64',
+            base64TextTab: 'نص',
+            base64ImageTab: 'صورة',
+            encodeBtn: 'ترميز →',
+            decodeBtn: '← فك الترميز',
+
+            // URL Page
+            urlPageTitle: 'مشفر/فك تشفير URL - ionflow.xyz',
+            urlPageDesc: 'أداة ترميز/فك ترميز URL. ترميز الأحرف الخاصة في URL بأمان.',
+            urlHeading: 'مشفر URL',
+            urlSubheading: 'ترميز أو فك ترميز الأحرف الخاصة في URL',
+
+            // Hash Page
+            hashPageTitle: 'مولد Hash - ionflow.xyz',
+            hashPageDesc: 'مولد Hash عبر الإنترنت. إنشاء MD5، SHA-1، SHA-256، SHA-512 فوراً.',
+            hashHeading: 'مولد Hash',
+            hashSubheading: 'إنشاء تجزئة MD5، SHA-1، SHA-256، SHA-512',
+
+            // Color Page
+            colorPageTitle: 'محول الألوان - ionflow.xyz',
+            colorPageDesc: 'التحويل بين رموز الألوان HEX، RGB، HSL.',
+            colorHeading: 'محول الألوان',
+            colorSubheading: 'تحويل رموز الألوان HEX، RGB، HSL',
+
+            // Timestamp Page
+            timestampPageTitle: 'محول الطابع الزمني Unix - ionflow.xyz',
+            timestampPageDesc: 'التحويل بين طابع Unix الزمني والتاريخ/الوقت.',
+            timestampHeading: 'محول الطابع الزمني',
+            timestampSubheading: 'تحويل طابع Unix الزمني والتاريخ',
+
+            // UUID Page
+            uuidPageTitle: 'مولد UUID - ionflow.xyz',
+            uuidPageDesc: 'إنشاء UUID v4. يدعم الإنشاء بالجملة وتنسيقات متعددة.',
+            uuidHeading: 'مولد UUID',
+            uuidSubheading: 'إنشاء UUID v4',
+
+            // Password Page
+            passwordPageTitle: 'مولد كلمات المرور - ionflow.xyz',
+            passwordPageDesc: 'إنشاء كلمات مرور عشوائية قوية.',
+            passwordHeading: 'مولد كلمات المرور',
+            passwordSubheading: 'إنشاء كلمات مرور آمنة',
+
+            // WiFi Page
+            wifiPageTitle: 'مولد QR للواي فاي - ionflow.xyz',
+            wifiPageDesc: 'إنشاء رمز QR لمشاركة معلومات شبكة WiFi بسهولة.',
+            wifiHeading: 'QR للواي فاي',
+            wifiSubheading: 'مشاركة WiFi بسهولة مع رمز QR',
+
+            // vCard Page
+            vcardPageTitle: 'مولد QR لبطاقة العمل - ionflow.xyz',
+            vcardPageDesc: 'إنشاء رمز QR لبطاقة العمل. تحويل معلومات الاتصال إلى تنسيق vCard.',
+            vcardHeading: 'QR بطاقة العمل',
+            vcardSubheading: 'إنشاء رمز QR لمعلومات الاتصال',
 
             featureNoServer: 'بدون إرسال للخادم',
             featureNoServerDesc: 'تتم جميع المعالجات في متصفحك. لا يتم إرسال البيانات خارجياً.',

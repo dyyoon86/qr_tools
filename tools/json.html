@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Formatter - ionflow.xyz</title>
-    <meta name="description" content="온라인 JSON 포맷터. JSON을 보기 좋게 정리하고 문법을 검증합니다.">
+    <title data-i18n="jsonPageTitle">JSON Formatter - ionflow.xyz</title>
+    <meta name="description" data-i18n="jsonPageDesc" content="온라인 JSON 포맷터. JSON을 보기 좋게 정리하고 문법을 검증합니다.">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
         crossorigin="anonymous"></script>
@@ -45,8 +45,8 @@
 </head>
 <body>
     <div class="page-header">
-        <h1>JSON Formatter</h1>
-        <p>JSON을 보기 좋게 정리하고 문법을 검증합니다.</p>
+        <h1 data-i18n="jsonHeading">JSON Formatter</h1>
+        <p data-i18n="jsonSubheading">JSON을 보기 좋게 정리하고 문법을 검증합니다.</p>
     </div>
 
     <main>
@@ -55,10 +55,10 @@
         <div class="tool-container">
             <div class="panel">
                 <div class="panel-header">
-                    <span class="panel-title">입력</span>
+                    <span class="panel-title" data-i18n="jsonInputTitle">입력</span>
                     <div class="panel-actions">
-                        <button onclick="loadSample()">샘플</button>
-                        <button onclick="clearInput()">지우기</button>
+                        <button onclick="loadSample()" data-i18n="jsonSampleBtn">샘플</button>
+                        <button onclick="clearInput()" data-i18n="clearBtn">지우기</button>
                     </div>
                 </div>
                 <textarea id="json-input" class="code-font" placeholder='{"name": "홍길동", "age": 30}' spellcheck="false"></textarea>
@@ -66,9 +66,9 @@
 
             <div class="panel">
                 <div class="panel-header">
-                    <span class="panel-title">결과</span>
+                    <span class="panel-title" data-i18n="jsonOutputTitle">결과</span>
                     <div class="panel-actions">
-                        <button onclick="copyOutput()">복사</button>
+                        <button onclick="copyOutput()" data-i18n="copyBtn">복사</button>
                         <select id="indent-size" onchange="formatJSON()">
                             <option value="2">2 spaces</option>
                             <option value="4">4 spaces</option>
@@ -80,12 +80,12 @@
         </div>
 
         <div class="action-buttons">
-            <button class="action-btn primary" onclick="formatJSON()">포맷팅</button>
-            <button class="action-btn success" onclick="minifyJSON()">압축</button>
-            <button class="action-btn purple" onclick="validateJSON()">검증</button>
+            <button class="action-btn primary" onclick="formatJSON()" data-i18n="jsonFormatBtn">포맷팅</button>
+            <button class="action-btn success" onclick="minifyJSON()" data-i18n="jsonMinifyBtn">압축</button>
+            <button class="action-btn purple" onclick="validateJSON()" data-i18n="jsonValidateBtn">검증</button>
         </div>
 
-        <div class="ad-space">광고</div>
+        <div class="ad-space" data-i18n="ad">광고</div>
     </main>
 
     <script>

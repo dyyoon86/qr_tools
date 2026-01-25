@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR코드 생성기 - ionflow.xyz</title>
-    <meta name="description" content="무료 온라인 QR코드 생성기. URL, 텍스트를 QR코드로 변환하세요.">
+    <title data-i18n="qrPageTitle">QR코드 생성기 - ionflow.xyz</title>
+    <meta name="description" data-i18n="qrPageDesc" content="무료 온라인 QR코드 생성기. URL, 텍스트를 QR코드로 변환하세요.">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
         crossorigin="anonymous"></script>
@@ -183,58 +183,58 @@
 </head>
 <body>
     <div class="page-header">
-        <h1>QR코드 생성기</h1>
-        <p>URL, 텍스트를 QR코드로 변환합니다.</p>
+        <h1 data-i18n="qrHeading">QR코드 생성기</h1>
+        <p data-i18n="qrSubheading">URL, 텍스트를 QR코드로 변환합니다.</p>
     </div>
 
     <main>
         <div class="tool-container">
             <div class="panel">
-                <div class="panel-title">내용 입력</div>
+                <div class="panel-title" data-i18n="qrInputTitle">내용 입력</div>
 
                 <div class="type-buttons">
                     <button class="type-btn active" onclick="setType('url', this)">URL</button>
-                    <button class="type-btn" onclick="setType('text', this)">텍스트</button>
+                    <button class="type-btn" onclick="setType('text', this)" data-i18n="qrTextBtn">텍스트</button>
                 </div>
 
                 <div class="input-group">
-                    <textarea id="qr-input" placeholder="URL 또는 텍스트를 입력하세요">https://</textarea>
+                    <textarea id="qr-input" data-i18n-placeholder="qrInputPlaceholder" placeholder="URL 또는 텍스트를 입력하세요">https://</textarea>
                 </div>
 
                 <div class="color-row input-group">
                     <div>
-                        <label>QR 색상</label>
+                        <label data-i18n="qrColor">QR 색상</label>
                         <input type="color" id="qr-color" value="#000000">
                     </div>
                     <div>
-                        <label>배경 색상</label>
+                        <label data-i18n="qrBgColor">배경 색상</label>
                         <input type="color" id="bg-color" value="#FFFFFF">
                     </div>
                 </div>
 
                 <div class="size-slider input-group">
-                    <label>크기: <span id="size-label">256</span>px</label>
+                    <label><span data-i18n="qrSize">크기</span>: <span id="size-label">256</span>px</label>
                     <input type="range" id="qr-size" min="128" max="512" value="256" step="32" oninput="updateSize()">
                 </div>
 
-                <button class="generate-btn" onclick="generateQR()">QR코드 생성</button>
+                <button class="generate-btn" onclick="generateQR()" data-i18n="qrGenerateBtn">QR코드 생성</button>
             </div>
 
             <div class="panel">
-                <div class="panel-title">미리보기</div>
+                <div class="panel-title" data-i18n="qrPreviewTitle">미리보기</div>
                 <div class="qr-preview">
                     <div id="qr-container">
-                        <div class="placeholder-text">URL 또는 텍스트를 입력하고<br>생성 버튼을 클릭하세요</div>
+                        <div class="placeholder-text" data-i18n="qrPlaceholder">URL 또는 텍스트를 입력하고<br>생성 버튼을 클릭하세요</div>
                     </div>
                 </div>
                 <div class="download-buttons">
-                    <button class="download-btn png" onclick="downloadPNG()">PNG 다운로드</button>
-                    <button class="download-btn svg" onclick="downloadSVG()">SVG 다운로드</button>
+                    <button class="download-btn png" onclick="downloadPNG()" data-i18n="qrDownloadPNG">PNG 다운로드</button>
+                    <button class="download-btn svg" onclick="downloadSVG()" data-i18n="qrDownloadSVG">SVG 다운로드</button>
                 </div>
             </div>
         </div>
 
-        <div class="ad-space">광고</div>
+        <div class="ad-space" data-i18n="ad">광고</div>
     </main>
 
     <div id="toast" class="toast"></div>
