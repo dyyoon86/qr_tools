@@ -269,9 +269,10 @@
 
     <div id="toast" class="toast"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- qrcode-generator: 대용량 데이터 지원 (최대 2953 bytes) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     <script>
-        let qrcode = null;
+        let currentQRCanvas = null;
 
         function showToast(message, isError = false) {
             const toast = document.getElementById('toast');
@@ -279,6 +280,12 @@
             toast.className = 'toast' + (isError ? ' error' : '');
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // UTF-8 문자열을 바이트 배열로 변환
+        function utf8ToBytes(str) {
+            const encoder = new TextEncoder();
+            return encoder.encode(str);
         }
 
         function generateVCardQR() {
@@ -296,25 +303,24 @@
             const container = document.getElementById('qr-container');
 
             if (!lastName || !firstName) {
-                alert('성과 이름을 입력해주세요.');
+                showToast('성과 이름을 입력해주세요', true);
                 return;
             }
 
             if (!phone) {
-                alert('휴대폰 번호를 입력해주세요.');
+                showToast('휴대폰 번호를 입력해주세요', true);
                 return;
             }
 
-            if (typeof QRCode === 'undefined') {
+            if (typeof qrcode === 'undefined') {
                 alert('QR코드 라이브러리를 불러오지 못했습니다. 페이지를 새로고침해주세요.');
                 return;
             }
 
-            // vCard 3.0 간결 포맷 (UTF-8 호환)
+            // vCard 3.0 포맷
             let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
             vcard += `N:${lastName};${firstName}\n`;
             vcard += `FN:${lastName}${firstName}\n`;
-
             if (company) vcard += `ORG:${company}\n`;
             if (title) vcard += `TITLE:${title}\n`;
             vcard += `TEL:${phone}\n`;
@@ -322,7 +328,6 @@
             if (email) vcard += `EMAIL:${email}\n`;
             if (website) vcard += `URL:${website}\n`;
             if (address) vcard += `ADR:;;${address}\n`;
-
             vcard += 'END:VCARD';
 
             const previewContent = document.getElementById('preview-content');
@@ -338,72 +343,81 @@
             `;
             document.getElementById('vcard-preview').classList.add('show');
 
-            container.innerHTML = '';
+            // UTF-8 바이트 크기 확인
+            const vcardBytes = utf8ToBytes(vcard);
+            console.log('vCard size:', vcardBytes.length, 'bytes');
 
-            // vCard 데이터 크기 확인 (UTF-8 바이트)
-            const vcardBytes = new Blob([vcard]).size;
-            console.log('vCard size:', vcardBytes, 'bytes');
-            console.log('vCard content:', vcard);
-
-            // QR코드 생성 (Error Correction L = 최대 용량)
             try {
-                qrcode = new QRCode(container, {
-                    text: vcard,
-                    width: 280,
-                    height: 280,
-                    colorDark: color,
-                    colorLight: bgColor,
-                    correctLevel: QRCode.CorrectLevel.L
-                });
+                // qrcode-generator: 자동 버전 선택 (0), Error Correction L
+                const qr = qrcode(0, 'L');
+                qr.addData(vcard, 'Byte');
+                qr.make();
 
-                // 생성 확인 (qrcodejs는 비동기로 canvas 생성)
-                setTimeout(() => {
-                    const canvas = container.querySelector('canvas');
-                    if (canvas) {
-                        showToast('QR코드가 생성되었습니다');
+                // Canvas로 렌더링
+                const moduleCount = qr.getModuleCount();
+                const cellSize = Math.floor(280 / moduleCount);
+                const size = cellSize * moduleCount;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                // 배경
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size, size);
+
+                // QR 모듈
+                ctx.fillStyle = color;
+                for (let row = 0; row < moduleCount; row++) {
+                    for (let col = 0; col < moduleCount; col++) {
+                        if (qr.isDark(row, col)) {
+                            ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                        }
                     }
-                }, 100);
+                }
+
+                container.innerHTML = '';
+                container.appendChild(canvas);
+                currentQRCanvas = canvas;
+
+                showToast('QR코드가 생성되었습니다');
             } catch (e) {
                 console.error('QR generation error:', e);
-                container.innerHTML = '<div class="placeholder-text" style="color:#ff3b30;">QR코드 생성 실패<br>입력 데이터가 너무 깁니다.<br>일부 항목을 줄여보세요.</div>';
-                showToast('QR코드 생성 실패: ' + e.message, true);
+                container.innerHTML = '<div class="placeholder-text" style="color:#ff3b30;">QR코드 생성 실패<br>' + e.message + '</div>';
+                showToast('QR코드 생성 실패', true);
             }
         }
 
         function downloadPNG() {
-            const container = document.getElementById('qr-container');
-            const canvas = container.querySelector('canvas');
-
-            if (!canvas) {
-                alert('먼저 QR코드를 생성해주세요.');
+            if (!currentQRCanvas) {
+                showToast('먼저 QR코드를 생성해주세요', true);
                 return;
             }
 
             const link = document.createElement('a');
             link.download = 'vcard-qrcode.png';
-            link.href = canvas.toDataURL('image/png');
+            link.href = currentQRCanvas.toDataURL('image/png');
             link.click();
+            showToast('PNG 다운로드 완료');
         }
 
         function downloadSVG() {
-            const container = document.getElementById('qr-container');
-            const canvas = container.querySelector('canvas');
-
-            if (!canvas) {
-                alert('먼저 QR코드를 생성해주세요.');
+            if (!currentQRCanvas) {
+                showToast('먼저 QR코드를 생성해주세요', true);
                 return;
             }
 
             const svgNS = "http://www.w3.org/2000/svg";
             const svg = document.createElementNS(svgNS, "svg");
-            svg.setAttribute("width", canvas.width);
-            svg.setAttribute("height", canvas.height);
+            svg.setAttribute("width", currentQRCanvas.width);
+            svg.setAttribute("height", currentQRCanvas.height);
             svg.setAttribute("xmlns", svgNS);
 
             const image = document.createElementNS(svgNS, "image");
-            image.setAttribute("width", canvas.width);
-            image.setAttribute("height", canvas.height);
-            image.setAttribute("href", canvas.toDataURL('image/png'));
+            image.setAttribute("width", currentQRCanvas.width);
+            image.setAttribute("height", currentQRCanvas.height);
+            image.setAttribute("href", currentQRCanvas.toDataURL('image/png'));
             svg.appendChild(image);
 
             const svgData = new XMLSerializer().serializeToString(svg);
@@ -414,6 +428,7 @@
             link.href = url;
             link.click();
             URL.revokeObjectURL(url);
+            showToast('SVG 다운로드 완료');
         }
     </script>
     <script src="/assets/js/layout.js?v=3"></script>
