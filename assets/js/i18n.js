@@ -53,6 +53,8 @@
             uuidGeneratorDesc: 'UUID v4를 생성합니다. 대량 생성과 다양한 포맷을 지원합니다.',
             passwordGenerator: '비밀번호 생성기',
             passwordGeneratorDesc: '강력한 랜덤 비밀번호를 생성합니다. 길이와 문자 종류를 선택할 수 있습니다.',
+            byteCounter: '글자수/바이트 계산기',
+            byteCounterDesc: '텍스트의 글자수와 바이트 수를 계산합니다. 다양한 인코딩 지원.',
 
             // Features
             featureNoServer: '서버 전송 없음',
@@ -116,6 +118,8 @@
             uuidGeneratorDesc: 'Generate UUID v4. Supports bulk generation and various formats.',
             passwordGenerator: 'Password Generator',
             passwordGeneratorDesc: 'Generate strong random passwords. Choose length and character types.',
+            byteCounter: 'Byte Counter',
+            byteCounterDesc: 'Count characters and bytes in text. Supports various encodings.',
 
             featureNoServer: 'No Server Upload',
             featureNoServerDesc: 'All processing happens in your browser. No data is sent externally.',
@@ -175,6 +179,8 @@
             uuidGeneratorDesc: 'UUID v4を生成します。一括生成と様々なフォーマットに対応。',
             passwordGenerator: 'パスワード生成',
             passwordGeneratorDesc: '強力なランダムパスワードを生成します。長さと文字種を選択可能。',
+            byteCounter: '文字数/バイト計算',
+            byteCounterDesc: 'テキストの文字数とバイト数を計算します。様々なエンコーディング対応。',
 
             featureNoServer: 'サーバー送信なし',
             featureNoServerDesc: 'すべての処理はブラウザ内で行われます。データは外部に送信されません。',
@@ -234,6 +240,8 @@
             uuidGeneratorDesc: '生成UUID v4。支持批量生成和多种格式。',
             passwordGenerator: '密码生成器',
             passwordGeneratorDesc: '生成强随机密码。可选择长度和字符类型。',
+            byteCounter: '字符/字节计算器',
+            byteCounterDesc: '计算文本的字符数和字节数。支持多种编码。',
 
             featureNoServer: '无服务器上传',
             featureNoServerDesc: '所有处理都在浏览器中完成。数据不会发送到外部。',
@@ -293,6 +301,8 @@
             uuidGeneratorDesc: 'Genera UUID v4. Generación masiva y varios formatos.',
             passwordGenerator: 'Generador de Contraseñas',
             passwordGeneratorDesc: 'Genera contraseñas aleatorias seguras. Elige longitud y tipos de caracteres.',
+            byteCounter: 'Contador de Bytes',
+            byteCounterDesc: 'Cuenta caracteres y bytes en texto. Soporta varias codificaciones.',
 
             featureNoServer: 'Sin Envío al Servidor',
             featureNoServerDesc: 'Todo se procesa en tu navegador. Los datos no se envían externamente.',
@@ -352,6 +362,8 @@
             uuidGeneratorDesc: 'إنشاء UUID v4. يدعم الإنشاء بالجملة وتنسيقات متعددة.',
             passwordGenerator: 'مولد كلمات المرور',
             passwordGeneratorDesc: 'إنشاء كلمات مرور عشوائية قوية. اختر الطول وأنواع الأحرف.',
+            byteCounter: 'عداد البايت',
+            byteCounterDesc: 'حساب عدد الأحرف والبايتات في النص. يدعم ترميزات متعددة.',
 
             featureNoServer: 'بدون إرسال للخادم',
             featureNoServerDesc: 'تتم جميع المعالجات في متصفحك. لا يتم إرسال البيانات خارجياً.',
