@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="regexPageTitle">Regex 테스터 - ionflow.xyz</title>
+    <meta name="description" data-i18n="regexPageDesc" content="정규식(Regular Expression)을 실시간으로 테스트하고 매칭 결과를 확인하세요.">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 1000px; }
+
+        .regex-input-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .regex-input-row input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .regex-input-row input:focus {
+            outline: none;
+            border-color: #007aff;
+        }
+        .regex-input-row input.error {
+            border-color: #ff3b30;
+        }
+
+        .flags-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .flag-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .flag-item input { width: 16px; height: 16px; }
+        .flag-item code {
+            background: #e8e8ed;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .test-area {
+            position: relative;
+        }
+        .test-area textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .test-area textarea:focus { outline: none; border-color: #86868b; }
+
+        .highlight-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            pointer-events: none;
+            font-size: 15px;
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: transparent;
+        }
+        .highlight-layer .match {
+            background: #ffeb3b;
+            color: transparent;
+            border-radius: 2px;
+        }
+        .highlight-layer .group {
+            background: #4caf50;
+            color: transparent;
+        }
+
+        .results-panel {
+            margin-top: 20px;
+        }
+        .match-count {
+            display: flex;
+            gap: 24px;
+            padding: 16px;
+            background: #f5f5f7;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+        .match-stat {
+            text-align: center;
+        }
+        .match-stat .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #007aff;
+        }
+        .match-stat .label {
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        .matches-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+        }
+        .match-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e8e8ed;
+        }
+        .match-item:last-child { border-bottom: none; }
+        .match-index {
+            background: #007aff;
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .match-content {
+            flex: 1;
+        }
+        .match-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            background: #fff8e1;
+            padding: 4px 8px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        .match-groups {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #86868b;
+        }
+        .match-groups code {
+            background: #e8f5e9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        .match-position {
+            font-size: 11px;
+            color: #86868b;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .error-message.show { display: block; }
+
+        .cheatsheet {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .cheatsheet-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+        .cheatsheet-section table {
+            width: 100%;
+            font-size: 13px;
+        }
+        .cheatsheet-section td {
+            padding: 4px 0;
+        }
+        .cheatsheet-section td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: #007aff;
+            width: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .regex-input-row { flex-direction: column; }
+            .match-count { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="regexHeading">Regex Tester</h1>
+        <p data-i18n="regexSubheading">정규식을 실시간으로 테스트하고 매칭 결과를 확인하세요</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="panel-title" data-i18n="regexPatternTitle">정규식 패턴</div>
+
+            <div class="regex-input-row">
+                <span style="font-size: 20px; color: #86868b;">/</span>
+                <input type="text" id="regex-pattern" class="code-font" data-i18n-placeholder="regexPatternPlaceholder" placeholder="정규식 패턴 입력..." oninput="testRegex()">
+                <span style="font-size: 20px; color: #86868b;">/</span>
+                <input type="text" id="regex-flags" class="code-font" style="width: 60px; text-align: center;" value="g" oninput="testRegex()">
+            </div>
+
+            <div class="flags-row">
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-g" checked onchange="updateFlags()">
+                    <code>g</code>
+                    <span data-i18n="regexFlagG">전역 검색</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-i" onchange="updateFlags()">
+                    <code>i</code>
+                    <span data-i18n="regexFlagI">대소문자 무시</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-m" onchange="updateFlags()">
+                    <code>m</code>
+                    <span data-i18n="regexFlagM">다중 행</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-s" onchange="updateFlags()">
+                    <code>s</code>
+                    <span data-i18n="regexFlagS">점(.) 줄바꿈 포함</span>
+                </label>
+            </div>
+
+            <div id="error-message" class="error-message"></div>
+
+            <div class="panel-title" data-i18n="regexTestTitle">테스트 문자열</div>
+            <div class="test-area">
+                <textarea id="test-string" data-i18n-placeholder="regexTestPlaceholder" placeholder="테스트할 문자열을 입력하세요..." oninput="testRegex()">The quick brown fox jumps over the lazy dog.
+Email: test@example.com, admin@ionflow.xyz
+Phone: 010-1234-5678, 02-123-4567
+Date: 2026-01-25, 2025/12/31</textarea>
+            </div>
+        </div>
+
+        <div class="panel results-panel">
+            <div class="panel-title" data-i18n="regexResultsTitle">매칭 결과</div>
+
+            <div class="match-count">
+                <div class="match-stat">
+                    <div class="number" id="match-count">0</div>
+                    <div class="label" data-i18n="regexMatchCount">매칭 수</div>
+                </div>
+                <div class="match-stat">
+                    <div class="number" id="group-count">0</div>
+                    <div class="label" data-i18n="regexGroupCount">그룹 수</div>
+                </div>
+                <div class="match-stat">
+                    <div class="number" id="exec-time">0</div>
+                    <div class="label" data-i18n="regexExecTime">실행시간 (ms)</div>
+                </div>
+            </div>
+
+            <div class="matches-list" id="matches-list">
+                <div class="match-item" style="color: #86868b; justify-content: center;" data-i18n="regexNoMatches">
+                    패턴을 입력하면 매칭 결과가 표시됩니다
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-space" data-i18n="ad">광고</div>
+
+        <div class="info-section">
+            <h2 data-i18n="regexCheatsheetTitle">정규식 치트시트</h2>
+            <div class="cheatsheet">
+                <div class="cheatsheet-section">
+                    <h4 data-i18n="regexMetaChars">메타문자</h4>
+                    <table>
+                        <tr><td>.</td><td data-i18n="regexDot">아무 문자 (줄바꿈 제외)</td></tr>
+                        <tr><td>\d</td><td data-i18n="regexDigit">숫자 [0-9]</td></tr>
+                        <tr><td>\w</td><td data-i18n="regexWord">단어 문자 [A-Za-z0-9_]</td></tr>
+                        <tr><td>\s</td><td data-i18n="regexSpace">공백 문자</td></tr>
+                        <tr><td>^</td><td data-i18n="regexStart">문자열 시작</td></tr>
+                        <tr><td>$</td><td data-i18n="regexEnd">문자열 끝</td></tr>
+                    </table>
+                </div>
+                <div class="cheatsheet-section">
+                    <h4 data-i18n="regexQuantifiers">수량자</h4>
+                    <table>
+                        <tr><td>*</td><td data-i18n="regexStar">0회 이상</td></tr>
+                        <tr><td>+</td><td data-i18n="regexPlus">1회 이상</td></tr>
+                        <tr><td>?</td><td data-i18n="regexQuestion">0 또는 1회</td></tr>
+                        <tr><td>{n}</td><td data-i18n="regexExact">정확히 n회</td></tr>
+                        <tr><td>{n,}</td><td data-i18n="regexMin">n회 이상</td></tr>
+                        <tr><td>{n,m}</td><td data-i18n="regexRange">n~m회</td></tr>
+                    </table>
+                </div>
+                <div class="cheatsheet-section">
+                    <h4 data-i18n="regexGroups">그룹 & 참조</h4>
+                    <table>
+                        <tr><td>(abc)</td><td data-i18n="regexCapture">캡처 그룹</td></tr>
+                        <tr><td>(?:abc)</td><td data-i18n="regexNonCapture">비캡처 그룹</td></tr>
+                        <tr><td>a|b</td><td data-i18n="regexOr">a 또는 b</td></tr>
+                        <tr><td>[abc]</td><td data-i18n="regexCharClass">문자 클래스</td></tr>
+                        <tr><td>[^abc]</td><td data-i18n="regexNegClass">부정 문자 클래스</td></tr>
+                        <tr><td>\1</td><td data-i18n="regexBackref">역참조</td></tr>
+                    </table>
+                </div>
+                <div class="cheatsheet-section">
+                    <h4 data-i18n="regexExamples">자주 쓰는 패턴</h4>
+                    <table>
+                        <tr><td colspan="2" style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">[\w.-]+@[\w.-]+\.\w+</td></tr>
+                        <tr><td colspan="2" style="color: #86868b; font-size: 11px;" data-i18n="regexEmailEx">이메일</td></tr>
+                        <tr><td colspan="2" style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">01[0-9]-\d{3,4}-\d{4}</td></tr>
+                        <tr><td colspan="2" style="color: #86868b; font-size: 11px;" data-i18n="regexPhoneEx">휴대폰</td></tr>
+                        <tr><td colspan="2" style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">\d{4}[-/]\d{2}[-/]\d{2}</td></tr>
+                        <tr><td colspan="2" style="color: #86868b; font-size: 11px;" data-i18n="regexDateEx">날짜</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function updateFlags() {
+            let flags = '';
+            if (document.getElementById('flag-g').checked) flags += 'g';
+            if (document.getElementById('flag-i').checked) flags += 'i';
+            if (document.getElementById('flag-m').checked) flags += 'm';
+            if (document.getElementById('flag-s').checked) flags += 's';
+            document.getElementById('regex-flags').value = flags;
+            testRegex();
+        }
+
+        function syncFlagCheckboxes() {
+            const flags = document.getElementById('regex-flags').value;
+            document.getElementById('flag-g').checked = flags.includes('g');
+            document.getElementById('flag-i').checked = flags.includes('i');
+            document.getElementById('flag-m').checked = flags.includes('m');
+            document.getElementById('flag-s').checked = flags.includes('s');
+        }
+
+        document.getElementById('regex-flags').addEventListener('input', syncFlagCheckboxes);
+
+        function testRegex() {
+            const pattern = document.getElementById('regex-pattern').value;
+            const flags = document.getElementById('regex-flags').value;
+            const testString = document.getElementById('test-string').value;
+            const errorEl = document.getElementById('error-message');
+            const patternInput = document.getElementById('regex-pattern');
+            const matchesList = document.getElementById('matches-list');
+
+            // Reset
+            errorEl.classList.remove('show');
+            patternInput.classList.remove('error');
+
+            if (!pattern) {
+                document.getElementById('match-count').textContent = '0';
+                document.getElementById('group-count').textContent = '0';
+                document.getElementById('exec-time').textContent = '0';
+                matchesList.innerHTML = '<div class="match-item" style="color: #86868b; justify-content: center;">패턴을 입력하면 매칭 결과가 표시됩니다</div>';
+                return;
+            }
+
+            let regex;
+            try {
+                regex = new RegExp(pattern, flags);
+            } catch (e) {
+                errorEl.textContent = '정규식 오류: ' + e.message;
+                errorEl.classList.add('show');
+                patternInput.classList.add('error');
+                document.getElementById('match-count').textContent = '0';
+                document.getElementById('group-count').textContent = '0';
+                document.getElementById('exec-time').textContent = '0';
+                matchesList.innerHTML = '';
+                return;
+            }
+
+            const startTime = performance.now();
+            const matches = [];
+            let match;
+            let groupCount = 0;
+
+            if (flags.includes('g')) {
+                while ((match = regex.exec(testString)) !== null) {
+                    matches.push({
+                        text: match[0],
+                        index: match.index,
+                        groups: match.slice(1)
+                    });
+                    if (match[0] === '') regex.lastIndex++;
+                    if (match.length > 1) groupCount = Math.max(groupCount, match.length - 1);
+                }
+            } else {
+                match = regex.exec(testString);
+                if (match) {
+                    matches.push({
+                        text: match[0],
+                        index: match.index,
+                        groups: match.slice(1)
+                    });
+                    if (match.length > 1) groupCount = match.length - 1;
+                }
+            }
+
+            const execTime = (performance.now() - startTime).toFixed(2);
+
+            document.getElementById('match-count').textContent = matches.length;
+            document.getElementById('group-count').textContent = groupCount;
+            document.getElementById('exec-time').textContent = execTime;
+
+            if (matches.length === 0) {
+                matchesList.innerHTML = '<div class="match-item" style="color: #86868b; justify-content: center;">매칭된 결과가 없습니다</div>';
+                return;
+            }
+
+            let html = '';
+            matches.forEach((m, i) => {
+                html += `<div class="match-item">
+                    <span class="match-index">${i + 1}</span>
+                    <div class="match-content">
+                        <div class="match-text">${escapeHtml(m.text)}</div>
+                        ${m.groups.length > 0 ? `<div class="match-groups">그룹: ${m.groups.map((g, gi) => `<code>$${gi + 1}: ${escapeHtml(g || '')}</code>`).join('')}</div>` : ''}
+                    </div>
+                    <span class="match-position">위치: ${m.index}</span>
+                </div>`;
+            });
+            matchesList.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function showStatus(msg) {
+            const s = document.getElementById('status');
+            s.textContent = msg;
+            s.classList.add('show');
+            setTimeout(() => s.classList.remove('show'), 3000);
+        }
+
+        // Initialize
+        testRegex();
+    </script>
+    <script src="/assets/js/i18n.js?v=2"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>
