@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate OG Image & Favicon</title>
+    <style>
+        body { font-family: system-ui; padding: 40px; background: #f5f5f7; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #1d1d1f; }
+        .preview { margin: 20px 0; background: #fff; padding: 20px; border-radius: 12px; }
+        canvas { display: block; margin: 10px 0; border: 1px solid #ddd; }
+        button { padding: 12px 24px; background: #1d1d1f; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin: 5px; }
+        button:hover { background: #424245; }
+        .success { color: #34c759; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ionflow.xyz Image Generator</h1>
+        <p>Click the buttons below to generate and download the required images.</p>
+
+        <div class="preview">
+            <h3>1. OG Image (1200x630)</h3>
+            <canvas id="og-canvas" width="1200" height="630"></canvas>
+            <button onclick="downloadOG()">Download og-image.png</button>
+            <div id="og-status"></div>
+        </div>
+
+        <div class="preview">
+            <h3>2. Apple Touch Icon (180x180)</h3>
+            <canvas id="apple-canvas" width="180" height="180"></canvas>
+            <button onclick="downloadApple()">Download apple-touch-icon.png</button>
+            <div id="apple-status"></div>
+        </div>
+
+        <div class="preview">
+            <h3>3. Favicon 32x32</h3>
+            <canvas id="favicon32-canvas" width="32" height="32"></canvas>
+            <button onclick="downloadFavicon32()">Download favicon-32x32.png</button>
+            <div id="favicon32-status"></div>
+        </div>
+
+        <div class="preview">
+            <h3>4. Favicon 16x16</h3>
+            <canvas id="favicon16-canvas" width="16" height="16"></canvas>
+            <button onclick="downloadFavicon16()">Download favicon-16x16.png</button>
+            <div id="favicon16-status"></div>
+        </div>
+
+        <button onclick="downloadAll()" style="background:#34c759; font-size: 16px; padding: 16px 32px;">Download All Images</button>
+    </div>
+
+    <script>
+        // Draw OG Image
+        function drawOG() {
+            const canvas = document.getElementById('og-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+            gradient.addColorStop(0, '#f5f5f7');
+            gradient.addColorStop(1, '#e8e8ed');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1200, 630);
+
+            // Title
+            ctx.fillStyle = '#1d1d1f';
+            ctx.font = 'bold 72px system-ui, -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('ionflow.xyz', 600, 260);
+
+            // Subtitle
+            ctx.fillStyle = '#86868b';
+            ctx.font = '32px system-ui, -apple-system, sans-serif';
+            ctx.fillText('Free Online Developer Tools', 600, 320);
+
+            // Tool icons
+            const icons = [
+                { x: 400, color: '#1d1d1f', text: 'QR' },
+                { x: 500, color: '#34c759', text: '{}' },
+                { x: 600, color: '#af52de', text: '64' },
+                { x: 700, color: '#ff9500', text: '#' }
+            ];
+
+            icons.forEach(icon => {
+                // Rounded rectangle
+                ctx.fillStyle = icon.color;
+                roundRect(ctx, icon.x, 400, 80, 80, 12);
+                ctx.fill();
+
+                // Text
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 24px system-ui';
+                ctx.fillText(icon.text, icon.x + 40, 450);
+            });
+        }
+
+        // Draw Apple Touch Icon
+        function drawApple() {
+            const canvas = document.getElementById('apple-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, 180, 180);
+            gradient.addColorStop(0, '#1d1d1f');
+            gradient.addColorStop(1, '#424245');
+            ctx.fillStyle = gradient;
+            roundRect(ctx, 0, 0, 180, 180, 36);
+            ctx.fill();
+
+            // Text "io"
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 72px system-ui, -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('io', 90, 95);
+        }
+
+        // Draw Favicon 32x32
+        function drawFavicon32() {
+            const canvas = document.getElementById('favicon32-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, 32, 32);
+            gradient.addColorStop(0, '#1d1d1f');
+            gradient.addColorStop(1, '#424245');
+            ctx.fillStyle = gradient;
+            roundRect(ctx, 0, 0, 32, 32, 6);
+            ctx.fill();
+
+            // Text "io"
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px system-ui, -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('io', 16, 17);
+        }
+
+        // Draw Favicon 16x16
+        function drawFavicon16() {
+            const canvas = document.getElementById('favicon16-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, 16, 16);
+            gradient.addColorStop(0, '#1d1d1f');
+            gradient.addColorStop(1, '#424245');
+            ctx.fillStyle = gradient;
+            roundRect(ctx, 0, 0, 16, 16, 3);
+            ctx.fill();
+
+            // Text "io"
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 8px system-ui, -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('io', 8, 9);
+        }
+
+        // Rounded rectangle helper
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        // Download functions
+        function downloadOG() {
+            const canvas = document.getElementById('og-canvas');
+            downloadCanvas(canvas, 'og-image.png');
+            document.getElementById('og-status').innerHTML = '<span class="success">Downloaded!</span>';
+        }
+
+        function downloadApple() {
+            const canvas = document.getElementById('apple-canvas');
+            downloadCanvas(canvas, 'apple-touch-icon.png');
+            document.getElementById('apple-status').innerHTML = '<span class="success">Downloaded!</span>';
+        }
+
+        function downloadFavicon32() {
+            const canvas = document.getElementById('favicon32-canvas');
+            downloadCanvas(canvas, 'favicon-32x32.png');
+            document.getElementById('favicon32-status').innerHTML = '<span class="success">Downloaded!</span>';
+        }
+
+        function downloadFavicon16() {
+            const canvas = document.getElementById('favicon16-canvas');
+            downloadCanvas(canvas, 'favicon-16x16.png');
+            document.getElementById('favicon16-status').innerHTML = '<span class="success">Downloaded!</span>';
+        }
+
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadAll() {
+            downloadOG();
+            setTimeout(downloadApple, 300);
+            setTimeout(downloadFavicon32, 600);
+            setTimeout(downloadFavicon16, 900);
+        }
+
+        // Initialize
+        drawOG();
+        drawApple();
+        drawFavicon32();
+        drawFavicon16();
+    </script>
+</body>
+</html>
