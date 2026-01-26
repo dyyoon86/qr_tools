@@ -260,6 +260,7 @@
         .line-added .line-num { background: #ccffd8; }
         .line-removed { background: var(--removed-bg); }
         .line-removed .line-num { background: #ffd7d5; }
+        .empty-cell { background: #f6f8fa; }
 
         .highlight-add {
             background: var(--added-highlight);
@@ -709,16 +710,36 @@
                     <table class="diff-table"><tbody>
             `;
 
-            const original = document.getElementById('original-text').value.split('\n');
-            const modified = document.getElementById('modified-text').value.split('\n');
+            // Group consecutive removes and adds together for better alignment
+            const groups = [];
+            let i = 0;
+            while (i < diff.length) {
+                if (diff[i].type === 'equal') {
+                    groups.push({ type: 'equal', items: [diff[i]] });
+                    i++;
+                } else {
+                    // Collect consecutive removes and adds
+                    const removes = [];
+                    const adds = [];
+                    while (i < diff.length && diff[i].type === 'remove') {
+                        removes.push(diff[i]);
+                        i++;
+                    }
+                    while (i < diff.length && diff[i].type === 'add') {
+                        adds.push(diff[i]);
+                        i++;
+                    }
+                    if (removes.length > 0 || adds.length > 0) {
+                        groups.push({ type: 'change', removes, adds });
+                    }
+                }
+            }
 
             let oldLineNum = 0, newLineNum = 0;
-            let i = 0;
 
-            while (i < diff.length) {
-                const item = diff[i];
-
-                if (item.type === 'equal') {
+            for (const group of groups) {
+                if (group.type === 'equal') {
+                    const item = group.items[0];
                     html += `
                         <tr>
                             <td class="line-num side-left">${++oldLineNum}</td>
@@ -727,39 +748,45 @@
                             <td class="line-content">${escapeHtml(item.value)}</td>
                         </tr>
                     `;
-                    i++;
-                } else if (item.type === 'remove' && i + 1 < diff.length && diff[i + 1].type === 'add') {
-                    // Changed line - show character diff
-                    const { oldHtml, newHtml } = highlightCharDiff(item.value, diff[i + 1].value);
-                    html += `
-                        <tr>
-                            <td class="line-num side-left line-removed">${++oldLineNum}</td>
-                            <td class="line-content side-left line-removed">${oldHtml || '&nbsp;'}</td>
-                            <td class="line-num line-added">${++newLineNum}</td>
-                            <td class="line-content line-added">${newHtml || '&nbsp;'}</td>
-                        </tr>
-                    `;
-                    i += 2;
-                } else if (item.type === 'remove') {
-                    html += `
-                        <tr>
-                            <td class="line-num side-left line-removed">${++oldLineNum}</td>
-                            <td class="line-content side-left line-removed">${escapeHtml(item.value) || '&nbsp;'}</td>
-                            <td class="line-num"></td>
-                            <td class="line-content"></td>
-                        </tr>
-                    `;
-                    i++;
-                } else if (item.type === 'add') {
-                    html += `
-                        <tr>
-                            <td class="line-num side-left"></td>
-                            <td class="line-content side-left"></td>
-                            <td class="line-num line-added">${++newLineNum}</td>
-                            <td class="line-content line-added">${escapeHtml(item.value) || '&nbsp;'}</td>
-                        </tr>
-                    `;
-                    i++;
+                } else {
+                    const { removes, adds } = group;
+                    const maxLen = Math.max(removes.length, adds.length);
+
+                    for (let j = 0; j < maxLen; j++) {
+                        const removeItem = removes[j];
+                        const addItem = adds[j];
+
+                        // If both exist on same row, show character diff
+                        if (removeItem && addItem) {
+                            const { oldHtml, newHtml } = highlightCharDiff(removeItem.value, addItem.value);
+                            html += `
+                                <tr>
+                                    <td class="line-num side-left line-removed">${++oldLineNum}</td>
+                                    <td class="line-content side-left line-removed">${oldHtml || '&nbsp;'}</td>
+                                    <td class="line-num line-added">${++newLineNum}</td>
+                                    <td class="line-content line-added">${newHtml || '&nbsp;'}</td>
+                                </tr>
+                            `;
+                        } else if (removeItem) {
+                            html += `
+                                <tr>
+                                    <td class="line-num side-left line-removed">${++oldLineNum}</td>
+                                    <td class="line-content side-left line-removed">${escapeHtml(removeItem.value) || '&nbsp;'}</td>
+                                    <td class="line-num empty-cell"></td>
+                                    <td class="line-content empty-cell"></td>
+                                </tr>
+                            `;
+                        } else if (addItem) {
+                            html += `
+                                <tr>
+                                    <td class="line-num side-left empty-cell"></td>
+                                    <td class="line-content side-left empty-cell"></td>
+                                    <td class="line-num line-added">${++newLineNum}</td>
+                                    <td class="line-content line-added">${escapeHtml(addItem.value) || '&nbsp;'}</td>
+                                </tr>
+                            `;
+                        }
+                    }
                 }
             }
 
