@@ -225,6 +225,7 @@
         .diff-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
             line-height: 1.5;
@@ -234,6 +235,11 @@
             padding: 0;
             vertical-align: top;
         }
+
+        .diff-table td:nth-child(1),
+        .diff-table td:nth-child(3) { width: 50px; }
+        .diff-table td:nth-child(2),
+        .diff-table td:nth-child(4) { width: calc(50% - 50px); }
 
         .line-num {
             width: 50px;
@@ -718,15 +724,15 @@
                     groups.push({ type: 'equal', items: [diff[i]] });
                     i++;
                 } else {
-                    // Collect consecutive removes and adds
+                    // Collect consecutive removes and adds (in any order)
                     const removes = [];
                     const adds = [];
-                    while (i < diff.length && diff[i].type === 'remove') {
-                        removes.push(diff[i]);
-                        i++;
-                    }
-                    while (i < diff.length && diff[i].type === 'add') {
-                        adds.push(diff[i]);
+                    while (i < diff.length && (diff[i].type === 'remove' || diff[i].type === 'add')) {
+                        if (diff[i].type === 'remove') {
+                            removes.push(diff[i]);
+                        } else {
+                            adds.push(diff[i]);
+                        }
                         i++;
                     }
                     if (removes.length > 0 || adds.length > 0) {
