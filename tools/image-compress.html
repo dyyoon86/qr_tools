@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="imageCompressTitle">이미지 압축기 - ionflow.xyz</title>
+    <meta name="description" content="브라우저에서 이미지를 압축합니다. 품질 조절, 리사이즈, 포맷 변환(JPEG/PNG/WebP) 지원. 서버 전송 없음.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/image-compress.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="이미지 압축기 - ionflow.xyz">
+    <meta property="og:description" content="브라우저에서 이미지를 압축합니다. 서버 전송 없이 안전합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/image-compress.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/image-compress.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/image-compress.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/image-compress.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 900px; }
+        .drop-zone {
+            border: 2px dashed #d2d2d7; border-radius: 16px;
+            padding: 48px 24px; text-align: center; cursor: pointer;
+            transition: all 0.3s; background: #fff;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #0071e3; background: #f0f5ff;
+        }
+        .drop-zone .icon { font-size: 48px; margin-bottom: 12px; }
+        .drop-zone .text { font-size: 15px; color: #86868b; }
+        .drop-zone .hint { font-size: 13px; color: #86868b; margin-top: 8px; }
+        .controls {
+            display: flex; gap: 16px; align-items: center; margin: 20px 0;
+            flex-wrap: wrap; background: #fff; border-radius: 12px; padding: 16px;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 4px; }
+        .control-group label { font-size: 13px; color: #86868b; }
+        .control-group input, .control-group select {
+            padding: 8px 12px; font-size: 14px;
+            border: 1px solid #d2d2d7; border-radius: 8px;
+        }
+        .control-group input[type="range"] { width: 200px; }
+        .quality-value { font-weight: 600; font-size: 14px; color: #0071e3; }
+        .comparison {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) { .comparison { grid-template-columns: 1fr; } }
+        .compare-card {
+            background: #fff; border-radius: 12px; overflow: hidden;
+        }
+        .compare-card .header {
+            padding: 10px 16px; font-size: 14px; font-weight: 600;
+            display: flex; justify-content: space-between;
+        }
+        .compare-card .size { color: #86868b; font-weight: 400; }
+        .compare-card img {
+            width: 100%; display: block; object-fit: contain;
+            max-height: 300px; background: #f5f5f7;
+        }
+        .result-bar {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; padding: 16px; background: #fff; border-radius: 12px;
+            margin-top: 16px;
+        }
+        .result-bar .reduction {
+            font-size: 28px; font-weight: 700; color: #34c759;
+        }
+        .result-bar .label { font-size: 14px; color: #86868b; }
+        .btn-row {
+            display: flex; gap: 10px; margin-top: 16px; justify-content: center;
+        }
+        .btn-row button {
+            padding: 12px 24px; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+        }
+        .btn-primary { background: #1d1d1f; color: #fff; }
+        .btn-primary:hover { background: #424245; }
+        .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+        .btn-secondary:hover { background: #d2d2d7; }
+        .hidden { display: none; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="imageCompressHeading">이미지 압축기</h1>
+        <p data-i18n="imageCompressSubheading">브라우저에서 이미지를 압축합니다. 서버 전송 없이 안전합니다.</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <div class="icon">📷</div>
+                <div class="text">이미지를 드래그하거나 클릭하여 업로드</div>
+                <div class="hint">JPEG, PNG, WebP, GIF 지원 (최대 20MB)</div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFile(this.files[0])">
+
+            <div class="controls hidden" id="controls">
+                <div class="control-group">
+                    <label>품질: <span class="quality-value" id="quality-val">80%</span></label>
+                    <input type="range" id="quality" min="10" max="100" value="80" oninput="updateQuality()">
+                </div>
+                <div class="control-group">
+                    <label>포맷</label>
+                    <select id="format" onchange="compress()">
+                        <option value="image/jpeg">JPEG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp" selected>WebP</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>최대 너비 (px)</label>
+                    <input type="number" id="max-width" value="1920" min="100" max="10000" step="100" onchange="compress()">
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden" id="result-section">
+            <div class="comparison">
+                <div class="compare-card">
+                    <div class="header"><span>원본</span><span class="size" id="orig-size"></span></div>
+                    <img id="orig-img">
+                </div>
+                <div class="compare-card">
+                    <div class="header"><span>압축</span><span class="size" id="comp-size"></span></div>
+                    <img id="comp-img">
+                </div>
+            </div>
+            <div class="result-bar">
+                <div>
+                    <div class="reduction" id="reduction">-0%</div>
+                    <div class="label">크기 감소</div>
+                </div>
+                <div>
+                    <div class="reduction" id="dimensions" style="font-size:16px;color:#1d1d1f"></div>
+                    <div class="label">해상도</div>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button class="btn-primary" onclick="download()">압축 이미지 다운로드</button>
+                <button class="btn-secondary" onclick="reset()">다른 이미지</button>
+            </div>
+        </div>
+
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        let originalFile = null;
+        let compressedBlob = null;
+        let originalImg = new Image();
+
+        // Drag and drop
+        const dropZone = document.getElementById('drop-zone');
+        ['dragenter','dragover'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('dragover'); }));
+        ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('dragover'); }));
+        dropZone.addEventListener('drop', e => { if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(2) + ' MB';
+        }
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                showToast('이미지 파일을 선택하세요', true);
+                return;
+            }
+            if (file.size > 20 * 1048576) {
+                showToast('20MB 이하의 이미지만 지원합니다', true);
+                return;
+            }
+            originalFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                originalImg.onload = () => compress();
+                originalImg.src = e.target.result;
+                document.getElementById('orig-img').src = e.target.result;
+                document.getElementById('orig-size').textContent = formatSize(file.size);
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('controls').classList.remove('hidden');
+        }
+
+        function compress() {
+            if (!originalImg.src) return;
+
+            const quality = parseInt(document.getElementById('quality').value) / 100;
+            const format = document.getElementById('format').value;
+            const maxWidth = parseInt(document.getElementById('max-width').value) || 1920;
+
+            const canvas = document.createElement('canvas');
+            let w = originalImg.naturalWidth;
+            let h = originalImg.naturalHeight;
+
+            if (w > maxWidth) {
+                h = Math.round(h * maxWidth / w);
+                w = maxWidth;
+            }
+            canvas.width = w;
+            canvas.height = h;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(originalImg, 0, 0, w, h);
+
+            canvas.toBlob(blob => {
+                compressedBlob = blob;
+                const url = URL.createObjectURL(blob);
+                document.getElementById('comp-img').src = url;
+                document.getElementById('comp-size').textContent = formatSize(blob.size);
+
+                const reduction = ((1 - blob.size / originalFile.size) * 100).toFixed(1);
+                document.getElementById('reduction').textContent = `-${reduction}%`;
+                document.getElementById('reduction').style.color = reduction > 0 ? '#34c759' : '#ff3b30';
+                document.getElementById('dimensions').textContent = `${w} × ${h}`;
+
+                document.getElementById('result-section').classList.remove('hidden');
+            }, format, quality);
+        }
+
+        function updateQuality() {
+            document.getElementById('quality-val').textContent = document.getElementById('quality').value + '%';
+            compress();
+        }
+
+        function download() {
+            if (!compressedBlob) return;
+            const format = document.getElementById('format').value;
+            const ext = format.split('/')[1];
+            const name = (originalFile.name.replace(/\.[^.]+$/, '') || 'image') + '_compressed.' + ext;
+            const a = document.createElement('a');
+            a.download = name;
+            a.href = URL.createObjectURL(compressedBlob);
+            a.click();
+            showToast('다운로드 완료');
+        }
+
+        function reset() {
+            originalFile = null;
+            compressedBlob = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('controls').classList.add('hidden');
+            document.getElementById('result-section').classList.add('hidden');
+        }
+
+        function showToast(msg, isError) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (isError ? ' error' : '');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

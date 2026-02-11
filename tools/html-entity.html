@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="htmlEntityTitle">HTML 엔티티 변환기 - ionflow.xyz</title>
+    <meta name="description" content="HTML 특수문자를 엔티티 코드로 인코딩하거나 디코딩합니다. &amp; &lt; &gt; 등 변환.">
+
+    <link rel="canonical" href="https://ionflow.xyz/tools/html-entity.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="HTML 엔티티 변환기 - ionflow.xyz">
+    <meta property="og:description" content="HTML 특수문자를 엔티티 코드로 인코딩하거나 디코딩합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/html-entity.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HTML 엔티티 변환기 - ionflow.xyz">
+    <meta name="twitter:description" content="HTML 특수문자를 엔티티 코드로 인코딩하거나 디코딩합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/html-entity.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/html-entity.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/html-entity.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 800px; }
+        .mode-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            background: #e8e8ed;
+            border-radius: 10px;
+            padding: 3px;
+        }
+        .mode-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #86868b;
+            transition: all 0.2s;
+        }
+        .mode-tab.active {
+            background: #fff;
+            color: #1d1d1f;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        textarea {
+            height: 160px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .output-area {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary { background: #1d1d1f; color: #fff; }
+        .btn-primary:hover { background: #424245; }
+        .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+        .btn-secondary:hover { background: #d2d2d7; }
+        .ref-table { margin-top: 24px; }
+        .ref-table h3 { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        .ref-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .ref-item:hover { background: #e8e8ed; }
+        .ref-item .char { font-size: 16px; }
+        .ref-item .code { font-family: 'JetBrains Mono', monospace; color: #86868b; font-size: 12px; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0;
+            transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="htmlEntityHeading">HTML 엔티티 변환기</h1>
+        <p data-i18n="htmlEntitySubheading">HTML 특수문자를 인코딩하거나 디코딩합니다</p>
+    </div>
+
+    <main>
+        <div class="panel">
+            <div class="mode-tabs">
+                <button class="mode-tab active" onclick="setMode('encode')" data-i18n="encodeTab">인코딩 (텍스트 → 엔티티)</button>
+                <button class="mode-tab" onclick="setMode('decode')" data-i18n="decodeTab">디코딩 (엔티티 → 텍스트)</button>
+            </div>
+
+            <textarea id="input" placeholder="변환할 텍스트를 입력하세요..." oninput="convert()"></textarea>
+
+            <div class="btn-row">
+                <button class="btn-primary" onclick="convert()" data-i18n="convertBtn">변환</button>
+                <button class="btn-secondary" onclick="copyResult()" data-i18n="copyBtn">복사</button>
+                <button class="btn-secondary" onclick="swapIO()" data-i18n="swapBtn">↕ 입출력 전환</button>
+                <button class="btn-secondary" onclick="clearAll()" data-i18n="clearBtn">지우기</button>
+            </div>
+
+            <div class="output-area" id="output"></div>
+        </div>
+
+        <div class="ad-space">광고</div>
+
+        <div class="panel ref-table">
+            <h3 data-i18n="refTitle">자주 사용하는 HTML 엔티티</h3>
+            <div class="ref-grid" id="ref-grid"></div>
+        </div>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let mode = 'encode';
+
+        const ENTITIES = [
+            ['&', '&amp;'], ['<', '&lt;'], ['>', '&gt;'], ['"', '&quot;'], ["'", '&#39;'],
+            [' ', '&nbsp;'], ['©', '&copy;'], ['®', '&reg;'], ['™', '&trade;'],
+            ['€', '&euro;'], ['£', '&pound;'], ['¥', '&yen;'], ['¢', '&cent;'],
+            ['§', '&sect;'], ['¶', '&para;'], ['†', '&dagger;'], ['‡', '&Dagger;'],
+            ['•', '&bull;'], ['…', '&hellip;'], ['–', '&ndash;'], ['—', '&mdash;'],
+            ['←', '&larr;'], ['→', '&rarr;'], ['↑', '&uarr;'], ['↓', '&darr;'],
+            ['♠', '&spades;'], ['♣', '&clubs;'], ['♥', '&hearts;'], ['♦', '&diams;'],
+            ['∞', '&infin;'], ['√', '&radic;'], ['∑', '&sum;'], ['±', '&plusmn;'],
+            ['×', '&times;'], ['÷', '&divide;'], ['≠', '&ne;'], ['≤', '&le;'],
+            ['≥', '&ge;'], ['°', '&deg;'], ['µ', '&micro;'], ['π', '&pi;']
+        ];
+
+        function setMode(m) {
+            mode = m;
+            document.querySelectorAll('.mode-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', (i === 0 && m === 'encode') || (i === 1 && m === 'decode'));
+            });
+            convert();
+        }
+
+        function encodeHTML(str) {
+            return str.replace(/[&<>"']/g, ch => {
+                const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+                return map[ch];
+            });
+        }
+
+        function decodeHTML(str) {
+            const el = document.createElement('textarea');
+            el.innerHTML = str;
+            return el.value;
+        }
+
+        function convert() {
+            const input = document.getElementById('input').value;
+            const output = mode === 'encode' ? encodeHTML(input) : decodeHTML(input);
+            document.getElementById('output').textContent = output;
+        }
+
+        function copyResult() {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text).then(() => showToast('복사되었습니다'));
+        }
+
+        function swapIO() {
+            const input = document.getElementById('input');
+            const output = document.getElementById('output');
+            input.value = output.textContent;
+            mode = mode === 'encode' ? 'decode' : 'encode';
+            document.querySelectorAll('.mode-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', (i === 0 && mode === 'encode') || (i === 1 && mode === 'decode'));
+            });
+            convert();
+        }
+
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').textContent = '';
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        // Render reference grid
+        const grid = document.getElementById('ref-grid');
+        ENTITIES.forEach(([char, code]) => {
+            const item = document.createElement('div');
+            item.className = 'ref-item';
+            item.innerHTML = `<span class="char">${char}</span><span class="code">${code}</span>`;
+            item.onclick = () => {
+                navigator.clipboard.writeText(code).then(() => showToast(code + ' 복사됨'));
+            };
+            grid.appendChild(item);
+        });
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

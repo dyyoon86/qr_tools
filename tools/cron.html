@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="cronTitle">Cron 표현식 해석기 - ionflow.xyz</title>
+    <meta name="description" content="Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다. 비주얼 빌더를 제공합니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/cron.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="Cron 표현식 해석기 - ionflow.xyz">
+    <meta property="og:description" content="Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/cron.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/cron.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/cron.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/cron.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 800px; }
+        .cron-input-row {
+            display: flex; gap: 10px; align-items: center; margin-bottom: 16px;
+        }
+        .cron-input-row input {
+            flex: 1; padding: 14px 16px; font-size: 18px;
+            font-family: 'JetBrains Mono', monospace;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+            letter-spacing: 2px; text-align: center;
+        }
+        .cron-input-row input:focus { outline: none; border-color: #0071e3; }
+        .field-labels {
+            display: flex; justify-content: center; gap: 0; margin-bottom: 20px;
+        }
+        .field-label {
+            flex: 1; max-width: 80px; text-align: center;
+            font-size: 11px; color: #86868b; padding: 4px;
+        }
+        .presets {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .preset-btn {
+            padding: 6px 14px; border: 1px solid #d2d2d7; border-radius: 20px;
+            background: #fff; font-size: 13px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+        .result-card {
+            background: #fff; border-radius: 12px; padding: 20px; margin-top: 16px;
+        }
+        .result-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .description { font-size: 17px; color: #1d1d1f; line-height: 1.6; }
+        .next-runs { margin-top: 16px; }
+        .next-runs h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+        .run-item {
+            display: flex; justify-content: space-between;
+            padding: 10px 12px; border-bottom: 1px solid #f5f5f7;
+            font-size: 14px;
+        }
+        .run-item:last-child { border: none; }
+        .run-item .num { color: #86868b; width: 30px; }
+        .run-item .time { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .run-item .relative { color: #86868b; font-size: 13px; }
+        .error-msg { color: #ff3b30; font-size: 14px; margin-top: 8px; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="cronHeading">Cron 표현식 해석기</h1>
+        <p data-i18n="cronSubheading">Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="cron-input-row">
+                <input type="text" id="cron-input" value="0 9 * * 1-5" placeholder="* * * * *" oninput="parseCron()">
+            </div>
+            <div class="field-labels">
+                <div class="field-label">분<br>(0-59)</div>
+                <div class="field-label">시<br>(0-23)</div>
+                <div class="field-label">일<br>(1-31)</div>
+                <div class="field-label">월<br>(1-12)</div>
+                <div class="field-label">요일<br>(0-6)</div>
+            </div>
+            <div class="presets">
+                <button class="preset-btn" onclick="setPreset('* * * * *')">매분</button>
+                <button class="preset-btn" onclick="setPreset('0 * * * *')">매시 정각</button>
+                <button class="preset-btn" onclick="setPreset('0 0 * * *')">매일 자정</button>
+                <button class="preset-btn" onclick="setPreset('0 9 * * 1-5')">평일 오전 9시</button>
+                <button class="preset-btn" onclick="setPreset('0 0 1 * *')">매월 1일</button>
+                <button class="preset-btn" onclick="setPreset('0 0 * * 0')">매주 일요일</button>
+                <button class="preset-btn" onclick="setPreset('*/5 * * * *')">5분마다</button>
+                <button class="preset-btn" onclick="setPreset('0 */2 * * *')">2시간마다</button>
+                <button class="preset-btn" onclick="setPreset('30 4 * * *')">매일 새벽 4:30</button>
+                <button class="preset-btn" onclick="setPreset('0 12 * * 1')">매주 월요일 정오</button>
+            </div>
+            <div class="result-card" id="result">
+                <h3>설명</h3>
+                <div class="description" id="description"></div>
+                <div class="error-msg" id="error" style="display:none"></div>
+            </div>
+            <div class="result-card next-runs" id="next-runs">
+                <h3>다음 5회 실행 시각</h3>
+                <div id="runs-list"></div>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        const DAYS = ['일','월','화','수','목','금','토'];
+        const MONTHS = ['','1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+        function parseField(field, min, max) {
+            const values = new Set();
+            field.split(',').forEach(part => {
+                let [range, step] = part.split('/');
+                step = step ? parseInt(step) : 1;
+                if (range === '*') {
+                    for (let i = min; i <= max; i += step) values.add(i);
+                } else if (range.includes('-')) {
+                    const [s, e] = range.split('-').map(Number);
+                    for (let i = s; i <= e; i += step) values.add(i);
+                } else {
+                    values.add(parseInt(range));
+                }
+            });
+            return [...values].sort((a, b) => a - b);
+        }
+
+        function describeCron(expr) {
+            const parts = expr.trim().split(/\s+/);
+            if (parts.length < 5) return '최소 5개 필드가 필요합니다 (분 시 일 월 요일)';
+            const [min, hour, dom, mon, dow] = parts;
+            let desc = '';
+
+            if (min === '*' && hour === '*' && dom === '*' && mon === '*' && dow === '*') return '매분 실행';
+            if (min === '0' && hour === '0' && dom === '*' && mon === '*' && dow === '*') return '매일 자정(00:00)에 실행';
+
+            // Time description
+            if (hour !== '*' && min !== '*') {
+                const hours = parseField(hour, 0, 23);
+                const mins = parseField(min, 0, 59);
+                desc += hours.map(h => mins.map(m => `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`).join(', ')).join(', ') + '에 ';
+            } else if (hour !== '*') {
+                desc += `${hour}시 `;
+                if (min.includes('/')) desc += `${min.split('/')[1]}분마다 `;
+            } else if (min !== '*') {
+                if (min.includes('/')) desc += `${min.split('/')[1]}분마다 `;
+                else desc += `매시 ${min}분에 `;
+            } else {
+                desc += '매분 ';
+            }
+
+            // Day description
+            if (dow !== '*') {
+                const days = parseField(dow, 0, 6);
+                desc += '매주 ' + days.map(d => DAYS[d] + '요일').join(', ') + ' ';
+            }
+            if (dom !== '*') desc += `매월 ${dom}일 `;
+            if (mon !== '*') {
+                const months = parseField(mon, 1, 12);
+                desc += months.map(m => MONTHS[m]).join(', ') + ' ';
+            }
+
+            return desc.trim() + ' 실행';
+        }
+
+        function getNextRuns(expr, count = 5) {
+            const parts = expr.trim().split(/\s+/);
+            if (parts.length < 5) return [];
+            const mins = parseField(parts[0], 0, 59);
+            const hours = parseField(parts[1], 0, 23);
+            const doms = parseField(parts[2], 1, 31);
+            const mons = parseField(parts[3], 1, 12);
+            const dows = parseField(parts[4], 0, 6);
+            const results = [];
+            const now = new Date();
+            let d = new Date(now);
+            d.setSeconds(0, 0);
+            d.setMinutes(d.getMinutes() + 1);
+
+            for (let i = 0; i < 525600 && results.length < count; i++) {
+                if (mons.includes(d.getMonth() + 1) &&
+                    (parts[2] === '*' || doms.includes(d.getDate())) &&
+                    (parts[4] === '*' || dows.includes(d.getDay())) &&
+                    hours.includes(d.getHours()) &&
+                    mins.includes(d.getMinutes())) {
+                    results.push(new Date(d));
+                }
+                d.setMinutes(d.getMinutes() + 1);
+            }
+            return results;
+        }
+
+        function relativeTime(date) {
+            const diff = date - new Date();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 60) return `${mins}분 후`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}시간 ${mins % 60}분 후`;
+            const days = Math.floor(hours / 24);
+            return `${days}일 ${hours % 24}시간 후`;
+        }
+
+        function parseCron() {
+            const expr = document.getElementById('cron-input').value.trim();
+            const descEl = document.getElementById('description');
+            const errorEl = document.getElementById('error');
+            const runsList = document.getElementById('runs-list');
+
+            if (!expr) { descEl.textContent = ''; runsList.innerHTML = ''; return; }
+
+            try {
+                const desc = describeCron(expr);
+                descEl.textContent = desc;
+                errorEl.style.display = 'none';
+
+                const runs = getNextRuns(expr);
+                runsList.innerHTML = runs.map((r, i) =>
+                    `<div class="run-item"><span class="num">${i + 1}</span><span class="time">${r.toLocaleString('ko-KR')}</span><span class="relative">${relativeTime(r)}</span></div>`
+                ).join('');
+            } catch (e) {
+                errorEl.textContent = '잘못된 Cron 표현식입니다';
+                errorEl.style.display = 'block';
+                runsList.innerHTML = '';
+            }
+        }
+
+        function setPreset(expr) {
+            document.getElementById('cron-input').value = expr;
+            parseCron();
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        parseCron();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

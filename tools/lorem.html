@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="loremTitle">Lorem Ipsum 생성기 - ionflow.xyz</title>
+    <meta name="description" content="Lorem Ipsum 더미 텍스트를 생성합니다. 문단, 문장, 단어 단위로 생성 가능합니다.">
+
+    <link rel="canonical" href="https://ionflow.xyz/tools/lorem.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="Lorem Ipsum 생성기 - ionflow.xyz">
+    <meta property="og:description" content="Lorem Ipsum 더미 텍스트를 생성합니다. 문단, 문장, 단어 단위로 생성 가능합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/lorem.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lorem Ipsum 생성기 - ionflow.xyz">
+    <meta name="twitter:description" content="Lorem Ipsum 더미 텍스트를 생성합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/lorem.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/lorem.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/lorem.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 800px; }
+        .options {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .options label {
+            font-size: 14px;
+            color: #86868b;
+        }
+        .options select, .options input[type="number"] {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            min-width: 100px;
+        }
+        .options input[type="number"] { width: 80px; }
+        .options select:focus, .options input[type="number"]:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+        .output-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #1d1d1f;
+            min-height: 200px;
+            white-space: pre-wrap;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-generate {
+            background: #1d1d1f;
+            color: #fff;
+        }
+        .btn-generate:hover { background: #424245; }
+        .btn-copy {
+            background: #e8e8ed;
+            color: #1d1d1f;
+        }
+        .btn-copy:hover { background: #d2d2d7; }
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .check-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .check-row label {
+            font-size: 14px;
+            color: #86868b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="loremHeading">Lorem Ipsum 생성기</h1>
+        <p data-i18n="loremSubheading">디자인과 개발에 필요한 더미 텍스트를 생성합니다</p>
+    </div>
+
+    <main>
+        <div class="panel">
+            <div class="options">
+                <label data-i18n="loremTypeLabel">유형:</label>
+                <select id="type">
+                    <option value="paragraphs">문단</option>
+                    <option value="sentences">문장</option>
+                    <option value="words">단어</option>
+                </select>
+                <label data-i18n="loremCountLabel">개수:</label>
+                <input type="number" id="count" value="3" min="1" max="100">
+            </div>
+            <div class="check-row">
+                <label><input type="checkbox" id="startLorem" checked> "Lorem ipsum dolor sit amet..."으로 시작</label>
+                <label><input type="checkbox" id="htmlTags"> HTML &lt;p&gt; 태그 포함</label>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-generate" onclick="generate()" data-i18n="generateBtn">생성하기</button>
+                <button class="btn-copy" onclick="copyText()" data-i18n="copyBtn">복사</button>
+            </div>
+
+            <div class="output-box" id="output">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
+        </div>
+
+        <div class="ad-space">광고</div>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const WORDS = [
+            'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do',
+            'eiusmod','tempor','incididunt','ut','labore','et','dolore','magna','aliqua','enim',
+            'ad','minim','veniam','quis','nostrud','exercitation','ullamco','laboris','nisi',
+            'aliquip','ex','ea','commodo','consequat','duis','aute','irure','in','reprehenderit',
+            'voluptate','velit','esse','cillum','fugiat','nulla','pariatur','excepteur','sint',
+            'occaecat','cupidatat','non','proident','sunt','culpa','qui','officia','deserunt',
+            'mollit','anim','id','est','laborum','ac','accumsan','aliquet','ante','arcu',
+            'at','auctor','augue','bibendum','blandit','commodo','condimentum','congue',
+            'consequat','cras','curabitur','cursus','dapibus','diam','dictum','dignissim',
+            'donec','dui','efficitur','egestas','eget','eleifend','elementum','eros','etiam',
+            'eu','euismod','facilisi','facilisis','fames','faucibus','felis','fermentum',
+            'feugiat','finibus','fringilla','fusce','gravida','habitant','habitasse','hac',
+            'hendrerit','iaculis','imperdiet','integer','interdum','justo','lacinia','lacus',
+            'laoreet','lectus','leo','libero','ligula','lobortis','luctus','maecenas','massa',
+            'mattis','mauris','maximus','metus','mi','morbi','nam','nec','neque','nibh',
+            'nisi','nisl','nullam','nunc','odio','orci','ornare','pellentesque','pharetra',
+            'phasellus','placerat','platea','porta','porttitor','posuere','praesent','pretium',
+            'proin','pulvinar','purus','quam','rhoncus','risus','rutrum','sagittis','sapien',
+            'scelerisque','semper','senectus','sodales','sollicitudin','suscipit','suspendisse',
+            'tellus','tempus','tincidunt','tortor','tristique','turpis','ultrices','ultricies',
+            'urna','varius','vehicula','vel','vestibulum','vitae','vivamus','viverra','volutpat','vulputate'
+        ];
+
+        const FIRST_SENTENCE = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+
+        function randomWord() {
+            return WORDS[Math.floor(Math.random() * WORDS.length)];
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function generateSentence() {
+            const len = 8 + Math.floor(Math.random() * 12);
+            const words = [];
+            for (let i = 0; i < len; i++) words.push(randomWord());
+            words[0] = capitalize(words[0]);
+            return words.join(' ') + '.';
+        }
+
+        function generateParagraph() {
+            const count = 4 + Math.floor(Math.random() * 5);
+            const sentences = [];
+            for (let i = 0; i < count; i++) sentences.push(generateSentence());
+            return sentences.join(' ');
+        }
+
+        function generate() {
+            const type = document.getElementById('type').value;
+            const count = Math.max(1, Math.min(100, parseInt(document.getElementById('count').value) || 3));
+            const startLorem = document.getElementById('startLorem').checked;
+            const htmlTags = document.getElementById('htmlTags').checked;
+            let result = [];
+
+            if (type === 'paragraphs') {
+                for (let i = 0; i < count; i++) {
+                    let p = generateParagraph();
+                    if (i === 0 && startLorem) p = FIRST_SENTENCE + ' ' + p;
+                    result.push(htmlTags ? '<p>' + p + '</p>' : p);
+                }
+                document.getElementById('output').textContent = result.join(htmlTags ? '\n\n' : '\n\n');
+            } else if (type === 'sentences') {
+                for (let i = 0; i < count; i++) {
+                    let s = generateSentence();
+                    if (i === 0 && startLorem) s = FIRST_SENTENCE;
+                    result.push(s);
+                }
+                document.getElementById('output').textContent = result.join(' ');
+            } else {
+                const words = [];
+                if (startLorem) words.push('lorem', 'ipsum', 'dolor', 'sit', 'amet');
+                while (words.length < count) words.push(randomWord());
+                document.getElementById('output').textContent = words.slice(0, count).join(' ');
+            }
+        }
+
+        function copyText() {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text).then(() => showToast('복사되었습니다'));
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        generate();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

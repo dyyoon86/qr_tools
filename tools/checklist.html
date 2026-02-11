@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="checklistTitle">체크리스트 관리자 - ionflow.xyz</title>
+    <meta name="description" content="간편한 온라인 체크리스트입니다. 할일 목록을 관리하고 브라우저에 자동 저장됩니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/checklist.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="체크리스트 관리자 - ionflow.xyz">
+    <meta property="og:description" content="간편한 온라인 체크리스트. 할일 목록을 관리하고 자동 저장됩니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/checklist.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/checklist.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/checklist.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/checklist.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 600px; }
+        .add-row {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        .add-row input {
+            flex: 1; padding: 14px 16px; font-size: 15px;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+        }
+        .add-row input:focus { outline: none; border-color: #0071e3; }
+        .add-row button {
+            padding: 14px 24px; background: #1d1d1f; color: #fff;
+            border: none; border-radius: 12px; font-size: 15px;
+            font-weight: 600; cursor: pointer; white-space: nowrap;
+        }
+        .add-row button:hover { background: #424245; }
+        .stats {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; font-size: 14px; color: #86868b;
+        }
+        .progress-bar {
+            width: 100%; height: 6px; background: #e8e8ed;
+            border-radius: 3px; margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: #34c759; border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .todo-list { list-style: none; padding: 0; margin: 0; }
+        .todo-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 16px; background: #fff; border-radius: 12px;
+            margin-bottom: 8px; transition: opacity 0.3s;
+        }
+        .todo-item.done { opacity: 0.5; }
+        .todo-item input[type="checkbox"] {
+            width: 20px; height: 20px; cursor: pointer;
+            accent-color: #34c759;
+        }
+        .todo-item .text {
+            flex: 1; font-size: 15px; color: #1d1d1f;
+            border: none; background: none; outline: none;
+            font-family: inherit;
+        }
+        .todo-item.done .text { text-decoration: line-through; color: #86868b; }
+        .todo-item .delete-btn {
+            padding: 4px 10px; background: none; border: none;
+            color: #ff3b30; font-size: 18px; cursor: pointer;
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .todo-item:hover .delete-btn { opacity: 1; }
+        .filter-row {
+            display: flex; gap: 8px; margin-bottom: 16px;
+        }
+        .filter-btn {
+            padding: 6px 14px; border: 1px solid #d2d2d7;
+            border-radius: 20px; background: #fff; font-size: 13px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .filter-btn.active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+        .actions {
+            display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
+        }
+        .actions button {
+            padding: 8px 16px; border: 1px solid #d2d2d7;
+            border-radius: 8px; background: #fff; font-size: 13px;
+            cursor: pointer;
+        }
+        .actions button:hover { background: #e8e8ed; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="checklistHeading">체크리스트 관리자</h1>
+        <p data-i18n="checklistSubheading">할일 목록을 관리하고 브라우저에 자동 저장됩니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="add-row">
+                <input type="text" id="new-item" placeholder="새 항목 추가..." onkeydown="if(event.key==='Enter')addItem()">
+                <button onclick="addItem()">추가</button>
+            </div>
+            <div class="stats" id="stats"></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+            <div class="filter-row">
+                <button class="filter-btn active" onclick="setFilter('all',this)">전체</button>
+                <button class="filter-btn" onclick="setFilter('active',this)">미완료</button>
+                <button class="filter-btn" onclick="setFilter('done',this)">완료</button>
+            </div>
+            <ul class="todo-list" id="todo-list"></ul>
+            <div class="actions">
+                <button onclick="clearDone()">완료 항목 삭제</button>
+                <button onclick="clearAll()">전체 삭제</button>
+                <button onclick="exportList()">텍스트 내보내기</button>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        let items = JSON.parse(localStorage.getItem('ionflow-checklist') || '[]');
+        let filter = 'all';
+
+        function save() {
+            localStorage.setItem('ionflow-checklist', JSON.stringify(items));
+            render();
+        }
+
+        function addItem() {
+            const input = document.getElementById('new-item');
+            const text = input.value.trim();
+            if (!text) return;
+            items.push({ id: Date.now(), text, done: false });
+            input.value = '';
+            save();
+        }
+
+        function toggleItem(id) {
+            const item = items.find(i => i.id === id);
+            if (item) item.done = !item.done;
+            save();
+        }
+
+        function deleteItem(id) {
+            items = items.filter(i => i.id !== id);
+            save();
+        }
+
+        function editItem(id, text) {
+            const item = items.find(i => i.id === id);
+            if (item) item.text = text;
+            save();
+        }
+
+        function setFilter(f, btn) {
+            filter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
+
+        function clearDone() {
+            items = items.filter(i => !i.done);
+            save();
+            showToast('완료 항목이 삭제되었습니다');
+        }
+
+        function clearAll() {
+            if (items.length === 0) return;
+            items = [];
+            save();
+            showToast('모든 항목이 삭제되었습니다');
+        }
+
+        function exportList() {
+            const text = items.map(i => (i.done ? '[x] ' : '[ ] ') + i.text).join('\n');
+            navigator.clipboard.writeText(text).then(() => showToast('체크리스트가 복사되었습니다'));
+        }
+
+        function render() {
+            const list = document.getElementById('todo-list');
+            const filtered = items.filter(i => {
+                if (filter === 'active') return !i.done;
+                if (filter === 'done') return i.done;
+                return true;
+            });
+
+            list.innerHTML = filtered.map(item => `
+                <li class="todo-item ${item.done ? 'done' : ''}">
+                    <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleItem(${item.id})">
+                    <input type="text" class="text" value="${item.text.replace(/"/g,'&quot;')}" onchange="editItem(${item.id},this.value)">
+                    <button class="delete-btn" onclick="deleteItem(${item.id})">×</button>
+                </li>
+            `).join('');
+
+            const total = items.length;
+            const done = items.filter(i => i.done).length;
+            const pct = total > 0 ? Math.round(done / total * 100) : 0;
+            document.getElementById('stats').textContent = `${done}/${total} 완료 (${pct}%)`;
+            document.getElementById('progress').style.width = pct + '%';
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        render();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

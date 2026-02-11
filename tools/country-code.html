@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="countryCodeTitle">국가 코드 검색기 - ionflow.xyz</title>
+    <meta name="description" content="전세계 국가의 국가코드, 전화번호 코드, 화폐, 수도 등을 검색합니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/country-code.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="국가 코드 검색기 - ionflow.xyz">
+    <meta property="og:description" content="전세계 국가의 국가코드, 전화번호 코드, 화폐 등을 검색합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/country-code.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/country-code.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/country-code.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/country-code.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 900px; }
+        .search-row {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        .search-row input {
+            flex: 1; padding: 14px 16px; font-size: 15px;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+        }
+        .search-row input:focus { outline: none; border-color: #0071e3; }
+        .count-label { font-size: 13px; color: #86868b; margin-bottom: 12px; }
+        .country-table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 14px;
+        }
+        .country-table th {
+            background: #e8e8ed; padding: 12px 14px; text-align: left;
+            font-weight: 600; position: sticky; top: 0; cursor: pointer;
+        }
+        .country-table th:first-child { border-radius: 8px 0 0 8px; }
+        .country-table th:last-child { border-radius: 0 8px 8px 0; }
+        .country-table th:hover { background: #d2d2d7; }
+        .country-table td {
+            padding: 10px 14px; border-bottom: 1px solid #f5f5f7;
+        }
+        .country-table tr:hover td { background: #f5f5f7; }
+        .flag { font-size: 20px; margin-right: 6px; }
+        .code { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .table-container {
+            max-height: 600px; overflow-y: auto;
+            border-radius: 12px; background: #fff;
+        }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="countryCodeHeading">국가 코드 검색기</h1>
+        <p data-i18n="countryCodeSubheading">국가코드, 전화번호, 화폐 정보를 검색합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="search-row">
+                <input type="text" id="search" placeholder="국가명, 코드, 전화번호로 검색..." oninput="filterCountries()">
+            </div>
+            <div class="count-label" id="count"></div>
+            <div class="table-container">
+                <table class="country-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortBy('name')">국가</th>
+                            <th onclick="sortBy('code')">코드</th>
+                            <th onclick="sortBy('phone')">전화</th>
+                            <th onclick="sortBy('currency')">화폐</th>
+                            <th onclick="sortBy('capital')">수도</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        const COUNTRIES=[
+            {name:'대한민국',en:'South Korea',code:'KR',phone:'+82',currency:'KRW ₩',capital:'서울',flag:'🇰🇷'},
+            {name:'미국',en:'United States',code:'US',phone:'+1',currency:'USD $',capital:'워싱턴 D.C.',flag:'🇺🇸'},
+            {name:'일본',en:'Japan',code:'JP',phone:'+81',currency:'JPY ¥',capital:'도쿄',flag:'🇯🇵'},
+            {name:'중국',en:'China',code:'CN',phone:'+86',currency:'CNY ¥',capital:'베이징',flag:'🇨🇳'},
+            {name:'영국',en:'United Kingdom',code:'GB',phone:'+44',currency:'GBP £',capital:'런던',flag:'🇬🇧'},
+            {name:'프랑스',en:'France',code:'FR',phone:'+33',currency:'EUR €',capital:'파리',flag:'🇫🇷'},
+            {name:'독일',en:'Germany',code:'DE',phone:'+49',currency:'EUR €',capital:'베를린',flag:'🇩🇪'},
+            {name:'캐나다',en:'Canada',code:'CA',phone:'+1',currency:'CAD $',capital:'오타와',flag:'🇨🇦'},
+            {name:'호주',en:'Australia',code:'AU',phone:'+61',currency:'AUD $',capital:'캔버라',flag:'🇦🇺'},
+            {name:'인도',en:'India',code:'IN',phone:'+91',currency:'INR ₹',capital:'뉴델리',flag:'🇮🇳'},
+            {name:'브라질',en:'Brazil',code:'BR',phone:'+55',currency:'BRL R$',capital:'브라질리아',flag:'🇧🇷'},
+            {name:'러시아',en:'Russia',code:'RU',phone:'+7',currency:'RUB ₽',capital:'모스크바',flag:'🇷🇺'},
+            {name:'이탈리아',en:'Italy',code:'IT',phone:'+39',currency:'EUR €',capital:'로마',flag:'🇮🇹'},
+            {name:'스페인',en:'Spain',code:'ES',phone:'+34',currency:'EUR €',capital:'마드리드',flag:'🇪🇸'},
+            {name:'멕시코',en:'Mexico',code:'MX',phone:'+52',currency:'MXN $',capital:'멕시코시티',flag:'🇲🇽'},
+            {name:'네덜란드',en:'Netherlands',code:'NL',phone:'+31',currency:'EUR €',capital:'암스테르담',flag:'🇳🇱'},
+            {name:'스위스',en:'Switzerland',code:'CH',phone:'+41',currency:'CHF Fr',capital:'베른',flag:'🇨🇭'},
+            {name:'스웨덴',en:'Sweden',code:'SE',phone:'+46',currency:'SEK kr',capital:'스톡홀름',flag:'🇸🇪'},
+            {name:'노르웨이',en:'Norway',code:'NO',phone:'+47',currency:'NOK kr',capital:'오슬로',flag:'🇳🇴'},
+            {name:'덴마크',en:'Denmark',code:'DK',phone:'+45',currency:'DKK kr',capital:'코펜하겐',flag:'🇩🇰'},
+            {name:'핀란드',en:'Finland',code:'FI',phone:'+358',currency:'EUR €',capital:'헬싱키',flag:'🇫🇮'},
+            {name:'폴란드',en:'Poland',code:'PL',phone:'+48',currency:'PLN zł',capital:'바르샤바',flag:'🇵🇱'},
+            {name:'태국',en:'Thailand',code:'TH',phone:'+66',currency:'THB ฿',capital:'방콕',flag:'🇹🇭'},
+            {name:'베트남',en:'Vietnam',code:'VN',phone:'+84',currency:'VND ₫',capital:'하노이',flag:'🇻🇳'},
+            {name:'싱가포르',en:'Singapore',code:'SG',phone:'+65',currency:'SGD $',capital:'싱가포르',flag:'🇸🇬'},
+            {name:'인도네시아',en:'Indonesia',code:'ID',phone:'+62',currency:'IDR Rp',capital:'자카르타',flag:'🇮🇩'},
+            {name:'말레이시아',en:'Malaysia',code:'MY',phone:'+60',currency:'MYR RM',capital:'쿠알라룸푸르',flag:'🇲🇾'},
+            {name:'필리핀',en:'Philippines',code:'PH',phone:'+63',currency:'PHP ₱',capital:'마닐라',flag:'🇵🇭'},
+            {name:'터키',en:'Turkey',code:'TR',phone:'+90',currency:'TRY ₺',capital:'앙카라',flag:'🇹🇷'},
+            {name:'사우디아라비아',en:'Saudi Arabia',code:'SA',phone:'+966',currency:'SAR ﷼',capital:'리야드',flag:'🇸🇦'},
+            {name:'아랍에미리트',en:'UAE',code:'AE',phone:'+971',currency:'AED د.إ',capital:'아부다비',flag:'🇦🇪'},
+            {name:'이스라엘',en:'Israel',code:'IL',phone:'+972',currency:'ILS ₪',capital:'예루살렘',flag:'🇮🇱'},
+            {name:'이집트',en:'Egypt',code:'EG',phone:'+20',currency:'EGP £',capital:'카이로',flag:'🇪🇬'},
+            {name:'남아프리카공화국',en:'South Africa',code:'ZA',phone:'+27',currency:'ZAR R',capital:'프리토리아',flag:'🇿🇦'},
+            {name:'나이지리아',en:'Nigeria',code:'NG',phone:'+234',currency:'NGN ₦',capital:'아부자',flag:'🇳🇬'},
+            {name:'아르헨티나',en:'Argentina',code:'AR',phone:'+54',currency:'ARS $',capital:'부에노스아이레스',flag:'🇦🇷'},
+            {name:'콜롬비아',en:'Colombia',code:'CO',phone:'+57',currency:'COP $',capital:'보고타',flag:'🇨🇴'},
+            {name:'칠레',en:'Chile',code:'CL',phone:'+56',currency:'CLP $',capital:'산티아고',flag:'🇨🇱'},
+            {name:'뉴질랜드',en:'New Zealand',code:'NZ',phone:'+64',currency:'NZD $',capital:'웰링턴',flag:'🇳🇿'},
+            {name:'포르투갈',en:'Portugal',code:'PT',phone:'+351',currency:'EUR €',capital:'리스본',flag:'🇵🇹'},
+            {name:'벨기에',en:'Belgium',code:'BE',phone:'+32',currency:'EUR €',capital:'브뤼셀',flag:'🇧🇪'},
+            {name:'오스트리아',en:'Austria',code:'AT',phone:'+43',currency:'EUR €',capital:'빈',flag:'🇦🇹'},
+            {name:'아일랜드',en:'Ireland',code:'IE',phone:'+353',currency:'EUR €',capital:'더블린',flag:'🇮🇪'},
+            {name:'체코',en:'Czech Republic',code:'CZ',phone:'+420',currency:'CZK Kč',capital:'프라하',flag:'🇨🇿'},
+            {name:'그리스',en:'Greece',code:'GR',phone:'+30',currency:'EUR €',capital:'아테네',flag:'🇬🇷'},
+            {name:'헝가리',en:'Hungary',code:'HU',phone:'+36',currency:'HUF Ft',capital:'부다페스트',flag:'🇭🇺'},
+            {name:'루마니아',en:'Romania',code:'RO',phone:'+40',currency:'RON lei',capital:'부쿠레슈티',flag:'🇷🇴'},
+            {name:'우크라이나',en:'Ukraine',code:'UA',phone:'+380',currency:'UAH ₴',capital:'키이우',flag:'🇺🇦'},
+            {name:'대만',en:'Taiwan',code:'TW',phone:'+886',currency:'TWD NT$',capital:'타이베이',flag:'🇹🇼'},
+            {name:'홍콩',en:'Hong Kong',code:'HK',phone:'+852',currency:'HKD HK$',capital:'홍콩',flag:'🇭🇰'}
+        ];
+
+        let sortField = 'name';
+        let sortAsc = true;
+
+        function filterCountries() {
+            const q = document.getElementById('search').value.toLowerCase();
+            const filtered = COUNTRIES.filter(c =>
+                c.name.toLowerCase().includes(q) ||
+                c.en.toLowerCase().includes(q) ||
+                c.code.toLowerCase().includes(q) ||
+                c.phone.includes(q) ||
+                c.currency.toLowerCase().includes(q) ||
+                c.capital.toLowerCase().includes(q)
+            );
+            filtered.sort((a, b) => {
+                const av = a[sortField] || '';
+                const bv = b[sortField] || '';
+                return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+            });
+            renderTable(filtered);
+        }
+
+        function sortBy(field) {
+            if (sortField === field) sortAsc = !sortAsc;
+            else { sortField = field; sortAsc = true; }
+            filterCountries();
+        }
+
+        function renderTable(data) {
+            document.getElementById('count').textContent = `${data.length}개 국가`;
+            document.getElementById('tbody').innerHTML = data.map(c => `
+                <tr>
+                    <td><span class="flag">${c.flag}</span>${c.name}<br><small style="color:#86868b">${c.en}</small></td>
+                    <td class="code">${c.code}</td>
+                    <td class="code">${c.phone}</td>
+                    <td>${c.currency}</td>
+                    <td>${c.capital}</td>
+                </tr>
+            `).join('');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        filterCountries();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

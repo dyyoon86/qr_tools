@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="asciiArtTitle">ASCII 아트 생성기 - ionflow.xyz</title>
+    <meta name="description" content="텍스트를 ASCII 아트로 변환합니다. 다양한 폰트 스타일을 지원합니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/ascii-art.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="ASCII 아트 생성기 - ionflow.xyz">
+    <meta property="og:description" content="텍스트를 ASCII 아트로 변환합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/ascii-art.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/ascii-art.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/ascii-art.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/ascii-art.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 900px; }
+        .input-row {
+            display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .input-row input {
+            flex: 1; min-width: 200px; padding: 14px 16px; font-size: 16px;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+        }
+        .input-row input:focus { outline: none; border-color: #0071e3; }
+        .input-row select {
+            padding: 14px 12px; font-size: 14px;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+            background: #fff; cursor: pointer;
+        }
+        .output-box {
+            background: #1d1d1f; color: #34c759;
+            border-radius: 12px; padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px; line-height: 1.2;
+            white-space: pre; overflow-x: auto;
+            min-height: 150px;
+        }
+        .btn-row {
+            display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 10px 20px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        .btn-primary { background: #1d1d1f; color: #fff; }
+        .btn-primary:hover { background: #424245; }
+        .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+        .btn-secondary:hover { background: #d2d2d7; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="asciiArtHeading">ASCII 아트 생성기</h1>
+        <p data-i18n="asciiArtSubheading">텍스트를 ASCII 아트로 변환합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="input-row">
+                <input type="text" id="text-input" value="HELLO" placeholder="텍스트 입력 (영문)" oninput="generate()" maxlength="20">
+                <select id="font-select" onchange="generate()">
+                    <option value="standard">Standard</option>
+                    <option value="big">Big</option>
+                    <option value="block">Block</option>
+                    <option value="banner">Banner</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="slant">Slant</option>
+                </select>
+            </div>
+            <div class="output-box" id="output"></div>
+            <div class="btn-row">
+                <button class="btn-primary" onclick="generate()">생성</button>
+                <button class="btn-secondary" onclick="copyArt()">복사</button>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        // Simplified ASCII art font data for common characters
+        const FONTS = {
+            standard: {
+                height: 6,
+                chars: {
+                    'A':['  _   ','  / \\  ',' / _ \\ ','/ ___ \\','/_/   \\_\\',''],
+                    'B':[' ____  ','| __ ) ','|  _ \\ ','| |_) |','|____/ ',''],
+                    'C':[' ____ ','/ ___|','| |   ','| |___',' \\____|',''],
+                    'D':[' ____  ','|  _ \\ ','| | | |','| |_| |','|____/ ',''],
+                    'E':[' _____ ','| ____|','|  _|  ','| |___ ','|_____|',''],
+                    'F':[' _____ ','|  ___|','| |_   ','|  _|  ','|_|    ',''],
+                    'G':[' ____ ','/ ___|','| |  _ ','| |_| |',' \\____|',''],
+                    'H':[' _   _ ','| | | |','| |_| |','|  _  |','|_| |_|',''],
+                    'I':[' ___ ','|_ _|',' | | ',' | | ','|___|',''],
+                    'J':[' ___  ','|_  | ',' _| | ','| _  |','|____|',''],
+                    'K':[' _  __','| |/ /','| \' / ','| . \\ ','|_|\\_\\',''],
+                    'L':[' _     ','| |    ','| |    ','| |___ ','|_____|',''],
+                    'M':[' __  __ ','|  \\/  |','| |\\/| |','| |  | |','|_|  |_|',''],
+                    'N':[' _   _ ','| \\ | |','|  \\| |','| |\\  |','|_| \\_|',''],
+                    'O':[' ___  ','/ _ \\ ','| | | |','| |_| |',' \\___/ ',''],
+                    'P':[' ____  ','|  _ \\ ','| |_) |','|  __/ ','|_|    ',''],
+                    'Q':[' ___  ','/ _ \\ ','| | | |','| |_| |',' \\__\\_\\',''],
+                    'R':[' ____  ','|  _ \\ ','| |_) |','|  _ < ','|_| \\_\\',''],
+                    'S':[' ____  ','/ ___| ','\\____ \\',' ___) |','|____/ ',''],
+                    'T':[' _____ ','|_   _|','  | |  ','  | |  ','  |_|  ',''],
+                    'U':[' _   _ ','| | | |','| | | |','| |_| |',' \\___/ ',''],
+                    'V':['__     __','\\ \\   / /',' \\ \\ / / ','  \\ V /  ','   \\_/   ',''],
+                    'W':['__        __','\\ \\      / /',' \\ \\ /\\ / / ','  \\ V  V /  ','   \\_/\\_/   ',''],
+                    'X':['__  __','\\ \\/ /',' \\  / ',' /  \\ ','/_/\\_\\',''],
+                    'Y':['__   __','\\ \\ / /',' \\ V / ','  | |  ','  |_|  ',''],
+                    'Z':['_____','|__  /','  / / ',' / /_ ','/____|',''],
+                    ' ':['   ','   ','   ','   ','   ',''],
+                    '!':['_ ','| |','| |','|_|','(_)',''],
+                    '0':[' ___  ','/ _ \\ ','| | | |','| |_| |',' \\___/ ',''],
+                    '1':[' _ ','/ |','| |','| |','|_|',''],
+                    '2':[' ____  ','|___ \\ ','  __) |',' / __/ ','|_____|',''],
+                    '3':[' _____ ','|___ / ','  |_ \\ ',' ___) |','|____/ ',''],
+                    '4':['  _  _ ',' | || |',' | || |_','|__   _|','   |_|  ',''],
+                    '5':[' ____  ','| ___| ','|___ \\ ',' ___) |','|____/ ',''],
+                    '6':[' __   ','/ /_  ','| \'_ \\ ','| (_) |',' \\___/ ',''],
+                    '7':[' _____ ','|___  |','   / / ','  / /  ',' /_/   ',''],
+                    '8':[' ___  ','( _ ) ','/ _ \\ ','| (_) |',' \\___/ ',''],
+                    '9':[' ___  ','/ _ \\ ','| (_) |',' \\__, |','   /_/ ',''],
+                }
+            },
+            big: {
+                height: 6,
+                chars: null // fallback to canvas
+            },
+            block: { height: 6, chars: null },
+            banner: { height: 6, chars: null },
+            shadow: { height: 6, chars: null },
+            slant: { height: 6, chars: null }
+        };
+
+        function generateStandard(text) {
+            const font = FONTS.standard;
+            const lines = Array(font.height).fill('');
+            for (const ch of text.toUpperCase()) {
+                const glyph = font.chars[ch] || font.chars[' '];
+                for (let i = 0; i < font.height; i++) {
+                    lines[i] += (glyph[i] || '') + ' ';
+                }
+            }
+            return lines.join('\n');
+        }
+
+        function generateCanvas(text, fontName) {
+            // Canvas-based ASCII art generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const fontSize = fontName === 'big' ? 24 : fontName === 'block' ? 20 : 18;
+            ctx.font = `bold ${fontSize}px monospace`;
+            const metrics = ctx.measureText(text);
+            canvas.width = Math.ceil(metrics.width) + 4;
+            canvas.height = fontSize + 8;
+            ctx.fillStyle = '#000';
+            ctx.font = `bold ${fontSize}px monospace`;
+            ctx.fillText(text, 2, fontSize);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const chars = fontName === 'shadow' ? ' ░▒▓█' : fontName === 'banner' ? ' .:-=+*#%@' : ' .:;+=xX$&';
+            let result = '';
+            for (let y = 0; y < canvas.height; y += 2) {
+                let line = '';
+                for (let x = 0; x < canvas.width; x++) {
+                    const idx = (y * canvas.width + x) * 4;
+                    const alpha = imageData.data[idx + 3];
+                    const charIdx = Math.floor(alpha / 256 * chars.length);
+                    line += chars[Math.min(charIdx, chars.length - 1)];
+                }
+                if (line.trim()) result += line + '\n';
+            }
+            return result || text;
+        }
+
+        function generate() {
+            const text = document.getElementById('text-input').value || 'HELLO';
+            const font = document.getElementById('font-select').value;
+
+            let result;
+            if (font === 'standard' && FONTS.standard.chars) {
+                result = generateStandard(text);
+            } else {
+                result = generateCanvas(text, font);
+            }
+            document.getElementById('output').textContent = result;
+        }
+
+        function copyArt() {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text).then(() => showToast('ASCII 아트 복사됨'));
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        generate();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

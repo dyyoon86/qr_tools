@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="faviconGenTitle">파비콘 생성기 - ionflow.xyz</title>
+    <meta name="description" content="텍스트나 이모지로 파비콘을 생성합니다. ICO, PNG, SVG 다운로드를 지원합니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/favicon-gen.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="파비콘 생성기 - ionflow.xyz">
+    <meta property="og:description" content="텍스트나 이모지로 파비콘을 생성합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/favicon-gen.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/favicon-gen.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/favicon-gen.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/favicon-gen.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 800px; }
+        .editor-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+        }
+        @media (max-width: 768px) { .editor-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block; font-size: 14px; color: #86868b; margin-bottom: 6px;
+        }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px; font-size: 15px;
+            border: 1px solid #d2d2d7; border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: #0071e3;
+        }
+        .form-group input[type="color"] {
+            height: 44px; padding: 4px; cursor: pointer;
+        }
+        .emoji-grid {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+        }
+        .emoji-btn {
+            width: 36px; height: 36px; border: 1px solid #d2d2d7;
+            border-radius: 8px; background: #fff; font-size: 20px;
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s;
+        }
+        .emoji-btn:hover { background: #e8e8ed; transform: scale(1.1); }
+        .preview-section { text-align: center; }
+        .preview-section h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+        .preview-canvas {
+            border: 2px dashed #d2d2d7; border-radius: 16px;
+            padding: 24px; margin-bottom: 16px;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 12px;
+        }
+        .preview-canvas canvas { image-rendering: pixelated; }
+        .size-previews {
+            display: flex; gap: 16px; justify-content: center;
+            align-items: flex-end; flex-wrap: wrap;
+        }
+        .size-preview { text-align: center; }
+        .size-preview canvas { image-rendering: pixelated; border-radius: 4px; }
+        .size-preview .label { font-size: 11px; color: #86868b; margin-top: 4px; }
+        .btn-row {
+            display: flex; gap: 10px; justify-content: center;
+            margin-top: 16px; flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 10px 20px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        .btn-primary { background: #1d1d1f; color: #fff; }
+        .btn-primary:hover { background: #424245; }
+        .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+        .btn-secondary:hover { background: #d2d2d7; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="faviconGenHeading">파비콘 생성기</h1>
+        <p data-i18n="faviconGenSubheading">텍스트나 이모지로 파비콘을 생성합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <div class="editor-grid">
+                <div>
+                    <div class="form-group">
+                        <label>텍스트 / 이모지</label>
+                        <input type="text" id="text" value="F" maxlength="4" oninput="render()">
+                    </div>
+                    <div class="form-group">
+                        <label>빠른 이모지 선택</label>
+                        <div class="emoji-grid" id="emoji-grid"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>배경색</label>
+                        <input type="color" id="bg-color" value="#0071e3" onchange="render()">
+                    </div>
+                    <div class="form-group">
+                        <label>텍스트색</label>
+                        <input type="color" id="text-color" value="#ffffff" onchange="render()">
+                    </div>
+                    <div class="form-group">
+                        <label>모양</label>
+                        <select id="shape" onchange="render()">
+                            <option value="square">사각형</option>
+                            <option value="rounded">둥근 사각형</option>
+                            <option value="circle">원형</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>폰트 크기 비율</label>
+                        <input type="range" id="font-ratio" min="30" max="90" value="60" oninput="render()" style="width:100%">
+                    </div>
+                </div>
+                <div class="preview-section">
+                    <h3>미리보기</h3>
+                    <div class="preview-canvas">
+                        <canvas id="preview" width="256" height="256" style="width:128px;height:128px;"></canvas>
+                        <div class="size-previews">
+                            <div class="size-preview"><canvas id="p64" width="64" height="64" style="width:64px;height:64px"></canvas><div class="label">64px</div></div>
+                            <div class="size-preview"><canvas id="p32" width="32" height="32" style="width:32px;height:32px"></canvas><div class="label">32px</div></div>
+                            <div class="size-preview"><canvas id="p16" width="16" height="16" style="width:16px;height:16px"></canvas><div class="label">16px</div></div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn-primary" onclick="download('png')">PNG 다운로드</button>
+                        <button class="btn-secondary" onclick="download('svg')">SVG 다운로드</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        const EMOJIS = ['🚀','⚡','🔥','💎','🎯','🌟','💡','🎨','🔮','❤️','🍀','🐱','🎵','📦','⭐','🌊','🎪','🏠','📚','🔑'];
+
+        function initEmojis() {
+            const grid = document.getElementById('emoji-grid');
+            EMOJIS.forEach(e => {
+                const btn = document.createElement('button');
+                btn.className = 'emoji-btn';
+                btn.textContent = e;
+                btn.onclick = () => { document.getElementById('text').value = e; render(); };
+                grid.appendChild(btn);
+            });
+        }
+
+        function drawFavicon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const text = document.getElementById('text').value || 'F';
+            const bgColor = document.getElementById('bg-color').value;
+            const textColor = document.getElementById('text-color').value;
+            const shape = document.getElementById('shape').value;
+            const fontRatio = parseInt(document.getElementById('font-ratio').value) / 100;
+
+            ctx.clearRect(0, 0, size, size);
+
+            // Background
+            ctx.fillStyle = bgColor;
+            if (shape === 'circle') {
+                ctx.beginPath();
+                ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+                ctx.fill();
+            } else if (shape === 'rounded') {
+                const r = size * 0.2;
+                ctx.beginPath();
+                ctx.moveTo(r, 0);
+                ctx.lineTo(size-r, 0); ctx.quadraticCurveTo(size, 0, size, r);
+                ctx.lineTo(size, size-r); ctx.quadraticCurveTo(size, size, size-r, size);
+                ctx.lineTo(r, size); ctx.quadraticCurveTo(0, size, 0, size-r);
+                ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
+                ctx.fill();
+            } else {
+                ctx.fillRect(0, 0, size, size);
+            }
+
+            // Text
+            const fontSize = Math.floor(size * fontRatio);
+            ctx.fillStyle = textColor;
+            ctx.font = `bold ${fontSize}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, size/2, size/2 + size*0.03);
+        }
+
+        function render() {
+            drawFavicon(document.getElementById('preview'), 256);
+            drawFavicon(document.getElementById('p64'), 64);
+            drawFavicon(document.getElementById('p32'), 32);
+            drawFavicon(document.getElementById('p16'), 16);
+        }
+
+        function download(format) {
+            if (format === 'png') {
+                const canvas = document.createElement('canvas');
+                canvas.width = canvas.height = 256;
+                drawFavicon(canvas, 256);
+                const link = document.createElement('a');
+                link.download = 'favicon.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('PNG 다운로드 완료');
+            } else if (format === 'svg') {
+                const text = document.getElementById('text').value || 'F';
+                const bgColor = document.getElementById('bg-color').value;
+                const textColor = document.getElementById('text-color').value;
+                const shape = document.getElementById('shape').value;
+                const fontRatio = parseInt(document.getElementById('font-ratio').value);
+                let shapeSvg;
+                if (shape === 'circle') shapeSvg = '<circle cx="128" cy="128" r="128" fill="' + bgColor + '"/>';
+                else if (shape === 'rounded') shapeSvg = '<rect width="256" height="256" rx="50" fill="' + bgColor + '"/>';
+                else shapeSvg = '<rect width="256" height="256" fill="' + bgColor + '"/>';
+                const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">${shapeSvg}<text x="128" y="140" text-anchor="middle" font-size="${fontRatio*2.56}" fill="${textColor}" font-weight="bold" font-family="sans-serif">${text}</text></svg>`;
+                const blob = new Blob([svg], {type:'image/svg+xml'});
+                const link = document.createElement('a');
+                link.download = 'favicon.svg';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                showToast('SVG 다운로드 완료');
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        initEmojis();
+        render();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

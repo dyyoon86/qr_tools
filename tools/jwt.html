@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="jwtTitle">JWT 디코더 - ionflow.xyz</title>
+    <meta name="description" content="JWT(JSON Web Token)를 디코딩하고 분석합니다. Header, Payload, 만료시간을 확인합니다.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/jwt.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="JWT 디코더 - ionflow.xyz">
+    <meta property="og:description" content="JWT 토큰을 디코딩하고 분석합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/jwt.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/jwt.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/jwt.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/jwt.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 900px; }
+        textarea {
+            height: 120px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .jwt-visual {
+            margin-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            word-break: break-all;
+            padding: 16px;
+            background: #fff;
+            border-radius: 12px;
+        }
+        .jwt-visual .header { color: #ff3b30; }
+        .jwt-visual .payload { color: #af52de; }
+        .jwt-visual .signature { color: #007aff; }
+        .jwt-visual .dot { color: #86868b; }
+        .sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) { .sections { grid-template-columns: 1fr; } }
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .section-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-card h3 .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background: #ff3b30; }
+        .dot-purple { background: #af52de; }
+        .dot-blue { background: #007aff; }
+        .section-card pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+            color: #1d1d1f;
+        }
+        .status-bar {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .badge-valid { background: #d1fae5; color: #065f46; }
+        .badge-expired { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #e0e7ff; color: #3730a3; }
+        .btn-row {
+            display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 10px 20px; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        .btn-primary { background: #1d1d1f; color: #fff; }
+        .btn-primary:hover { background: #424245; }
+        .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+        .btn-secondary:hover { background: #d2d2d7; }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.error { background: #ff3b30; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="jwtHeading">JWT 디코더</h1>
+        <p data-i18n="jwtSubheading">JSON Web Token을 디코딩하고 분석합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <textarea id="jwt-input" placeholder="JWT 토큰을 붙여넣으세요 (eyJhbGciOiJ...)" oninput="decode()"></textarea>
+            <div class="btn-row">
+                <button class="btn-primary" onclick="decode()">디코딩</button>
+                <button class="btn-secondary" onclick="loadSample()">샘플 JWT</button>
+                <button class="btn-secondary" onclick="clearAll()">지우기</button>
+            </div>
+            <div class="jwt-visual" id="jwt-visual" style="display:none"></div>
+            <div class="status-bar" id="status-bar"></div>
+            <div class="sections" id="sections" style="display:none">
+                <div class="section-card">
+                    <h3><span class="dot dot-red"></span> Header</h3>
+                    <pre id="header-json"></pre>
+                </div>
+                <div class="section-card">
+                    <h3><span class="dot dot-purple"></span> Payload</h3>
+                    <pre id="payload-json"></pre>
+                </div>
+            </div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        function b64decode(str) {
+            str = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (str.length % 4) str += '=';
+            return decodeURIComponent(atob(str).split('').map(c =>
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join(''));
+        }
+
+        function decode() {
+            const jwt = document.getElementById('jwt-input').value.trim();
+            const visual = document.getElementById('jwt-visual');
+            const sections = document.getElementById('sections');
+            const statusBar = document.getElementById('status-bar');
+
+            if (!jwt) {
+                visual.style.display = 'none';
+                sections.style.display = 'none';
+                statusBar.innerHTML = '';
+                return;
+            }
+
+            const parts = jwt.split('.');
+            if (parts.length !== 3) {
+                showToast('유효한 JWT 형식이 아닙니다 (header.payload.signature)', true);
+                return;
+            }
+
+            // Visual
+            visual.style.display = 'block';
+            visual.innerHTML = `<span class="header">${parts[0]}</span><span class="dot">.</span><span class="payload">${parts[1]}</span><span class="dot">.</span><span class="signature">${parts[2]}</span>`;
+
+            try {
+                const header = JSON.parse(b64decode(parts[0]));
+                const payload = JSON.parse(b64decode(parts[1]));
+
+                document.getElementById('header-json').textContent = JSON.stringify(header, null, 2);
+                document.getElementById('payload-json').textContent = JSON.stringify(payload, null, 2);
+                sections.style.display = 'grid';
+
+                // Status badges
+                const badges = [];
+                badges.push(`<span class="status-badge badge-info">알고리즘: ${header.alg || '없음'}</span>`);
+                if (header.typ) badges.push(`<span class="status-badge badge-info">타입: ${header.typ}</span>`);
+
+                if (payload.exp) {
+                    const expDate = new Date(payload.exp * 1000);
+                    const now = new Date();
+                    const isExpired = expDate < now;
+                    badges.push(`<span class="status-badge ${isExpired ? 'badge-expired' : 'badge-valid'}">${isExpired ? '만료됨' : '유효'}: ${expDate.toLocaleString('ko-KR')}</span>`);
+                }
+                if (payload.iat) {
+                    badges.push(`<span class="status-badge badge-info">발급: ${new Date(payload.iat * 1000).toLocaleString('ko-KR')}</span>`);
+                }
+                if (payload.sub) badges.push(`<span class="status-badge badge-info">sub: ${payload.sub}</span>`);
+                if (payload.iss) badges.push(`<span class="status-badge badge-info">iss: ${payload.iss}</span>`);
+
+                statusBar.innerHTML = badges.join('');
+            } catch (e) {
+                showToast('JWT 디코딩 실패: ' + e.message, true);
+                sections.style.display = 'none';
+            }
+        }
+
+        function loadSample() {
+            // A sample JWT (not a real secret)
+            const header = btoa(JSON.stringify({alg:'HS256',typ:'JWT'})).replace(/=/g,'');
+            const now = Math.floor(Date.now()/1000);
+            const payload = btoa(JSON.stringify({sub:'1234567890',name:'Hong Gildong',iat:now,exp:now+3600,iss:'ionflow.xyz',role:'admin'})).replace(/=/g,'');
+            const sig = 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+            document.getElementById('jwt-input').value = header + '.' + payload + '.' + sig;
+            decode();
+        }
+
+        function clearAll() {
+            document.getElementById('jwt-input').value = '';
+            document.getElementById('jwt-visual').style.display = 'none';
+            document.getElementById('sections').style.display = 'none';
+            document.getElementById('status-bar').innerHTML = '';
+        }
+
+        function showToast(msg, isError) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (isError ? ' error' : '');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

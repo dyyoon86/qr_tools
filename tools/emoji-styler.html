@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="emojiStylerTitle">이모지 텍스트 스타일러 - ionflow.xyz</title>
+    <meta name="description" content="텍스트를 유니코드 특수문자 스타일로 변환합니다. 볼드, 이탤릭, 모노스페이스 등 10가지 이상 스타일.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/emoji-styler.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="이모지 텍스트 스타일러 - ionflow.xyz">
+    <meta property="og:description" content="텍스트를 유니코드 특수문자 스타일로 변환합니다.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/emoji-styler.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/emoji-styler.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/emoji-styler.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/emoji-styler.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 800px; }
+        textarea { height: 100px; font-size: 16px; }
+        .styles-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .style-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+            gap: 12px;
+        }
+        .style-row:hover { background: #e8e8ed; }
+        .style-name {
+            font-size: 13px;
+            color: #86868b;
+            min-width: 100px;
+            flex-shrink: 0;
+        }
+        .style-preview {
+            flex: 1;
+            font-size: 16px;
+            line-height: 1.4;
+            word-break: break-all;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .copy-hint {
+            font-size: 11px;
+            color: #86868b;
+            flex-shrink: 0;
+        }
+        .toast {
+            position: fixed; bottom: 32px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1d1d1f; color: #fff;
+            padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="emojiStylerHeading">이모지 텍스트 스타일러</h1>
+        <p data-i18n="emojiStylerSubheading">텍스트를 유니코드 특수문자 스타일로 변환합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <textarea id="input" placeholder="변환할 텍스트를 입력하세요..." oninput="convertAll()">Hello World</textarea>
+            <div class="styles-grid" id="styles-grid"></div>
+        </div>
+        <div class="ad-space">광고</div>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+        // Unicode Mathematical Alphanumeric Symbols mappings
+        const NORMAL_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const NORMAL_LOWER = 'abcdefghijklmnopqrstuvwxyz';
+        const NORMAL_DIGITS = '0123456789';
+
+        const STYLES = {
+            'Bold': { upper: 0x1D400, lower: 0x1D41A, digit: 0x1D7CE },
+            'Italic': { upper: 0x1D434, lower: 0x1D44E, digit: null },
+            'Bold Italic': { upper: 0x1D468, lower: 0x1D482, digit: null },
+            'Script': { upper: 0x1D49C, lower: 0x1D4B6, digit: null },
+            'Bold Script': { upper: 0x1D4D0, lower: 0x1D4EA, digit: null },
+            'Fraktur': { upper: 0x1D504, lower: 0x1D51E, digit: null },
+            'Double-Struck': { upper: 0x1D538, lower: 0x1D552, digit: 0x1D7D8 },
+            'Sans-Serif': { upper: 0x1D5A0, lower: 0x1D5BA, digit: 0x1D7E2 },
+            'Sans Bold': { upper: 0x1D5D4, lower: 0x1D5EE, digit: 0x1D7EC },
+            'Sans Italic': { upper: 0x1D608, lower: 0x1D622, digit: null },
+            'Sans Bold Italic': { upper: 0x1D63C, lower: 0x1D656, digit: null },
+            'Monospace': { upper: 0x1D670, lower: 0x1D68A, digit: 0x1D7F6 }
+        };
+
+        // Special text effects
+        const SPECIAL = {
+            'Strikethrough': text => [...text].map(c => c + '\u0336').join(''),
+            'Underline': text => [...text].map(c => c + '\u0332').join(''),
+            'Overline': text => [...text].map(c => c + '\u0305').join(''),
+            'Upside Down': text => {
+                const map = {'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ','i':'ᴉ','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','o':'o','p':'d','q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x','y':'ʎ','z':'z',
+                'A':'∀','B':'ᗺ','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'Ⅎ','G':'⅁','H':'H','I':'I','J':'ɾ','K':'ʞ','L':'˥','M':'W','N':'N','O':'O','P':'Ԁ','Q':'Ό','R':'ᴚ','S':'S','T':'⊥','U':'∩','V':'Λ','W':'M','X':'X','Y':'⅄','Z':'Z',
+                '1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ㄣ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6','0':'0','.':'˙',',':'\'','?':'¿','!':'¡','\'':',','"':'„','(':')',')':'(','[':']',']':'[','{':'}','}':'{','<':'>','>':'<','&':'⅋','_':'‾'};
+                return [...text].reverse().map(c => map[c] || c).join('');
+            },
+            'Circled': text => {
+                return [...text].map(c => {
+                    const code = c.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCodePoint(0x24B6 + code - 65);
+                    if (code >= 97 && code <= 122) return String.fromCodePoint(0x24D0 + code - 97);
+                    if (code >= 49 && code <= 57) return String.fromCodePoint(0x2460 + code - 49);
+                    if (c === '0') return '\u24EA';
+                    return c;
+                }).join('');
+            },
+            'Squared': text => {
+                return [...text].map(c => {
+                    const code = c.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCodePoint(0x1F130 + code - 65);
+                    if (code >= 97 && code <= 122) return String.fromCodePoint(0x1F130 + code - 97);
+                    return c;
+                }).join('');
+            },
+            'Fullwidth': text => {
+                return [...text].map(c => {
+                    const code = c.charCodeAt(0);
+                    if (code >= 33 && code <= 126) return String.fromCodePoint(0xFF01 + code - 33);
+                    if (c === ' ') return '\u3000';
+                    return c;
+                }).join('');
+            },
+            'Sparkles': text => '✨ ' + text + ' ✨',
+            'Clap': text => text.split(/\s+/).join(' 👏 '),
+        };
+
+        function transformUnicode(text, style) {
+            const s = STYLES[style];
+            if (!s) return text;
+            return [...text].map(c => {
+                const ui = NORMAL_UPPER.indexOf(c);
+                if (ui >= 0) return String.fromCodePoint(s.upper + ui);
+                const li = NORMAL_LOWER.indexOf(c);
+                if (li >= 0) return String.fromCodePoint(s.lower + li);
+                if (s.digit) {
+                    const di = NORMAL_DIGITS.indexOf(c);
+                    if (di >= 0) return String.fromCodePoint(s.digit + di);
+                }
+                return c;
+            }).join('');
+        }
+
+        function convertAll() {
+            const text = document.getElementById('input').value || 'Hello World';
+            const grid = document.getElementById('styles-grid');
+            grid.innerHTML = '';
+
+            // Unicode styles
+            Object.keys(STYLES).forEach(name => {
+                const converted = transformUnicode(text, name);
+                addRow(name, converted, grid);
+            });
+
+            // Special styles
+            Object.keys(SPECIAL).forEach(name => {
+                const converted = SPECIAL[name](text);
+                addRow(name, converted, grid);
+            });
+        }
+
+        function addRow(name, text, container) {
+            const row = document.createElement('div');
+            row.className = 'style-row';
+            row.innerHTML = `<span class="style-name">${name}</span><span class="style-preview">${escapeHtml(text)}</span><span class="copy-hint">클릭하여 복사</span>`;
+            row.onclick = () => {
+                navigator.clipboard.writeText(text).then(() => showToast(name + ' 스타일 복사됨'));
+            };
+            container.appendChild(row);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        convertAll();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>

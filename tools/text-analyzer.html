@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="textAnalyzerTitle">텍스트 분석기 Pro - ionflow.xyz</title>
+    <meta name="description" content="텍스트를 종합 분석합니다. 글자수, 단어수, 문장수, 키워드 빈도, 가독성 점수, 읽기 시간.">
+    <link rel="canonical" href="https://ionflow.xyz/tools/text-analyzer.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="텍스트 분석기 Pro - ionflow.xyz">
+    <meta property="og:description" content="텍스트를 종합 분석합니다. 글자수, 단어수, 문장수, 키워드 빈도.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/text-analyzer.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/text-analyzer.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/text-analyzer.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/text-analyzer.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+    <style>
+        main { max-width: 900px; }
+        textarea { height: 200px; font-size: 15px; line-height: 1.7; }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px; margin-top: 20px;
+        }
+        .stat-card {
+            background: #fff; border-radius: 12px; padding: 16px; text-align: center;
+        }
+        .stat-value {
+            font-size: 28px; font-weight: 700; color: #1d1d1f;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-label { font-size: 12px; color: #86868b; margin-top: 4px; }
+        .stat-card.highlight { background: linear-gradient(135deg, #0071e3, #00c7be); }
+        .stat-card.highlight .stat-value, .stat-card.highlight .stat-label { color: #fff; }
+        .analysis-section { margin-top: 24px; }
+        .analysis-section h3 { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+        .keyword-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        .keyword-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 12px; background: #fff; border-radius: 8px;
+        }
+        .keyword-item .word { font-size: 14px; font-weight: 600; }
+        .keyword-item .count {
+            font-size: 13px; color: #86868b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .keyword-item .bar {
+            height: 4px; background: #0071e3; border-radius: 2px;
+            margin-top: 4px; transition: width 0.3s;
+        }
+        .char-breakdown {
+            display: flex; gap: 0; border-radius: 12px; overflow: hidden;
+            height: 32px; margin-top: 12px;
+        }
+        .char-segment { display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 600; color: #fff; min-width: 2px; transition: flex 0.3s; }
+        .legend {
+            display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #86868b; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .reading-info { background: #fff; border-radius: 12px; padding: 16px; margin-top: 16px; }
+        .reading-info .row {
+            display: flex; justify-content: space-between; padding: 6px 0;
+            border-bottom: 1px solid #f5f5f7; font-size: 14px;
+        }
+        .reading-info .row:last-child { border: none; }
+        .reading-info .label { color: #86868b; }
+        .reading-info .value { font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .btn-row { display: flex; gap: 10px; margin-top: 12px; }
+        .btn-secondary {
+            padding: 8px 16px; background: #e8e8ed; border: none;
+            border-radius: 8px; font-size: 13px; cursor: pointer;
+        }
+        .btn-secondary:hover { background: #d2d2d7; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="textAnalyzerHeading">텍스트 분석기 Pro</h1>
+        <p data-i18n="textAnalyzerSubheading">텍스트를 종합적으로 분석합니다</p>
+    </div>
+    <main>
+        <div class="panel">
+            <textarea id="input" placeholder="분석할 텍스트를 입력하세요..." oninput="analyze()"></textarea>
+            <div class="btn-row">
+                <button class="btn-secondary" onclick="document.getElementById('input').value='';analyze()">지우기</button>
+                <button class="btn-secondary" onclick="loadSample()">샘플 텍스트</button>
+            </div>
+            <div class="stats-grid" id="stats-grid"></div>
+        </div>
+
+        <div class="panel analysis-section" id="char-section" style="margin-top:16px">
+            <h3>문자 구성</h3>
+            <div class="char-breakdown" id="char-bar"></div>
+            <div class="legend" id="legend"></div>
+        </div>
+
+        <div class="panel analysis-section" id="keyword-section" style="margin-top:16px">
+            <h3>키워드 빈도 (Top 15)</h3>
+            <div class="keyword-grid" id="keywords"></div>
+        </div>
+
+        <div class="panel analysis-section" style="margin-top:16px">
+            <h3>읽기 정보</h3>
+            <div class="reading-info" id="reading-info"></div>
+        </div>
+
+        <div class="ad-space">광고</div>
+    </main>
+    <script>
+        function analyze() {
+            const text = document.getElementById('input').value;
+            const chars = [...text];
+            const charCount = chars.length;
+            const charNoSpace = chars.filter(c => !/\s/.test(c)).length;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = text.trim() ? words.length : 0;
+            const sentences = text.split(/[.!?。！？]+/).filter(s => s.trim().length > 0);
+            const sentenceCount = sentences.length;
+            const lines = text.split('\n');
+            const lineCount = text ? lines.length : 0;
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            const paraCount = paragraphs.length;
+            const bytes = new Blob([text]).size;
+            const korean = (text.match(/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]/g) || []).length;
+            const english = (text.match(/[a-zA-Z]/g) || []).length;
+            const numbers = (text.match(/[0-9]/g) || []).length;
+            const spaces = (text.match(/\s/g) || []).length;
+            const special = charCount - korean - english - numbers - spaces;
+
+            // Stats grid
+            const statsData = [
+                { value: charCount, label: '글자수', highlight: true },
+                { value: charNoSpace, label: '공백 제외' },
+                { value: wordCount, label: '단어수' },
+                { value: sentenceCount, label: '문장수' },
+                { value: lineCount, label: '줄 수' },
+                { value: paraCount, label: '문단수' },
+                { value: bytes.toLocaleString(), label: '바이트(UTF-8)' }
+            ];
+            document.getElementById('stats-grid').innerHTML = statsData.map(s =>
+                `<div class="stat-card${s.highlight?' highlight':''}"><div class="stat-value">${typeof s.value==='number'?s.value.toLocaleString():s.value}</div><div class="stat-label">${s.label}</div></div>`
+            ).join('');
+
+            // Character breakdown
+            const segments = [
+                { name: '한글', count: korean, color: '#0071e3' },
+                { name: '영문', count: english, color: '#34c759' },
+                { name: '숫자', count: numbers, color: '#ff9500' },
+                { name: '공백', count: spaces, color: '#86868b' },
+                { name: '특수', count: Math.max(0, special), color: '#af52de' }
+            ];
+            const total = Math.max(1, segments.reduce((s, x) => s + x.count, 0));
+            document.getElementById('char-bar').innerHTML = segments.filter(s => s.count > 0).map(s =>
+                `<div class="char-segment" style="flex:${s.count};background:${s.color}">${s.count > total*0.08 ? s.count : ''}</div>`
+            ).join('');
+            document.getElementById('legend').innerHTML = segments.map(s =>
+                `<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div>${s.name}: ${s.count} (${(s.count/total*100).toFixed(1)}%)</div>`
+            ).join('');
+
+            // Keywords
+            const stopWords = new Set(['의','가','이','은','는','를','을','에','도','로','와','과','한','하','되','다','것','수','그','나','들','저','때','더','등','및','또','인','위','대','만','안','어','너','내','제','뭐','좀']);
+            const wordFreq = {};
+            words.forEach(w => {
+                const clean = w.replace(/[^가-힣a-zA-Z0-9]/g, '').toLowerCase();
+                if (clean.length >= 2 && !stopWords.has(clean)) {
+                    wordFreq[clean] = (wordFreq[clean] || 0) + 1;
+                }
+            });
+            const topWords = Object.entries(wordFreq).sort((a, b) => b[1] - a[1]).slice(0, 15);
+            const maxFreq = topWords[0] ? topWords[0][1] : 1;
+            document.getElementById('keywords').innerHTML = topWords.map(([word, count]) =>
+                `<div class="keyword-item"><div><div class="word">${word}</div><div class="bar" style="width:${count/maxFreq*100}%"></div></div><span class="count">${count}</span></div>`
+            ).join('') || '<div style="color:#86868b;font-size:14px">텍스트를 입력하세요</div>';
+
+            // Reading info
+            const readTimeMin = Math.ceil(wordCount / 200);
+            const speakTimeMin = Math.ceil(wordCount / 130);
+            const avgWordLen = wordCount > 0 ? (words.reduce((s, w) => s + w.length, 0) / wordCount).toFixed(1) : 0;
+            const avgSentLen = sentenceCount > 0 ? Math.round(wordCount / sentenceCount) : 0;
+            document.getElementById('reading-info').innerHTML = [
+                ['예상 읽기 시간', `약 ${readTimeMin}분`],
+                ['예상 말하기 시간', `약 ${speakTimeMin}분`],
+                ['평균 단어 길이', `${avgWordLen}자`],
+                ['평균 문장 길이', `${avgSentLen}단어`],
+                ['고유 단어 수', Object.keys(wordFreq).length + '개']
+            ].map(([l, v]) => `<div class="row"><span class="label">${l}</span><span class="value">${v}</span></div>`).join('');
+        }
+
+        function loadSample() {
+            document.getElementById('input').value = '인공지능(AI)은 인간의 학습 능력, 추론 능력, 지각 능력을 인공적으로 구현하려는 컴퓨터 과학의 세부 분야 중 하나이다. 정보공학 분야에 있어 하나의 인프라 기술이기도 하다.\n\n인공지능이라는 용어는 1956년 다트머스 학회에서 존 매카시가 처음 사용하였다. 현재에 이르러 인공지능은 단순히 인간의 지능을 모방하는 수준을 넘어서, 다양한 산업 분야에서 혁신적인 변화를 이끌고 있다. 특히 자연어 처리, 컴퓨터 비전, 강화 학습 등의 기술이 급속도로 발전하고 있다.\n\n대규모 언어 모델(LLM)의 등장으로 인공지능의 활용 범위가 크게 확대되었다. ChatGPT, Claude, Gemini 등의 AI 서비스는 텍스트 생성, 코드 작성, 번역, 요약 등 다양한 작업을 수행할 수 있다.';
+            analyze();
+        }
+
+        analyze();
+    </script>
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+</body>
+</html>
