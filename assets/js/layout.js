@@ -47,6 +47,7 @@
             <div style="max-width:1200px;margin:0 auto;padding:0 22px;height:48px;display:flex;align-items:center;justify-content:space-between;">
                 <a href="/" style="font-size:21px;font-weight:600;text-decoration:none;color:inherit;">ionflow</a>
                 <div style="display:flex;align-items:center;gap:24px;">
+                    <a href="/tools/" style="font-size:13px;font-weight:500;color:#0071e3;text-decoration:none;">도구 모음</a>
                     <nav style="display:flex;gap:28px;">${navLinksHtml}</nav>
                     ${langSelector}
                 </div>
