@@ -246,7 +246,7 @@
         </div>
 
         <!-- AI Links -->
-        <div class="step-section">
+        <div class="step-section" id="aiLinks">
             <span class="step-label">LINK</span>
             <h2 class="step-title">AI에 붙여넣기</h2>
             <p class="step-desc">복사한 프롬프트를 아래 AI 서비스에 붙여넣으세요.</p>
@@ -458,6 +458,8 @@ medium-wide, bright office with sunlight...no watermarks
                     btn.textContent = '복사';
                     btn.classList.remove('copied');
                 }, 2000);
+                // 복사 후 AI 링크 섹션으로 스크롤
+                document.getElementById('aiLinks').scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
         };
 
