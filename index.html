@@ -12,35 +12,26 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="siteTitle">ionflow.xyz - 무료 온라인 도구 모음</title>
-    <meta name="description" data-i18n="siteDesc" content="30가지 무료 온라인 도구. QR코드, JSON, Base64, JWT, 마크다운 에디터, 이미지 압축, 컬러 팔레트 등.">
+    <title>ionflow - AI로 만드는 웹사이트 & 프로그램</title>
+    <meta name="description" content="비개발자도 OK. AI를 활용한 웹사이트 제작, 업무 자동화, 콘텐츠 도구 개발. 빠르고 합리적인 가격.">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://ionflow.xyz/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="ionflow.xyz">
-    <meta property="og:title" content="ionflow.xyz - 무료 온라인 개발자 도구">
-    <meta property="og:description" content="무료 온라인 도구 모음. QR코드 생성기, JSON Formatter, Base64 변환, UUID 생성, 비밀번호 생성 등.">
+    <meta property="og:site_name" content="ionflow">
+    <meta property="og:title" content="ionflow - AI로 만드는 웹사이트 & 프로그램">
+    <meta property="og:description" content="비개발자도 OK. AI를 활용한 웹사이트 제작, 업무 자동화, 콘텐츠 도구 개발.">
     <meta property="og:url" content="https://ionflow.xyz/">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta property="og:locale" content="ko_KR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ionflow.xyz - 무료 온라인 개발자 도구">
-    <meta name="twitter:description" content="무료 온라인 도구 모음. QR코드 생성기, JSON Formatter, Base64 변환, UUID 생성, 비밀번호 생성 등.">
+    <meta name="twitter:title" content="ionflow - AI로 만드는 웹사이트 & 프로그램">
+    <meta name="twitter:description" content="비개발자도 OK. AI를 활용한 웹사이트 제작, 업무 자동화, 콘텐츠 도구 개발.">
     <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
-
-    <!-- hreflang for i18n -->
-    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/">
-    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/?lang=en">
-    <link rel="alternate" hreflang="ja" href="https://ionflow.xyz/?lang=ja">
-    <link rel="alternate" hreflang="zh" href="https://ionflow.xyz/?lang=zh">
-    <link rel="alternate" hreflang="es" href="https://ionflow.xyz/?lang=es">
-    <link rel="alternate" hreflang="ar" href="https://ionflow.xyz/?lang=ar">
-    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
@@ -48,11 +39,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
 
-    <!-- Preconnect for performance -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
         crossorigin="anonymous"></script>
@@ -61,458 +50,564 @@
     <link rel="stylesheet" href="/assets/css/common.css">
 
     <style>
-        /* Hero */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Pretendard', -apple-system, sans-serif; color: #1d1d1f; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ── Hero ── */
         .hero {
-            padding: 48px 22px;
+            padding: 100px 22px 80px;
             text-align: center;
             background: #fbfbfd;
         }
-
+        .hero-label {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #86868b;
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
+        }
         .hero h1 {
             font-size: 56px;
             font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 20px;
         }
-
-        .hero p {
+        .hero h1 em {
+            font-style: normal;
+            color: #0071e3;
+        }
+        .hero .sub {
             font-size: 21px;
-            color: #86868b;
-            font-weight: 400;
+            color: #6e6e73;
+            line-height: 1.5;
+            max-width: 560px;
+            margin: 0 auto 40px;
         }
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #0071e3;
+            color: #fff;
+            border-radius: 980px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #0077ed; }
+        .btn-secondary {
+            display: inline-block;
+            padding: 16px 32px;
+            background: transparent;
+            color: #0071e3;
+            border-radius: 980px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(0,113,227,0.05); }
 
-        /* Section */
-        section {
-            padding: 48px 22px;
-            max-width: 1024px;
+        /* ── Section Base ── */
+        .sec {
+            padding: 80px 22px;
+            max-width: 980px;
             margin: 0 auto;
         }
-
-        .section-title {
-            font-size: 28px;
-            font-weight: 600;
+        .sec-gray { background: #f5f5f7; }
+        .sec-title {
+            font-size: 40px;
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 32px;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        .sec-sub {
+            font-size: 17px;
+            color: #6e6e73;
+            text-align: center;
+            margin-bottom: 56px;
         }
 
-        /* Tool Grid */
-        .tool-grid {
+        /* ── Pain Points ── */
+        .pain-list {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .pain-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 0;
+            font-size: 17px;
+            line-height: 1.5;
+            border-bottom: 1px solid #e5e5ea;
+        }
+        .pain-item:last-child { border-bottom: none; }
+        .pain-check {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: #f5f5f7;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        /* ── Services ── */
+        .svc-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .svc-card {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 36px 28px;
+            transition: transform 0.3s;
+        }
+        .sec-gray .svc-card { background: #fff; }
+        .svc-card:hover { transform: scale(1.02); }
+        .svc-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+        .svc-card h3 {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .svc-card p {
+            font-size: 15px;
+            color: #6e6e73;
+            line-height: 1.6;
+        }
+        .svc-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            background: #e8e8ed;
+            border-radius: 4px;
+            margin-top: 12px;
+            color: #6e6e73;
+        }
+
+        /* ── Value Props ── */
+        .val-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+        .val-card {
+            padding: 40px 20px;
+        }
+        .val-icon {
+            font-size: 44px;
+            margin-bottom: 16px;
+        }
+        .val-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .val-card p {
+            font-size: 15px;
+            color: #6e6e73;
+            line-height: 1.5;
+        }
+
+        /* ── Portfolio ── */
+        .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
-
-        .tool-card {
+        .portfolio-card {
             background: #f5f5f7;
             border-radius: 18px;
             padding: 32px 28px;
-            transition: transform 0.3s, background 0.3s;
-            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-
-        .tool-card:hover {
-            transform: scale(1.02);
-            background: #e8e8ed;
+        .sec-gray .portfolio-card { background: #fff; }
+        .portfolio-card:hover { transform: scale(1.02); }
+        .portfolio-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 14px;
+            color: #fff;
         }
-
-        .tool-icon {
-            font-size: 36px;
-            margin-bottom: 16px;
-        }
-
-        .tool-card h3 {
+        .portfolio-card h3 {
             font-size: 19px;
             font-weight: 600;
             margin-bottom: 8px;
         }
-
-        .tool-card p {
+        .portfolio-card p {
             font-size: 14px;
-            color: #86868b;
+            color: #6e6e73;
             line-height: 1.5;
-        }
-
-        .tool-badge {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 3px 8px;
-            background: #1d1d1f;
-            color: #fff;
-            border-radius: 4px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        /* Gray Section */
-        .gray-section {
-            background: #f5f5f7;
-        }
-
-        .gray-section section {
-            max-width: 980px;
-        }
-
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            text-align: center;
-        }
-
-        .feature-icon {
-            font-size: 40px;
             margin-bottom: 16px;
         }
-
-        .feature h4 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .feature p {
-            font-size: 14px;
-            color: #86868b;
-        }
-
-        /* Ad */
-        .ad-space {
-            max-width: 728px;
-            margin: 0 auto 40px;
-            height: 90px;
-            background: #f5f5f7;
-            border-radius: 8px;
+        .portfolio-result {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #1d1d1f;
+        }
+        .portfolio-result .before {
             color: #86868b;
-            font-size: 12px;
+            text-decoration: line-through;
+        }
+        .portfolio-result .arrow { color: #86868b; }
+        .portfolio-result .after {
+            font-weight: 600;
+            color: #0071e3;
+        }
+        .portfolio-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #86868b;
+            font-size: 17px;
         }
 
-        /* Footer */
-        footer {
+        /* ── Free Tools Banner ── */
+        .tools-banner {
+            text-align: center;
+        }
+        .tools-banner .count {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tools-banner .count em {
+            font-style: normal;
+            color: #0071e3;
+        }
+        .tools-preview {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0 36px;
+        }
+        .tool-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
             background: #f5f5f7;
-            padding: 20px 22px;
-            border-top: 1px solid #d2d2d7;
+            border-radius: 980px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
         }
+        .tool-chip:hover { background: #e8e8ed; }
+        .tool-chip .tc-icon { font-size: 18px; }
 
-        .footer-content {
-            max-width: 980px;
+        /* ── FAQ ── */
+        .faq-list {
+            max-width: 680px;
             margin: 0 auto;
+        }
+        .faq-item {
+            border-bottom: 1px solid #e5e5ea;
+        }
+        .faq-q {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 24px 0;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: #86868b;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a:hover {
+            font-family: inherit;
             color: #1d1d1f;
         }
+        .faq-q::after {
+            content: '+';
+            font-size: 24px;
+            font-weight: 300;
+            color: #86868b;
+            transition: transform 0.3s;
+        }
+        .faq-q.open::after {
+            transform: rotate(45deg);
+        }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-a-inner {
+            padding: 0 0 24px;
+            font-size: 15px;
+            color: #6e6e73;
+            line-height: 1.7;
+        }
 
-        /* Responsive */
+        /* ── CTA ── */
+        .cta-section {
+            text-align: center;
+            padding: 100px 22px;
+            background: #1d1d1f;
+            color: #fff;
+        }
+        .cta-section h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .cta-section p {
+            font-size: 17px;
+            color: #a1a1a6;
+            margin-bottom: 36px;
+        }
+        .btn-cta {
+            display: inline-block;
+            padding: 18px 40px;
+            background: #0071e3;
+            color: #fff;
+            border-radius: 980px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-cta:hover { background: #0077ed; }
+
+        /* ── Responsive ── */
         @media (max-width: 768px) {
+            .hero { padding: 64px 22px 48px; }
             .hero h1 { font-size: 36px; }
-            .hero p { font-size: 17px; }
-            nav { display: none; }
-            .features { grid-template-columns: 1fr; gap: 32px; }
-            .footer-content { flex-direction: column; gap: 16px; text-align: center; }
+            .hero .sub { font-size: 17px; }
+            .sec { padding: 56px 22px; }
+            .sec-title { font-size: 28px; }
+            .svc-grid { grid-template-columns: 1fr; }
+            .val-grid { grid-template-columns: 1fr; gap: 16px; }
+            .val-card { padding: 24px 20px; }
+            .tools-banner .count { font-size: 48px; }
+            .cta-section { padding: 64px 22px; }
+            .cta-section h2 { font-size: 28px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Hero -->
     <div class="hero">
-        <h1 data-i18n="heroTitle">온라인 도구 모음.</h1>
-        <p data-i18n="heroSubtitle">빠르고 안전한 무료 유틸리티.</p>
-    </div>
-
-    <div class="gray-section">
-        <section>
-            <h2 class="section-title">AI / 크리에이터</h2>
-            <div class="tool-grid">
-                <a href="/tools/flow-prompt-builder.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">🎬</div>
-                    <h3>Flow Prompt Builder <span class="tool-badge">NEW</span></h3>
-                    <p>유튜브 영상용 AI 이미지 프롬프트를 자동 생성합니다. Google Flow 최적화.</p>
-                </a>
-            </div>
-        </section>
-    </div>
-
-    <section>
-        <h2 class="section-title" data-i18n="sectionQR">QR코드</h2>
-        <div class="tool-grid">
-            <a href="/tools/qr.html" class="tool-card">
-                <div class="tool-icon">◲</div>
-                <h3 data-i18n="qrGenerator">QR코드 생성기</h3>
-                <p data-i18n="qrGeneratorDesc">URL, 텍스트를 QR코드로 변환합니다. PNG, SVG 다운로드를 지원합니다.</p>
-            </a>
-            <a href="/tools/wifi.html" class="tool-card">
-                <div class="tool-icon">◉</div>
-                <h3 data-i18n="wifiQR">WiFi QR코드</h3>
-                <p data-i18n="wifiQRDesc">WiFi 네트워크 정보를 QR코드로 만들어 간편하게 공유합니다.</p>
-            </a>
-            <a href="/tools/vcard.html" class="tool-card">
-                <div class="tool-icon">◎</div>
-                <h3 data-i18n="vcardQR">명함 QR코드</h3>
-                <p data-i18n="vcardQRDesc">연락처 정보를 vCard QR코드로 만들어 명함에 활용합니다.</p>
-            </a>
+        <div class="hero-label">AI Development Partner</div>
+        <h1>아이디어만 있으면<br><em>만들어 드립니다.</em></h1>
+        <p class="sub">코딩 몰라도 괜찮습니다. AI를 활용해 웹사이트, 프로그램, 자동화 도구를 빠르게 제작합니다.</p>
+        <div class="hero-cta">
+            <a href="#contact" class="btn-primary">문의하기</a>
+            <a href="/tools/" class="btn-secondary">무료 도구 보기</a>
         </div>
-    </section>
-
-    <div class="ad-space" data-i18n="ad">광고</div>
-
-    <div class="gray-section">
-        <section>
-            <h2 class="section-title" data-i18n="sectionDev">개발자 도구</h2>
-            <div class="tool-grid">
-                <a href="/tools/json.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">{ }</div>
-                    <h3><span data-i18n="jsonFormatter">JSON Formatter</span> <span class="tool-badge" data-i18n="popular">인기</span></h3>
-                    <p data-i18n="jsonFormatterDesc">JSON을 보기 좋게 정리하고 문법 오류를 검사합니다.</p>
-                </a>
-                <a href="/tools/base64.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⟷</div>
-                    <h3 data-i18n="base64">Base64 변환</h3>
-                    <p data-i18n="base64Desc">텍스트와 이미지를 Base64로 인코딩하거나 디코딩합니다.</p>
-                </a>
-                <a href="/tools/url.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">%</div>
-                    <h3 data-i18n="urlEncoder">URL 인코더</h3>
-                    <p data-i18n="urlEncoderDesc">URL 특수문자를 인코딩하거나 디코딩합니다.</p>
-                </a>
-                <a href="/tools/hash.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">#</div>
-                    <h3 data-i18n="hashGenerator">Hash 생성기</h3>
-                    <p data-i18n="hashGeneratorDesc">MD5, SHA-1, SHA-256, SHA-512 해시를 생성합니다.</p>
-                </a>
-                <a href="/tools/timestamp.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⏱</div>
-                    <h3 data-i18n="timestamp">Timestamp 변환</h3>
-                    <p data-i18n="timestampDesc">Unix Timestamp와 날짜를 서로 변환합니다.</p>
-                </a>
-                <a href="/tools/regex.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">.*</div>
-                    <h3 data-i18n="regexTester">Regex 테스터</h3>
-                    <p data-i18n="regexTesterDesc">정규식을 실시간으로 테스트하고 매칭 결과를 확인합니다.</p>
-                </a>
-                <a href="/tools/diff.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⇄</div>
-                    <h3 data-i18n="diffTool">Diff 비교기</h3>
-                    <p data-i18n="diffToolDesc">텍스트와 코드의 차이점을 시각적으로 비교합니다.</p>
-                </a>
-                <a href="/tools/jwt.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">🔑</div>
-                    <h3>JWT 디코더 <span class="tool-badge">NEW</span></h3>
-                    <p>JWT 토큰을 디코딩하여 Header, Payload를 분석합니다.</p>
-                </a>
-                <a href="/tools/cron.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⏰</div>
-                    <h3>Cron 표현식 해석기 <span class="tool-badge">NEW</span></h3>
-                    <p>Cron 표현식을 자연어로 변환하고 다음 실행 시간을 계산합니다.</p>
-                </a>
-                <a href="/tools/css-unit.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">📐</div>
-                    <h3>CSS 단위 변환기 <span class="tool-badge">NEW</span></h3>
-                    <p>px, rem, em, vw, vh, pt 등 CSS 단위를 상호 변환합니다.</p>
-                </a>
-                <a href="/tools/user-agent.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">🌐</div>
-                    <h3>User-Agent 분석기 <span class="tool-badge">NEW</span></h3>
-                    <p>브라우저 User-Agent 문자열을 파싱하여 브라우저, OS 정보를 표시합니다.</p>
-                </a>
-                <a href="/tools/ip-lookup.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">📡</div>
-                    <h3>IP 주소 조회 <span class="tool-badge">NEW</span></h3>
-                    <p>IP 주소의 위치, ISP, 타임존 정보를 조회합니다.</p>
-                </a>
-            </div>
-        </section>
     </div>
 
-    <section>
-        <h2 class="section-title">텍스트 / 변환</h2>
-        <div class="tool-grid">
-            <a href="/tools/byte.html" class="tool-card">
-                <div class="tool-icon">✎</div>
-                <h3 data-i18n="byteCounter">글자수/바이트 계산기</h3>
-                <p data-i18n="byteCounterDesc">텍스트의 글자수와 바이트 수를 계산합니다. 다양한 인코딩 지원.</p>
-            </a>
-            <a href="/tools/text-analyzer.html" class="tool-card">
-                <div class="tool-icon">📊</div>
-                <h3>텍스트 분석기 Pro <span class="tool-badge">NEW</span></h3>
-                <p>글자수, 단어수, 키워드 빈도, 가독성 점수, 읽기 시간을 종합 분석합니다.</p>
-            </a>
-            <a href="/tools/markdown.html" class="tool-card">
-                <div class="tool-icon">📝</div>
-                <h3>마크다운 에디터 <span class="tool-badge">NEW</span></h3>
-                <p>실시간 미리보기 마크다운 에디터. HTML 변환 및 다운로드를 지원합니다.</p>
-            </a>
-            <a href="/tools/html-entity.html" class="tool-card">
-                <div class="tool-icon">&amp;</div>
-                <h3>HTML 엔티티 변환 <span class="tool-badge">NEW</span></h3>
-                <p>HTML 특수문자를 엔티티로 인코딩/디코딩합니다. 레퍼런스 표 포함.</p>
-            </a>
-            <a href="/tools/lorem.html" class="tool-card">
-                <div class="tool-icon">📄</div>
-                <h3>Lorem Ipsum 생성기 <span class="tool-badge">NEW</span></h3>
-                <p>더미 텍스트를 문단, 문장, 단어 단위로 생성합니다.</p>
-            </a>
-            <a href="/tools/emoji-styler.html" class="tool-card">
-                <div class="tool-icon">✨</div>
-                <h3>이모지 텍스트 스타일러 <span class="tool-badge">NEW</span></h3>
-                <p>텍스트를 유니코드 특수 스타일(볼드, 이탤릭, 밑줄 등)로 변환합니다.</p>
-            </a>
-            <a href="/tools/ascii-art.html" class="tool-card">
-                <div class="tool-icon">▓</div>
-                <h3>ASCII Art 생성기 <span class="tool-badge">NEW</span></h3>
-                <p>텍스트를 대형 ASCII 아트로 변환합니다. 다양한 폰트 지원.</p>
-            </a>
+    <!-- Pain Points -->
+    <div class="sec">
+        <h2 class="sec-title">이런 고민, 있으신가요?</h2>
+        <div class="pain-list">
+            <div class="pain-item">
+                <div class="pain-check">&#10003;</div>
+                <span>아이디어는 있는데 개발자가 없다</span>
+            </div>
+            <div class="pain-item">
+                <div class="pain-check">&#10003;</div>
+                <span>외주 맡기면 너무 비싸고 커뮤니케이션이 어렵다</span>
+            </div>
+            <div class="pain-item">
+                <div class="pain-check">&#10003;</div>
+                <span>반복 업무가 많은데 자동화하고 싶다</span>
+            </div>
+            <div class="pain-item">
+                <div class="pain-check">&#10003;</div>
+                <span>간단한 웹사이트나 도구가 필요한데 직접 못 만든다</span>
+            </div>
         </div>
-    </section>
-
-    <div class="ad-space" data-i18n="ad">광고</div>
-
-    <div class="gray-section">
-        <section>
-            <h2 class="section-title">생성기 / 유틸리티</h2>
-            <div class="tool-grid">
-                <a href="/tools/uuid.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⬡</div>
-                    <h3 data-i18n="uuidGenerator">UUID 생성기</h3>
-                    <p data-i18n="uuidGeneratorDesc">UUID v4를 생성합니다. 대량 생성과 다양한 포맷을 지원합니다.</p>
-                </a>
-                <a href="/tools/password.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">⚿</div>
-                    <h3 data-i18n="passwordGenerator">비밀번호 생성기</h3>
-                    <p data-i18n="passwordGeneratorDesc">강력한 랜덤 비밀번호를 생성합니다. 길이와 문자 종류를 선택할 수 있습니다.</p>
-                </a>
-                <a href="/tools/checklist.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">✅</div>
-                    <h3>체크리스트 <span class="tool-badge">NEW</span></h3>
-                    <p>할 일 목록을 관리합니다. 로컬 저장, 필터, 내보내기 지원.</p>
-                </a>
-                <a href="/tools/country-code.html" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">🌍</div>
-                    <h3>국가코드 조회 <span class="tool-badge">NEW</span></h3>
-                    <p>국가별 국제전화번호, 통화, 수도 정보를 검색합니다.</p>
-                </a>
-            </div>
-        </section>
     </div>
 
-    <section>
-        <h2 class="section-title">디자인 / 미디어</h2>
-        <div class="tool-grid">
-            <a href="/tools/color.html" class="tool-card">
-                <div class="tool-icon">◐</div>
-                <h3 data-i18n="colorConverter">색상 변환기</h3>
-                <p data-i18n="colorConverterDesc">HEX, RGB, HSL 색상 코드를 변환합니다.</p>
-            </a>
-            <a href="/tools/palette.html" class="tool-card">
-                <div class="tool-icon">🎨</div>
-                <h3>컬러 팔레트 생성기 <span class="tool-badge">NEW</span></h3>
-                <p>7가지 색상 조화 모드로 팔레트를 생성합니다. CSS 변수 내보내기 지원.</p>
-            </a>
-            <a href="/tools/favicon-gen.html" class="tool-card">
-                <div class="tool-icon">⭐</div>
-                <h3>파비콘 생성기 <span class="tool-badge">NEW</span></h3>
-                <p>텍스트나 이모지로 파비콘을 생성합니다. PNG, SVG 다운로드 지원.</p>
-            </a>
-            <a href="/tools/image-compress.html" class="tool-card">
-                <div class="tool-icon">📷</div>
-                <h3>이미지 압축기 <span class="tool-badge">NEW</span></h3>
-                <p>브라우저에서 이미지를 압축합니다. 품질 조절, 포맷 변환 지원.</p>
-            </a>
-        </div>
-    </section>
-
-    <div class="gray-section">
-        <section>
-            <h2 class="section-title">더 많은 도구</h2>
-            <div class="tool-grid">
-                <a href="/calc/" class="tool-card" style="background:#fff;">
-                    <div class="tool-icon">🔢</div>
-                    <h3>전문 계산기 <span class="tool-badge">108개</span></h3>
-                    <p>연봉, 금융, 건강, 단위변환, 날짜, 우주 등 108가지 계산기 모음</p>
-                </a>
-            </div>
-        </section>
-    </div>
-
-    <div class="ad-space" data-i18n="ad">광고</div>
-
-    <div class="gray-section">
-        <section>
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">⊘</div>
-                    <h4 data-i18n="featureNoServer">서버 전송 없음</h4>
-                    <p data-i18n="featureNoServerDesc">모든 처리는 브라우저에서만 이루어집니다. 데이터가 외부로 전송되지 않습니다.</p>
+    <!-- Services -->
+    <div class="sec-gray">
+        <div class="sec">
+            <h2 class="sec-title">제작 서비스</h2>
+            <p class="sec-sub">AI를 활용해 빠르고 합리적인 가격으로 만들어 드립니다.</p>
+            <div class="svc-grid">
+                <div class="svc-card">
+                    <div class="svc-icon">&#9741;</div>
+                    <h3>웹사이트 제작</h3>
+                    <p>랜딩페이지, 포트폴리오, SaaS 웹앱까지. 반응형 디자인 기본 포함.</p>
+                    <span class="svc-tag">랜딩페이지 / 포트폴리오 / 웹앱</span>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">↯</div>
-                    <h4 data-i18n="featureFast">빠른 처리</h4>
-                    <p data-i18n="featureFastDesc">서버 요청 없이 즉시 처리됩니다. 대용량 데이터도 빠르게 처리합니다.</p>
+                <div class="svc-card">
+                    <div class="svc-icon">&#9889;</div>
+                    <h3>업무 자동화</h3>
+                    <p>반복되는 수작업을 자동화합니다. 데이터 수집, 보고서 생성, 알림 자동화.</p>
+                    <span class="svc-tag">크롤링 / 보고서 / 알림</span>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">∞</div>
-                    <h4 data-i18n="featureFree">무료 사용</h4>
-                    <p data-i18n="featureFreeDesc">회원가입 없이 모든 기능을 무료로 사용할 수 있습니다.</p>
+                <div class="svc-card">
+                    <div class="svc-icon">&#9998;</div>
+                    <h3>콘텐츠 도구</h3>
+                    <p>유튜브 분석, 영상 제작 보조, 프롬프트 생성기 등 크리에이터 맞춤 도구.</p>
+                    <span class="svc-tag">유튜브 / AI 영상 / 프롬프트</span>
+                </div>
+                <div class="svc-card">
+                    <div class="svc-icon">&#128200;</div>
+                    <h3>맞춤 프로그램</h3>
+                    <p>견적 자동 생성, 재고 관리, 고객 응대 봇 등 비즈니스 맞춤 솔루션.</p>
+                    <span class="svc-tag">견적 / 관리 / 챗봇</span>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 
-    <!-- JSON-LD Structured Data -->
+    <!-- Value Props -->
+    <div class="sec">
+        <div class="val-grid">
+            <div class="val-card">
+                <div class="val-icon">&#9889;</div>
+                <h3>빠른 속도</h3>
+                <p>AI를 활용해 기존 개발 대비 훨씬 빠르게 결과물을 전달합니다.</p>
+            </div>
+            <div class="val-card">
+                <div class="val-icon">&#128176;</div>
+                <h3>합리적 가격</h3>
+                <p>불필요한 중간 과정 없이 합리적인 가격으로 제작합니다.</p>
+            </div>
+            <div class="val-card">
+                <div class="val-icon">&#128172;</div>
+                <h3>쉬운 소통</h3>
+                <p>비개발자 눈높이에 맞춰 쉽게 설명하고 소통합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio -->
+    <div class="sec-gray">
+        <div class="sec">
+            <h2 class="sec-title">납품 사례</h2>
+            <p class="sec-sub">실제 제작하고 납품한 프로젝트입니다.</p>
+            <div class="portfolio-grid">
+                <!-- 사례 추가 시 아래 구조로 넣으면 됩니다:
+                <div class="portfolio-card">
+                    <span class="portfolio-label" style="background:#0071e3;">웹 제작</span>
+                    <h3>프로젝트 이름</h3>
+                    <p>프로젝트 설명</p>
+                    <div class="portfolio-result">
+                        <span class="before">기존 3일</span>
+                        <span class="arrow">&rarr;</span>
+                        <span class="after">5분으로 단축</span>
+                    </div>
+                </div>
+                -->
+                <div class="portfolio-empty">
+                    납품 사례가 곧 추가됩니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Free Tools -->
+    <div class="sec tools-banner">
+        <div class="count"><em>30+</em> 무료 도구</div>
+        <p class="sec-sub" style="margin-bottom:0;">직접 만든 도구들을 무료로 제공합니다. 기술력의 증거입니다.</p>
+        <div class="tools-preview">
+            <a href="/tools/flow-prompt-builder.html" class="tool-chip"><span class="tc-icon">&#127916;</span> Flow Prompt Builder</a>
+            <a href="/tools/qr.html" class="tool-chip"><span class="tc-icon">&#9650;</span> QR코드 생성기</a>
+            <a href="/tools/json.html" class="tool-chip"><span class="tc-icon">{ }</span> JSON Formatter</a>
+            <a href="/tools/markdown.html" class="tool-chip"><span class="tc-icon">&#9997;</span> 마크다운 에디터</a>
+            <a href="/tools/image-compress.html" class="tool-chip"><span class="tc-icon">&#128247;</span> 이미지 압축기</a>
+            <a href="/calc/" class="tool-chip"><span class="tc-icon">&#128290;</span> 전문 계산기 108개</a>
+        </div>
+        <a href="/tools/" class="btn-primary">전체 도구 보기</a>
+    </div>
+
+    <!-- FAQ -->
+    <div class="sec-gray">
+        <div class="sec">
+            <h2 class="sec-title">자주 묻는 질문</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">비용은 어떻게 되나요?</button>
+                    <div class="faq-a"><div class="faq-a-inner">프로젝트 규모와 복잡도에 따라 다릅니다. 간단한 랜딩페이지부터 복잡한 웹앱까지, 상담 후 견적을 안내드립니다. 부담 없이 문의해 주세요.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">제작 기간은 얼마나 걸리나요?</button>
+                    <div class="faq-a"><div class="faq-a-inner">AI를 활용하기 때문에 일반적인 외주보다 빠릅니다. 간단한 프로젝트는 며칠, 복잡한 프로젝트도 일반 외주 대비 크게 단축됩니다.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">제작 후 수정이 가능한가요?</button>
+                    <div class="faq-a"><div class="faq-a-inner">네, 납품 후 일정 기간 동안 수정을 지원합니다. 유지보수가 필요한 경우 별도 안내드립니다.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">코딩을 전혀 몰라도 되나요?</button>
+                    <div class="faq-a"><div class="faq-a-inner">네, 전혀 몰라도 됩니다. 원하시는 기능과 디자인만 말씀해 주시면 됩니다. 이해하기 쉽게 소통합니다.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">어떤 방식으로 문의하나요?</button>
+                    <div class="faq-a"><div class="faq-a-inner">이메일 또는 카카오톡으로 편하게 문의해 주세요. 상담은 무료입니다.</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section" id="contact">
+        <h2>프로젝트, 시작해볼까요?</h2>
+        <p>아이디어만 알려주세요. 나머지는 저희가 만들어 드립니다.</p>
+        <a href="mailto:contact@ionflow.xyz" class="btn-cta">이메일 문의하기</a>
+    </div>
+
+    <!-- JSON-LD -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "ionflow.xyz",
+        "@type": "ProfessionalService",
+        "name": "ionflow",
         "url": "https://ionflow.xyz/",
-        "description": "무료 온라인 도구 모음. QR코드 생성기, JSON Formatter, Base64 변환, UUID 생성, 비밀번호 생성 등.",
-        "inLanguage": ["ko", "en", "ja", "zh", "es", "ar"],
-        "publisher": {
-            "@type": "Organization",
-            "name": "ionflow.xyz",
-            "url": "https://ionflow.xyz/"
-        },
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://ionflow.xyz/?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "ionflow.xyz 온라인 도구",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web Browser",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "ratingCount": "150"
-        }
+        "description": "AI를 활용한 웹사이트 제작, 업무 자동화, 콘텐츠 도구 개발 서비스.",
+        "areaServed": "KR",
+        "serviceType": ["Web Development", "AI Automation", "Content Tools"]
     }
     </script>
 
-    <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
+
+    <script>
+    function toggleFaq(el) {
+        const answer = el.nextElementSibling;
+        const isOpen = el.classList.contains('open');
+        // close all
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.classList.remove('open');
+            q.nextElementSibling.style.maxHeight = null;
+        });
+        if (!isOpen) {
+            el.classList.add('open');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+    }
+    </script>
 </body>
 </html>
