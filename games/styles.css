@@ -1,0 +1,450 @@
+/*
+ * 바둑 게임 - 간단한 스타일
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f0e6;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* 메인 레이아웃 */
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.board-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 턴 표시 */
+.turn-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.turn-stone {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.turn-stone.black {
+    background: radial-gradient(circle at 30% 30%, #4a4a4a, #1a1a1a);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.turn-stone.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #d0d0d0);
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+#turn-text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 바둑판 */
+.board-canvas-wrapper {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+}
+
+#board-canvas {
+    display: block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+}
+
+/* 게임 정보 */
+.game-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 10px 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+/* 돌 아이콘 */
+.stone-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.stone-icon.black {
+    background: radial-gradient(circle at 30% 30%, #4a4a4a, #1a1a1a);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.stone-icon.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #d0d0d0);
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.stone-icon.large {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 5px;
+}
+
+/* 게임 컨트롤 버튼 */
+.game-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.control-btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.control-btn:active {
+    transform: scale(0.98);
+}
+
+.control-btn.primary {
+    background: #2c5f2d;
+    border-color: #2c5f2d;
+    color: #fff;
+}
+
+.control-btn.primary:hover {
+    background: #3d7a3e;
+}
+
+.control-btn.active {
+    background: #4a90d9;
+    border-color: #4a90d9;
+    color: #fff;
+}
+
+.control-btn.danger {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.control-btn.danger:hover {
+    background: #c82333;
+    border-color: #bd2130;
+}
+
+/* 모달 */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+    font-size: 20px;
+    color: #333;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+/* 설정 */
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setting-group:last-child {
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.setting-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.setting-select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+}
+
+.setting-select:focus {
+    outline: none;
+    border-color: #4a90d9;
+}
+
+/* 토스트 알림 */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 12px 24px;
+    background: #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* 새 게임 커튼 이펙트 */
+.curtain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.curtain-overlay.active {
+    pointer-events: auto;
+}
+
+.curtain {
+    position: absolute;
+    top: 0;
+    width: 51%;
+    height: 100%;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #1a1a2e 100%);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+.curtain-left {
+    left: 0;
+    transform: translateX(-101%);
+    border-right: 4px solid #dcb35c;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.curtain-right {
+    right: 0;
+    transform: translateX(101%);
+    border-left: 4px solid #dcb35c;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.curtain-overlay.closing .curtain-left,
+.curtain-overlay.closing .curtain-right {
+    transform: translateX(0);
+}
+
+.curtain-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: #dcb35c;
+    text-shadow: 0 0 20px rgba(220, 179, 92, 0.8), 0 4px 15px rgba(0,0,0,0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.curtain-overlay.show-text .curtain-text {
+    opacity: 1;
+}
+
+/* 커튼 장식 - 세로 줄무늬 */
+.curtain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 30px,
+        rgba(255,255,255,0.02) 30px,
+        rgba(255,255,255,0.02) 60px
+    );
+}
+
+/* 커튼 중앙 빛 효과 */
+.curtain-left::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 179, 92, 0.1));
+}
+
+.curtain-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(-90deg, transparent, rgba(220, 179, 92, 0.1));
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+    .game-container {
+        padding: 8px;
+    }
+
+    .board-wrapper {
+        gap: 8px;
+    }
+
+    .turn-indicator {
+        padding: 6px 15px;
+    }
+
+    .turn-stone {
+        width: 20px;
+        height: 20px;
+    }
+
+    #turn-text {
+        font-size: 14px;
+    }
+
+    .game-info {
+        gap: 15px;
+        padding: 8px 15px;
+    }
+
+    .info-item {
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .stone-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .game-controls {
+        gap: 8px;
+    }
+
+    .control-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
