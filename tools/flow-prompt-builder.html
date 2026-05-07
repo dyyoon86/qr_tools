@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Prompt Builder - ionflow.xyz</title>
+    <meta name="description" content="유튜브 영상용 이미지 생성 프롬프트를 자동으로 만들어주는 무료 도구. 스타일과 옵션만 선택하면 AI 이미지 프롬프트가 완성됩니다.">
+
+    <link rel="canonical" href="https://ionflow.xyz/tools/flow-prompt-builder.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ionflow.xyz">
+    <meta property="og:title" content="Flow Prompt Builder - AI 이미지 프롬프트 생성기">
+    <meta property="og:description" content="유튜브 영상용 이미지 생성 프롬프트를 자동으로 만들어주는 무료 도구.">
+    <meta property="og:url" content="https://ionflow.xyz/tools/flow-prompt-builder.html">
+    <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Flow Prompt Builder - AI 이미지 프롬프트 생성기">
+    <meta name="twitter:description" content="유튜브 영상용 이미지 생성 프롬프트를 자동으로 만들어주는 무료 도구.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
+    <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/flow-prompt-builder.html">
+    <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/flow-prompt-builder.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/flow-prompt-builder.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3465506500903274"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 860px; }
+
+        /* Step Section */
+        .step-section {
+            margin-bottom: 32px;
+        }
+        .step-label {
+            display: inline-block;
+            background: #1d1d1f;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .step-desc {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 16px;
+        }
+
+        /* Style Cards */
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .style-card {
+            background: #f5f5f7;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .style-card:hover { background: #e8e8ed; }
+        .style-card.selected {
+            border-color: #1d1d1f;
+            background: #f0f0f2;
+        }
+        .style-card .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .style-card .name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .style-card .desc {
+            font-size: 11px;
+            color: #86868b;
+        }
+
+        /* Options */
+        .option-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+        .option-group {
+            flex: 1;
+        }
+        .option-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+        }
+
+        /* Toggle Buttons */
+        .toggle-group {
+            display: flex;
+            gap: 8px;
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 10px 14px;
+            background: #f5f5f7;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .toggle-btn:hover { background: #e8e8ed; }
+        .toggle-btn.selected {
+            border-color: #1d1d1f;
+            background: #f0f0f2;
+            font-weight: 600;
+        }
+
+        /* Output */
+        .output-section {
+            background: #f5f5f7;
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 8px;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .output-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .copy-btn {
+            padding: 8px 20px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background: #424245; }
+        .copy-btn.copied { background: #34c759; }
+
+        .prompt-output {
+            background: #fff;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 200px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* How to use */
+        .how-to-use {
+            margin-top: 40px;
+            padding: 28px;
+            background: #f5f5f7;
+            border-radius: 18px;
+        }
+        .how-to-use h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .use-step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+        .use-step:last-child { margin-bottom: 0; }
+        .use-step .num {
+            min-width: 28px;
+            height: 28px;
+            background: #1d1d1f;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .use-step .text {
+            font-size: 14px;
+            line-height: 1.6;
+            padding-top: 3px;
+        }
+        .use-step .text strong { font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .style-grid { grid-template-columns: repeat(2, 1fr); }
+            .option-row { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>Flow Prompt Builder</h1>
+        <p>스타일과 옵션만 선택하면 이미지 생성용 프롬프트가 자동으로 완성됩니다</p>
+    </div>
+
+    <main>
+        <!-- Step 1: Style -->
+        <div class="step-section">
+            <span class="step-label">STEP 1</span>
+            <h2 class="step-title">이미지 스타일 선택</h2>
+            <p class="step-desc">영상에 사용할 이미지 스타일을 선택하세요.</p>
+            <div class="style-grid">
+                <div class="style-card selected" data-style="illustration" onclick="selectStyle(this)">
+                    <div class="icon">🎨</div>
+                    <div class="name">만화 / 일러스트</div>
+                    <div class="desc">웹툰 느낌의 친근한 그림체</div>
+                </div>
+                <div class="style-card" data-style="realistic" onclick="selectStyle(this)">
+                    <div class="icon">📷</div>
+                    <div class="name">실사</div>
+                    <div class="desc">사진처럼 보이는 리얼한 이미지</div>
+                </div>
+                <div class="style-card" data-style="cinematic" onclick="selectStyle(this)">
+                    <div class="icon">🎬</div>
+                    <div class="name">영화</div>
+                    <div class="desc">필름 느낌의 시네마틱 장면</div>
+                </div>
+                <div class="style-card" data-style="3d" onclick="selectStyle(this)">
+                    <div class="icon">🧊</div>
+                    <div class="name">3D 애니메이션</div>
+                    <div class="desc">픽사/디즈니 스타일의 3D</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Options -->
+        <div class="step-section">
+            <span class="step-label">STEP 2</span>
+            <h2 class="step-title">옵션 설정</h2>
+            <p class="step-desc">영상 템포와 캐릭터 설정을 조절하세요.</p>
+
+            <div class="option-row">
+                <div class="option-group">
+                    <label>문장당 이미지 수</label>
+                    <div class="toggle-group">
+                        <div class="toggle-btn" data-value="1" onclick="selectOption(this, 'imgPerSentence')">1장 (느린 템포)</div>
+                        <div class="toggle-btn selected" data-value="2" onclick="selectOption(this, 'imgPerSentence')">2장 (보통)</div>
+                        <div class="toggle-btn" data-value="3" onclick="selectOption(this, 'imgPerSentence')">3장 (빠른 템포)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option-row">
+                <div class="option-group">
+                    <label>캐릭터 등장</label>
+                    <div class="toggle-group">
+                        <div class="toggle-btn selected" data-value="yes" onclick="selectOption(this, 'character')">등장</div>
+                        <div class="toggle-btn" data-value="no" onclick="selectOption(this, 'character')">미등장</div>
+                    </div>
+                </div>
+                <div class="option-group">
+                    <label>인물 민족</label>
+                    <div class="toggle-group">
+                        <div class="toggle-btn selected" data-value="auto" onclick="selectOption(this, 'ethnicity')">자동</div>
+                        <div class="toggle-btn" data-value="korean" onclick="selectOption(this, 'ethnicity')">한국인</div>
+                        <div class="toggle-btn" data-value="western" onclick="selectOption(this, 'ethnicity')">서양인</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Output -->
+        <div class="step-section">
+            <span class="step-label">STEP 3</span>
+            <h2 class="step-title">프롬프트 복사</h2>
+            <p class="step-desc">아래 프롬프트를 복사해서 Google AI Studio에 대본과 함께 붙여넣으세요.</p>
+
+            <div class="output-section">
+                <div class="output-header">
+                    <span class="output-title">완성된 프롬프트</span>
+                    <button class="copy-btn" onclick="copyPrompt()">📋 복사</button>
+                </div>
+                <div class="prompt-output" id="promptOutput"></div>
+            </div>
+        </div>
+
+        <!-- Ad Space -->
+        <div class="ad-space">광고</div>
+
+        <!-- How to Use -->
+        <div class="how-to-use">
+            <h3>사용 방법</h3>
+            <div class="use-step">
+                <div class="num">1</div>
+                <div class="text">위에서 <strong>스타일</strong>과 <strong>옵션</strong>을 선택합니다.</div>
+            </div>
+            <div class="use-step">
+                <div class="num">2</div>
+                <div class="text"><strong>프롬프트를 복사</strong>합니다.</div>
+            </div>
+            <div class="use-step">
+                <div class="num">3</div>
+                <div class="text"><strong>Google AI Studio</strong> (또는 ChatGPT, Gemini 등)에 접속합니다.</div>
+            </div>
+            <div class="use-step">
+                <div class="num">4</div>
+                <div class="text">복사한 프롬프트를 붙여넣고, 바로 아래에 <strong>영상 대본</strong>을 붙여넣습니다.</div>
+            </div>
+            <div class="use-step">
+                <div class="num">5</div>
+                <div class="text">AI가 장면별 이미지 프롬프트를 생성합니다. 결과를 <strong>Google Flow</strong>에 붙여넣어 이미지를 생성하세요.</div>
+            </div>
+        </div>
+
+        <!-- Ad Space -->
+        <div class="ad-space" style="margin-top:32px">광고</div>
+    </main>
+
+    <script src="/assets/js/i18n.js?v=4"></script>
+    <script src="/assets/js/layout.js?v=3"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // State
+        const state = {
+            style: 'illustration',
+            imgPerSentence: '2',
+            character: 'yes',
+            ethnicity: 'auto'
+        };
+
+        // Style descriptions
+        const styleMap = {
+            illustration: {
+                name: '만화/일러스트',
+                prompt: 'colorful cartoon illustration style, clean line art, vibrant colors, webtoon aesthetic, flat shading, friendly and approachable character design'
+            },
+            realistic: {
+                name: '실사',
+                prompt: 'photorealistic style, high resolution photograph, natural lighting, realistic skin texture, DSLR quality, shallow depth of field, detailed environment'
+            },
+            cinematic: {
+                name: '영화',
+                prompt: 'cinematic film style, dramatic lighting, movie color grading, anamorphic lens flare, wide aspect ratio, atmospheric depth, professional cinematography'
+            },
+            '3d': {
+                name: '3D 애니메이션',
+                prompt: '3D rendered animation style, Pixar-Disney aesthetic, smooth subsurface scattering skin, soft ambient occlusion, stylized proportions, vibrant saturated colors'
+            }
+        };
+
+        // Ethnicity descriptions
+        const ethnicityMap = {
+            auto: '',
+            korean: 'The character is Korean with natural Korean facial features. ',
+            western: 'The character is Caucasian/Western with typical Western facial features. '
+        };
+
+        // Generate prompt
+        function generatePrompt() {
+            const s = styleMap[state.style];
+            const imgCount = state.imgPerSentence;
+            const hasChar = state.character === 'yes';
+            const ethDesc = ethnicityMap[state.ethnicity];
+
+            let prompt = `아래 대본을 읽고, 장면별 이미지 생성용 프롬프트를 만들어주세요.
+
+[규칙]
+1. 대본의 각 문장마다 ${imgCount}장의 이미지 프롬프트를 만드세요.
+2. 모든 프롬프트는 영어로 작성하세요.
+3. 이미지 스타일: ${s.prompt}
+`;
+
+            if (hasChar) {
+                prompt += `4. 캐릭터가 등장하는 장면에서는 동일한 캐릭터가 일관되게 나타나야 합니다.
+   - 캐릭터 외모 설명을 첫 프롬프트에서 상세하게 정의하고, 이후 프롬프트에서 동일한 설명을 반복하세요.
+`;
+                if (ethDesc) {
+                    prompt += `   - ${ethDesc}
+`;
+                }
+                prompt += `5. 캐릭터가 등장하지 않는 장면(배경, 화면, UI 등)은 캐릭터 없이 배경만 묘사하세요.
+`;
+            } else {
+                prompt += `4. 캐릭터(사람)는 등장시키지 마세요. 배경, 오브젝트, UI, 텍스트, 아이콘 등으로만 구성하세요.
+`;
+            }
+
+            prompt += `
+[출력 형식]
+각 프롬프트를 아래 형식으로 출력하세요:
+
+[장면 1-1]
+(영어 프롬프트)
+
+[장면 1-2]
+(영어 프롬프트)
+
+...
+
+[주의사항]
+- 프롬프트에 한글을 포함하지 마세요.
+- 각 프롬프트는 1~3문장으로 간결하게 작성하세요.
+- Google Flow의 이미지 생성에 최적화된 프롬프트를 만들어주세요.
+- 부정형 표현(no, don't, without 등)은 가급적 피하고, 원하는 것을 직접 서술하세요.
+
+---
+[대본 시작]
+(여기에 대본을 붙여넣으세요)`;
+
+            return prompt;
+        }
+
+        // Update output
+        function updateOutput() {
+            document.getElementById('promptOutput').textContent = generatePrompt();
+        }
+
+        // Select style
+        window.selectStyle = function(el) {
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            state.style = el.dataset.style;
+            updateOutput();
+        };
+
+        // Select option
+        window.selectOption = function(el, key) {
+            el.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            state[key] = el.dataset.value;
+            updateOutput();
+        };
+
+        // Copy prompt
+        window.copyPrompt = function() {
+            const text = generatePrompt();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '복사 완료!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 복사';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        };
+
+        // Initialize
+        updateOutput();
+    })();
+    </script>
+</body>
+</html>
