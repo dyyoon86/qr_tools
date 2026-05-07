@@ -396,7 +396,7 @@ ${ETHNICITY[eth]}`;
 ## Image 1
 
 **IMG**: [이미지 생성용 영문 프롬프트]
-**VID**: [동작 + 카메라 움직임만 1-2문장으로 짧게]
+**VID**: [이미지는 이미 있으므로 장면 묘사 반복 금지. 동작 + 카메라 움직임만 1-2문장으로 짧게. 예: "slow zoom in, character turns head left, hair swaying gently"]
 **KR**: [이 장면이 대본에서 어떤 부분인지 한글 설명]
 
 ## Image 2
@@ -405,12 +405,20 @@ ${ETHNICITY[eth]}`;
 **VID**: ...
 **KR**: ...
 
-(20개씩 끊어서 출력하세요. 20개 출력 후 "계속"이라고 하면 이어서 출력.)
+(... 대본 끝까지 반복. 각 이미지 사이에 빈 줄 1개씩 넣어서 구분할 것.)
 
-─── .txt 파일 형식 (반드시 준수) ───
-마지막에 아래 2개의 텍스트 파일 내용도 출력하세요:
-1. image-prompts.txt — IMG 프롬프트만 모아서 (번호 + 프롬프트, 각 항목 사이 빈 줄 1개)
-2. video-prompts.txt — VID 프롬프트만 모아서 (번호 + 프롬프트, 각 항목 사이 빈 줄 1개)
+대본이 길 경우 20개씩 끊어서 출력하세요. 20개를 출력할 때마다 바로 .txt 파일 2개를 제공하고, "계속 하시려면 [계속]이라고 입력하세요" 라고 안내한 뒤 멈추세요. 사용자가 [계속]하면 다음 20개를 이어서 출력 + 다시 .txt 제공. 대본 끝까지 반복.
+
+.txt 파일 형식 (반드시 준수):
+1. image-prompts.txt — IMG 프롬프트만. 프롬프트 사이에 빈 줄 1개씩 넣어서 구분할 것.
+2. video-prompts.txt — VID 프롬프트만. 프롬프트 사이에 빈 줄 1개씩 넣어서 구분할 것.
+
+예시 (image-prompts.txt):
+wide shot, character standing in rain...no watermarks
+
+medium-wide, bright office with sunlight...no watermarks
+
+(이렇게 프롬프트 하나 → 빈 줄 → 프롬프트 하나 → 빈 줄 형태. 절대 붙여쓰지 말 것.)
 
 ─── 대본 ───
 
