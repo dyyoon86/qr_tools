@@ -13,14 +13,6 @@
         }
     }
 
-    // Navigation items with i18n keys
-    const navItems = [
-        { href: '/tools/qr.html', i18nKey: 'navQR' },
-        { href: '/tools/json.html', i18nKey: 'navJSON' },
-        { href: '/tools/base64.html', i18nKey: 'navBase64' },
-        { href: '/tools/hash.html', i18nKey: 'navHash' }
-    ];
-
     // Footer links with i18n keys
     const footerLinks = [
         { href: '/pages/about.html', i18nKey: 'footerAbout' },
@@ -36,19 +28,17 @@
 
     // Create header HTML with inline styles to ensure consistency
     function createHeader() {
-        const navLinksHtml = navItems.map(item =>
-            `<a href="${item.href}" style="font-size:12px;opacity:0.8;" data-i18n="${item.i18nKey}">${t(item.i18nKey)}</a>`
-        ).join('');
-
         const langSelector = window.i18n ? window.i18n.createLanguageSelector() : '';
 
         return `
         <header style="background:rgba(255,255,255,0.95);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);position:sticky;top:0;z-index:100;border-bottom:1px solid #d2d2d7;">
             <div style="max-width:1200px;margin:0 auto;padding:0 22px;height:48px;display:flex;align-items:center;justify-content:space-between;">
                 <a href="/" style="font-size:21px;font-weight:600;text-decoration:none;color:inherit;">ionflow</a>
-                <div style="display:flex;align-items:center;gap:24px;">
-                    <a href="/tools/" style="font-size:13px;font-weight:500;color:#0071e3;text-decoration:none;">도구 모음</a>
-                    <nav style="display:flex;gap:28px;">${navLinksHtml}</nav>
+                <div style="display:flex;align-items:center;gap:16px;">
+                    <a href="/tools/" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#0071e3;text-decoration:none;padding:6px 14px;border-radius:980px;background:rgba(0,113,227,0.08);transition:background 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        도구 모음
+                    </a>
                     ${langSelector}
                 </div>
             </div>
