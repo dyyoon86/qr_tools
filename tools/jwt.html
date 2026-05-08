@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="jwtTitle">JWT 디코더 - ionflow.xyz</title>
-    <meta name="description" content="JWT(JSON Web Token)를 디코딩하고 분석합니다. Header, Payload, 만료시간을 확인합니다.">
+    <title data-i18n="jwtPageTitle">JWT 디코더 - ionflow.xyz</title>
+    <meta name="description" data-i18n="jwtPageDesc" content="JWT(JSON Web Token)를 디코딩하고 분석합니다. Header, Payload, 만료시간을 확인합니다.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/jwt.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
@@ -15,12 +23,268 @@
     <meta property="og:url" content="https://ionflow.xyz/tools/jwt.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JWT 디코더 - ionflow.xyz">
+    <meta name="twitter:description" content="JWT 토큰을 디코딩하고 분석합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/jwt.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/jwt.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/jwt.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        .jwt-token-input textarea {
+            width: 100%;
+            height: 110px;
+            box-sizing: border-box;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .jwt-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            background: var(--bg-secondary, #f8f9fa);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .jwt-part-h { color: #2b6cb0; }
+        .jwt-part-p { color: #276749; }
+        .jwt-part-s { color: #c53030; }
+        .jwt-dot { color: #999; font-size: 16px; font-weight: bold; padding: 0 2px; }
+        .jwt-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .jwt-meta-card {
+            background: var(--bg-secondary, #f8f9fa);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+        .jwt-meta-label {
+            font-size: 11px;
+            color: var(--text-secondary, #718096);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .jwt-meta-val {
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        .tag-valid { color: #1d7324; }
+        .tag-expired { color: #c53030; }
+        .jwt-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .jwt-section-full { grid-column: 1 / -1; }
+        .output-area { min-height: 140px; }
+        .json-key { color: #881391; }
+        .json-string { color: #1a1aa6; }
+        .json-number { color: #1c00cf; }
+        .json-boolean { color: #0d22aa; }
+        .json-null { color: #808080; }
+        @media (max-width: 768px) {
+            .jwt-sections { grid-template-columns: 1fr; }
+            .jwt-section-full { grid-column: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="jwtHeading">JWT 디코더</h1>
+        <p data-i18n="jwtSubheading">JWT 토큰을 붙여넣으면 Header, Payload, Signature를 분석합니다.</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel jwt-token-input" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="jwtInputTitle">JWT 토큰 입력</span>
+                <div class="panel-actions">
+                    <button data-i18n="sampleBtn" onclick="loadSample()">샘플</button>
+                    <button data-i18n="clearBtn" onclick="clearAll()">지우기</button>
+                </div>
+            </div>
+            <textarea id="jwt-input" class="code-font" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.signature" spellcheck="false"></textarea>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn primary" data-i18n="jwtDecodeBtn" onclick="decodeJWT()">디코딩</button>
+        </div>
+
+        <div id="jwt-visual" class="jwt-visual" style="display:none;"></div>
+        <div id="jwt-meta" class="jwt-meta-grid" style="display:none;"></div>
+
+        <div id="jwt-sections" class="jwt-sections" style="display:none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title" style="color:#2b6cb0;">&#x2022; Header</span>
+                    <div class="panel-actions">
+                        <button data-i18n="copyBtn" onclick="copyEl('out-header')">복사</button>
+                    </div>
+                </div>
+                <div id="out-header" class="output-area code-font"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title" style="color:#276749;">&#x2022; Payload</span>
+                    <div class="panel-actions">
+                        <button data-i18n="copyBtn" onclick="copyEl('out-payload')">복사</button>
+                    </div>
+                </div>
+                <div id="out-payload" class="output-area code-font"></div>
+            </div>
+
+            <div class="panel jwt-section-full">
+                <div class="panel-header">
+                    <span class="panel-title" style="color:#c53030;">&#x2022; Signature</span>
+                    <div class="panel-actions">
+                        <button data-i18n="copyBtn" onclick="copyEl('out-sig')">복사</button>
+                    </div>
+                </div>
+                <div id="out-sig" class="output-area code-font" style="min-height:60px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showStatus(msg, isError) {
+            var s = document.getElementById('status');
+            s.textContent = msg;
+            s.className = 'status ' + (isError ? 'error' : 'success');
+            setTimeout(function(){ s.className = 'status'; }, 3000);
+        }
+
+        function b64urlDecode(str) {
+            str = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (str.length % 4) str += '=';
+            try {
+                return decodeURIComponent(Array.prototype.map.call(atob(str), function(c){
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            } catch(e) { return atob(str); }
+        }
+
+        function highlight(json) {
+            json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(m){
+                var cls = 'json-number';
+                if (/^"/.test(m)) cls = /:$/.test(m) ? 'json-key' : 'json-string';
+                else if (/true|false/.test(m)) cls = 'json-boolean';
+                else if (/null/.test(m)) cls = 'json-null';
+                return '<span class="'+cls+'">'+m+'</span>';
+            });
+        }
+
+        function fmtTime(ts) {
+            return new Date(ts * 1000).toLocaleString('ko-KR', {timeZone:'Asia/Seoul'});
+        }
+
+        function decodeJWT() {
+            var token = document.getElementById('jwt-input').value.trim();
+            if (!token) { showStatus('JWT 토큰을 입력하세요.', true); return; }
+            var parts = token.split('.');
+            if (parts.length !== 3) { showStatus('유효하지 않은 JWT 형식입니다. 점(.)으로 구분된 3개의 파트가 필요합니다.', true); return; }
+            try {
+                var header = JSON.parse(b64urlDecode(parts[0]));
+                var payload = JSON.parse(b64urlDecode(parts[1]));
+                var sig = parts[2];
+
+                document.getElementById('out-header').innerHTML = '<pre>' + highlight(JSON.stringify(header, null, 2)) + '</pre>';
+                document.getElementById('out-payload').innerHTML = '<pre>' + highlight(JSON.stringify(payload, null, 2)) + '</pre>';
+                document.getElementById('out-sig').innerHTML = '<pre style="color:#c53030;white-space:pre-wrap;word-break:break-all;">' + sig + '</pre>';
+
+                // visual token
+                var vis = document.getElementById('jwt-visual');
+                vis.style.display = 'flex';
+                vis.innerHTML = '<span class="jwt-part-h">'+esc(parts[0])+'</span><span class="jwt-dot">.</span><span class="jwt-part-p">'+esc(parts[1])+'</span><span class="jwt-dot">.</span><span class="jwt-part-s">'+esc(parts[2])+'</span>';
+
+                // meta cards
+                var meta = document.getElementById('jwt-meta');
+                meta.style.display = 'grid';
+                var html = '';
+                html += card('알고리즘', header.alg || '-');
+                html += card('토큰 타입', header.typ || '-');
+                if (payload.sub) html += card('주체 (sub)', esc(String(payload.sub)));
+                if (payload.iss) html += card('발급자 (iss)', esc(String(payload.iss)));
+                if (payload.aud) html += card('대상 (aud)', esc(Array.isArray(payload.aud) ? payload.aud.join(', ') : String(payload.aud)));
+                if (payload.iat) html += card('발급 시간 (iat)', fmtTime(payload.iat));
+                if (payload.nbf) html += card('유효 시작 (nbf)', fmtTime(payload.nbf));
+                if (payload.exp) {
+                    var now = Math.floor(Date.now()/1000);
+                    var expired = payload.exp < now;
+                    html += '<div class="jwt-meta-card"><div class="jwt-meta-label">만료 시간 (exp)</div><div class="jwt-meta-val '+(expired?'tag-expired':'tag-valid')+'">'+fmtTime(payload.exp)+'&nbsp;('+(expired?'만료됨':'유효함')+')</div></div>';
+                }
+                meta.innerHTML = html;
+
+                document.getElementById('jwt-sections').style.display = 'grid';
+                showStatus('JWT 디코딩 완료');
+            } catch(e) {
+                showStatus('디코딩 실패: ' + e.message, true);
+            }
+        }
+
+        function card(label, val) {
+            return '<div class="jwt-meta-card"><div class="jwt-meta-label">'+label+'</div><div class="jwt-meta-val">'+val+'</div></div>';
+        }
+
+        function esc(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function copyEl(id) {
+            var t = (document.getElementById(id).textContent || '').trim();
+            navigator.clipboard.writeText(t).then(function(){ showStatus('복사되었습니다'); });
+        }
+
+        function clearAll() {
+            document.getElementById('jwt-input').value = '';
+            ['out-header','out-payload','out-sig'].forEach(function(id){ document.getElementById(id).innerHTML=''; });
+            document.getElementById('jwt-visual').style.display = 'none';
+            document.getElementById('jwt-meta').style.display = 'none';
+            document.getElementById('jwt-sections').style.display = 'none';
+        }
+
+        function loadSample() {
+            var h = btoa(JSON.stringify({alg:'HS256',typ:'JWT'})).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+            var now = Math.floor(Date.now()/1000);
+            var p = btoa(JSON.stringify({sub:'1234567890',name:'홍길동',iat:now,exp:now+3600,iss:'ionflow.xyz',role:'admin'})).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+            document.getElementById('jwt-input').value = h+'.'+p+'.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+            decodeJWT();
+        }
+
+        document.getElementById('jwt-input').addEventListener('input', function(){
+            var v = this.value.trim();
+            if (v && v.split('.').length === 3) decodeJWT();
+        });
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

@@ -12,8 +12,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flow Prompt Builder - ionflow.xyz</title>
-    <meta name="description" content="유튜브 영상용 이미지 생성 프롬프트를 자동으로 만들어주는 무료 도구. 스타일과 옵션만 선택하면 Nano Banana(Google Flow) 이미지 프롬프트가 완성됩니다.">
+    <title data-i18n="flowPromptPageTitle">Flow Prompt Builder - ionflow.xyz</title>
+    <meta name="description" data-i18n="flowPromptPageDesc" content="유튜브 영상용 이미지 생성 프롬프트를 자동으로 만들어주는 무료 도구. 스타일과 옵션만 선택하면 Nano Banana(Google Flow) 이미지 프롬프트가 완성됩니다.">
 
     <link rel="canonical" href="https://ionflow.xyz/tools/flow-prompt-builder.html">
     <meta property="og:type" content="website">
@@ -192,24 +192,24 @@
 </head>
 <body>
     <div class="page-header">
-        <h1>Flow Prompt Builder</h1>
-        <p>스타일과 옵션만 선택하면 이미지 생성용 프롬프트가 자동으로 완성됩니다</p>
+        <h1 data-i18n="flowPromptHeading">Flow Prompt Builder</h1>
+        <p data-i18n="flowPromptSubheading">스타일과 옵션만 선택하면 이미지 생성용 프롬프트가 자동으로 완성됩니다</p>
     </div>
 
     <main>
         <!-- Step 1: Style -->
         <div class="step-section">
             <span class="step-label">STEP 1</span>
-            <h2 class="step-title">이미지 스타일 선택</h2>
-            <p class="step-desc">영상에 사용할 이미지 스타일을 선택하세요.</p>
+            <h2 class="step-title" data-i18n="flowPromptStep1Title">이미지 스타일 선택</h2>
+            <p class="step-desc" data-i18n="flowPromptStep1Desc">영상에 사용할 이미지 스타일을 선택하세요.</p>
             <div class="style-grid" id="styleGrid"></div>
         </div>
 
         <!-- Step 2: Options -->
         <div class="step-section">
             <span class="step-label">STEP 2</span>
-            <h2 class="step-title">옵션 설정</h2>
-            <p class="step-desc">영상 템포와 캐릭터 설정을 조절하세요.</p>
+            <h2 class="step-title" data-i18n="flowPromptStep2Title">옵션 설정</h2>
+            <p class="step-desc" data-i18n="flowPromptStep2Desc">영상 템포와 캐릭터 설정을 조절하세요.</p>
 
             <div class="option-row">
                 <div class="option-group">
@@ -247,16 +247,16 @@
         <!-- Step 3: Output -->
         <div class="step-section">
             <span class="step-label">STEP 3</span>
-            <h2 class="step-title">프롬프트 복사</h2>
-            <p class="step-desc">아래 프롬프트를 복사해서 AI에 대본과 함께 붙여넣으세요.</p>
+            <h2 class="step-title" data-i18n="flowPromptStep3Title">프롬프트 복사</h2>
+            <p class="step-desc" data-i18n="flowPromptStep3Desc">아래 프롬프트를 복사해서 AI에 대본과 함께 붙여넣으세요.</p>
 
             <div class="output-section">
                 <div class="output-header">
                     <div>
-                        <span class="output-title">완성된 프롬프트</span>
+                        <span class="output-title" data-i18n="flowPromptOutputTitle">완성된 프롬프트</span>
                         <span class="output-stats" id="outputStats"></span>
                     </div>
-                    <button class="copy-btn" onclick="copyOutput()">복사</button>
+                    <button class="copy-btn" onclick="copyOutput()" data-i18n="copyBtn">복사</button>
                 </div>
                 <div class="prompt-output" id="output"></div>
             </div>
@@ -265,8 +265,8 @@
         <!-- AI Links -->
         <div class="step-section" id="aiLinks">
             <span class="step-label">LINK</span>
-            <h2 class="step-title">AI에 붙여넣기</h2>
-            <p class="step-desc">복사한 프롬프트를 아래 AI 서비스에 붙여넣으세요.</p>
+            <h2 class="step-title" data-i18n="flowPromptAiPasteTitle">AI에 붙여넣기</h2>
+            <p class="step-desc" data-i18n="flowPromptAiPasteDesc">복사한 프롬프트를 아래 AI 서비스에 붙여넣으세요.</p>
             <div class="ai-links">
                 <a href="https://aistudio.google.com/prompts/new_chat" target="_blank" class="ai-link">
                     <div class="logo" style="background:#fff;"><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" alt="AI Studio"></div>

@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="countryCodeTitle">국가 코드 검색기 - ionflow.xyz</title>
-    <meta name="description" content="전세계 국가의 국가코드, 전화번호 코드, 화폐, 수도 등을 검색합니다.">
+    <title data-i18n="countryPageTitle">국가 코드 검색기 - ionflow.xyz</title>
+    <meta name="description" data-i18n="countryPageDesc" content="전세계 국가의 국가코드, 전화번호 코드, 화폐, 수도 등을 검색합니다.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/country-code.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
@@ -15,12 +23,295 @@
     <meta property="og:url" content="https://ionflow.xyz/tools/country-code.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="국가 코드 검색기 - ionflow.xyz">
+    <meta name="twitter:description" content="전세계 국가의 국가코드, 전화번호 코드, 화폐 등을 검색합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/country-code.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/country-code.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/country-code.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .search-row input {
+            flex: 1;
+            font-size: 15px;
+        }
+        .result-count {
+            font-size: 13px;
+            color: var(--text-secondary, #718096);
+            margin-bottom: 12px;
+        }
+        .country-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .country-table thead th {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--border-color, #e2e8f0);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary, #718096);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .country-table thead th:hover { color: var(--accent-color, #3b82f6); }
+        .country-table thead th .sort-arrow { margin-left: 4px; opacity: 0.4; }
+        .country-table thead th.sorted .sort-arrow { opacity: 1; color: var(--accent-color, #3b82f6); }
+        .country-table tbody tr {
+            border-bottom: 1px solid var(--border-color, #e2e8f0);
+            transition: background 0.1s;
+        }
+        .country-table tbody tr:last-child { border-bottom: none; }
+        .country-table tbody tr:hover { background: var(--bg-secondary, #f8f9fa); }
+        .country-table td {
+            padding: 10px 12px;
+            vertical-align: middle;
+        }
+        .flag-cell { font-size: 22px; line-height: 1; }
+        .iso-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            background: var(--bg-secondary, #f0f0f0);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .dial-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-color, #3b82f6);
+        }
+        .no-results {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-secondary, #718096);
+        }
+        @media (max-width: 640px) {
+            .country-table td:nth-child(5),
+            .country-table th:nth-child(5) { display: none; }
+            .country-table td:nth-child(6),
+            .country-table th:nth-child(6) { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="countryHeading">국가코드 조회</h1>
+        <p data-i18n="countrySubheading">국가명, ISO 코드, 국제전화 코드, 화폐, 수도 등을 검색합니다.</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="countryPanelTitle">국가 검색</span>
+            </div>
+            <div class="search-row">
+                <input type="text" id="search-input" data-i18n-placeholder="countrySearchPlaceholder" placeholder="국가명, ISO코드, 전화코드 등으로 검색..." autofocus>
+            </div>
+            <div class="result-count" id="result-count"></div>
+
+            <div style="overflow-x:auto;">
+                <table class="country-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortBy('flag')" id="th-flag">국기</th>
+                            <th onclick="sortBy('name')" id="th-name">국가명 <span class="sort-arrow">▲</span></th>
+                            <th onclick="sortBy('iso2')" id="th-iso2">ISO2 <span class="sort-arrow">▲</span></th>
+                            <th onclick="sortBy('dial')" id="th-dial">전화코드 <span class="sort-arrow">▲</span></th>
+                            <th onclick="sortBy('currency')" id="th-currency">화폐 <span class="sort-arrow">▲</span></th>
+                            <th onclick="sortBy('capital')" id="th-capital">수도 <span class="sort-arrow">▲</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="country-tbody"></tbody>
+                </table>
+            </div>
+            <div id="no-results" class="no-results" style="display:none;">검색 결과가 없습니다.</div>
+        </div>
+    </main>
+
+    <script>
+        // flag, name(Korean), iso2, iso3, dial, currency, capital
+        var COUNTRIES = [
+            ['🇰🇷','대한민국','KR','KOR','+82','KRW (원)','서울'],
+            ['🇺🇸','미국','US','USA','+1','USD (달러)','워싱턴 D.C.'],
+            ['🇯🇵','일본','JP','JPN','+81','JPY (엔)','도쿄'],
+            ['🇨🇳','중국','CN','CHN','+86','CNY (위안)','베이징'],
+            ['🇬🇧','영국','GB','GBR','+44','GBP (파운드)','런던'],
+            ['🇩🇪','독일','DE','DEU','+49','EUR (유로)','베를린'],
+            ['🇫🇷','프랑스','FR','FRA','+33','EUR (유로)','파리'],
+            ['🇮🇹','이탈리아','IT','ITA','+39','EUR (유로)','로마'],
+            ['🇪🇸','스페인','ES','ESP','+34','EUR (유로)','마드리드'],
+            ['🇨🇦','캐나다','CA','CAN','+1','CAD (달러)','오타와'],
+            ['🇦🇺','호주','AU','AUS','+61','AUD (달러)','캔버라'],
+            ['🇳🇿','뉴질랜드','NZ','NZL','+64','NZD (달러)','웰링턴'],
+            ['🇧🇷','브라질','BR','BRA','+55','BRL (헤알)','브라질리아'],
+            ['🇲🇽','멕시코','MX','MEX','+52','MXN (페소)','멕시코시티'],
+            ['🇦🇷','아르헨티나','AR','ARG','+54','ARS (페소)','부에노스아이레스'],
+            ['🇮🇳','인도','IN','IND','+91','INR (루피)','뉴델리'],
+            ['🇷🇺','러시아','RU','RUS','+7','RUB (루블)','모스크바'],
+            ['🇿🇦','남아프리카','ZA','ZAF','+27','ZAR (랜드)','프리토리아'],
+            ['🇳🇬','나이지리아','NG','NGA','+234','NGN (나이라)','아부자'],
+            ['🇪🇬','이집트','EG','EGY','+20','EGP (파운드)','카이로'],
+            ['🇸🇦','사우디아라비아','SA','SAU','+966','SAR (리얄)','리야드'],
+            ['🇦🇪','아랍에미리트','AE','ARE','+971','AED (디르함)','아부다비'],
+            ['🇹🇷','터키','TR','TUR','+90','TRY (리라)','앙카라'],
+            ['🇮🇷','이란','IR','IRN','+98','IRR (리알)','테헤란'],
+            ['🇮🇱','이스라엘','IL','ISR','+972','ILS (세겔)','예루살렘'],
+            ['🇵🇰','파키스탄','PK','PAK','+92','PKR (루피)','이슬라마바드'],
+            ['🇧🇩','방글라데시','BD','BGD','+880','BDT (타카)','다카'],
+            ['🇮🇩','인도네시아','ID','IDN','+62','IDR (루피아)','자카르타'],
+            ['🇲🇾','말레이시아','MY','MYS','+60','MYR (링깃)','쿠알라룸푸르'],
+            ['🇸🇬','싱가포르','SG','SGP','+65','SGD (달러)','싱가포르'],
+            ['🇹🇭','태국','TH','THA','+66','THB (바트)','방콕'],
+            ['🇵🇭','필리핀','PH','PHL','+63','PHP (페소)','마닐라'],
+            ['🇻🇳','베트남','VN','VNM','+84','VND (동)','하노이'],
+            ['🇹🇼','대만','TW','TWN','+886','TWD (달러)','타이베이'],
+            ['🇭🇰','홍콩','HK','HKG','+852','HKD (달러)','홍콩'],
+            ['🇳🇱','네덜란드','NL','NLD','+31','EUR (유로)','암스테르담'],
+            ['🇧🇪','벨기에','BE','BEL','+32','EUR (유로)','브뤼셀'],
+            ['🇨🇭','스위스','CH','CHE','+41','CHF (프랑)','베른'],
+            ['🇦🇹','오스트리아','AT','AUT','+43','EUR (유로)','빈'],
+            ['🇵🇱','폴란드','PL','POL','+48','PLN (즐로티)','바르샤바'],
+            ['🇸🇪','스웨덴','SE','SWE','+46','SEK (크로나)','스톡홀름'],
+            ['🇳🇴','노르웨이','NO','NOR','+47','NOK (크로네)','오슬로'],
+            ['🇩🇰','덴마크','DK','DNK','+45','DKK (크로네)','코펜하겐'],
+            ['🇫🇮','핀란드','FI','FIN','+358','EUR (유로)','헬싱키'],
+            ['🇵🇹','포르투갈','PT','PRT','+351','EUR (유로)','리스본'],
+            ['🇬🇷','그리스','GR','GRC','+30','EUR (유로)','아테네'],
+            ['🇨🇿','체코','CZ','CZE','+420','CZK (코루나)','프라하'],
+            ['🇭🇺','헝가리','HU','HUN','+36','HUF (포린트)','부다페스트'],
+            ['🇷🇴','루마니아','RO','ROU','+40','RON (레이)','부쿠레슈티'],
+            ['🇺🇦','우크라이나','UA','UKR','+380','UAH (흐리우냐)','키이우'],
+            ['🇨🇴','콜롬비아','CO','COL','+57','COP (페소)','보고타'],
+            ['🇨🇱','칠레','CL','CHL','+56','CLP (페소)','산티아고'],
+            ['🇵🇪','페루','PE','PER','+51','PEN (솔)','리마'],
+            ['🇰🇪','케냐','KE','KEN','+254','KES (실링)','나이로비'],
+            ['🇬🇭','가나','GH','GHA','+233','GHS (세디)','아크라'],
+            ['🇲🇦','모로코','MA','MAR','+212','MAD (디르함)','라바트'],
+            ['🇪🇹','에티오피아','ET','ETH','+251','ETB (비르)','아디스아바바'],
+            ['🇵🇭','필리핀','PH','PHL','+63','PHP (페소)','마닐라'],
+            ['🇲🇲','미얀마','MM','MMR','+95','MMK (짯)','네피도'],
+            ['🇱🇰','스리랑카','LK','LKA','+94','LKR (루피)','콜롬보'],
+            ['🇳🇵','네팔','NP','NPL','+977','NPR (루피)','카트만두'],
+            ['🇰🇿','카자흐스탄','KZ','KAZ','+7','KZT (텡게)','아스타나'],
+            ['🇺🇿','우즈베키스탄','UZ','UZB','+998','UZS (숨)','타슈켄트'],
+            ['🇮🇶','이라크','IQ','IRQ','+964','IQD (디나르)','바그다드'],
+            ['🇯🇴','요르단','JO','JOR','+962','JOD (디나르)','암만'],
+            ['🇱🇧','레바논','LB','LBN','+961','LBP (파운드)','베이루트'],
+            ['🇰🇼','쿠웨이트','KW','KWT','+965','KWD (디나르)','쿠웨이트시티'],
+            ['🇶🇦','카타르','QA','QAT','+974','QAR (리얄)','도하'],
+            ['🇧🇭','바레인','BH','BHR','+973','BHD (디나르)','마나마'],
+            ['🇴🇲','오만','OM','OMN','+968','OMR (리알)','무스카트'],
+            ['🇵🇦','파나마','PA','PAN','+507','PAB (발보아)','파나마시티'],
+            ['🇨🇷','코스타리카','CR','CRI','+506','CRC (콜론)','산호세'],
+            ['🇸🇰','슬로바키아','SK','SVK','+421','EUR (유로)','브라티슬라바'],
+            ['🇭🇷','크로아티아','HR','HRV','+385','EUR (유로)','자그레브'],
+            ['🇧🇬','불가리아','BG','BGR','+359','BGN (레프)','소피아'],
+            ['🇷🇸','세르비아','RS','SRB','+381','RSD (디나르)','베오그라드'],
+        ];
+
+        var sortField = 'name';
+        var sortAsc = true;
+
+        function fieldIndex(f) {
+            var map = {flag:0, name:1, iso2:2, dial:4, currency:5, capital:6};
+            return map[f] !== undefined ? map[f] : 1;
+        }
+
+        function sortBy(field) {
+            if (sortField === field) { sortAsc = !sortAsc; }
+            else { sortField = field; sortAsc = true; }
+            render();
+        }
+
+        function render() {
+            var query = document.getElementById('search-input').value.toLowerCase().trim();
+            var data = COUNTRIES.filter(function(c){
+                if (!query) return true;
+                return c[1].toLowerCase().indexOf(query) !== -1 ||
+                       c[2].toLowerCase().indexOf(query) !== -1 ||
+                       c[3].toLowerCase().indexOf(query) !== -1 ||
+                       c[4].indexOf(query) !== -1 ||
+                       c[5].toLowerCase().indexOf(query) !== -1 ||
+                       c[6].toLowerCase().indexOf(query) !== -1;
+            });
+
+            var fi = fieldIndex(sortField);
+            data.sort(function(a, b){
+                var av = a[fi] || '', bv = b[fi] || '';
+                // numeric sort for dial codes
+                if (sortField === 'dial') {
+                    av = parseInt(av.replace(/\D/g,'')) || 0;
+                    bv = parseInt(bv.replace(/\D/g,'')) || 0;
+                    return sortAsc ? av - bv : bv - av;
+                }
+                return sortAsc ? av.localeCompare(bv, 'ko') : bv.localeCompare(av, 'ko');
+            });
+
+            // update header arrows
+            var fields = ['flag','name','iso2','dial','currency','capital'];
+            fields.forEach(function(f){
+                var th = document.getElementById('th-'+f);
+                if (!th) return;
+                if (f === 'flag') { th.className = ''; return; }
+                th.className = f === sortField ? 'sorted' : '';
+                var arrow = th.querySelector('.sort-arrow');
+                if (arrow) arrow.textContent = (!sortAsc && f === sortField) ? '▼' : '▲';
+            });
+
+            document.getElementById('result-count').textContent = data.length + '개 국가';
+
+            var tbody = document.getElementById('country-tbody');
+            var noRes = document.getElementById('no-results');
+            if (data.length === 0) {
+                tbody.innerHTML = '';
+                noRes.style.display = 'block';
+                return;
+            }
+            noRes.style.display = 'none';
+
+            tbody.innerHTML = data.map(function(c){
+                return '<tr>'
+                    + '<td class="flag-cell">' + c[0] + '</td>'
+                    + '<td><strong>' + esc(c[1]) + '</strong></td>'
+                    + '<td><span class="iso-code">' + c[2] + '</span></td>'
+                    + '<td><span class="dial-code">' + esc(c[4]) + '</span></td>'
+                    + '<td>' + esc(c[5]) + '</td>'
+                    + '<td>' + esc(c[6]) + '</td>'
+                    + '</tr>';
+            }).join('');
+        }
+
+        function esc(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        document.getElementById('search-input').addEventListener('input', function(){
+            clearTimeout(window._searchTimer);
+            window._searchTimer = setTimeout(render, 150);
+        });
+
+        render();
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

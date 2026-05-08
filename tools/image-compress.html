@@ -1,26 +1,481 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="imageCompressTitle">이미지 압축기 - ionflow.xyz</title>
-    <meta name="description" content="브라우저에서 이미지를 압축합니다. 품질 조절, 리사이즈, 포맷 변환(JPEG/PNG/WebP) 지원. 서버 전송 없음.">
+    <title data-i18n="imgCompressPageTitle">이미지 압축기 - ionflow.xyz</title>
+    <meta name="description" data-i18n="imgCompressPageDesc" content="이미지를 JPEG, PNG, WebP 형식으로 압축하고 파일 크기를 줄이세요.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/image-compress.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
     <meta property="og:title" content="이미지 압축기 - ionflow.xyz">
-    <meta property="og:description" content="브라우저에서 이미지를 압축합니다. 서버 전송 없이 안전합니다.">
+    <meta property="og:description" content="이미지를 JPEG, PNG, WebP 형식으로 압축하고 파일 크기를 줄이세요.">
     <meta property="og:url" content="https://ionflow.xyz/tools/image-compress.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="이미지 압축기 - ionflow.xyz">
+    <meta name="twitter:description" content="이미지를 JPEG, PNG, WebP 형식으로 압축하고 파일 크기를 줄이세요.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/image-compress.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/image-compress.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/image-compress.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 900px; }
+
+        .drop-zone {
+            border: 2px dashed #d2d2d7;
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            background: #fafafa;
+        }
+
+        .drop-zone:hover, .drop-zone.drag-over {
+            border-color: #1d1d1f;
+            background: #f0f0f5;
+        }
+
+        .drop-zone-icon { font-size: 48px; margin-bottom: 12px; }
+
+        .drop-zone p {
+            font-size: 16px;
+            color: #1d1d1f;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .drop-zone small { font-size: 13px; color: #86868b; }
+        .drop-zone input[type="file"] { display: none; }
+
+        .options-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .option-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .option-group .hint {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 4px;
+        }
+
+        .quality-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quality-row input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #d2d2d7;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .quality-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #1d1d1f;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .quality-val {
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        .format-tabs { display: flex; gap: 8px; }
+
+        .format-tab {
+            padding: 8px 18px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #fff;
+            font-family: 'Pretendard', sans-serif;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .format-tab:hover { background: #f5f5f7; }
+
+        .format-tab.active {
+            background: #1d1d1f;
+            color: #fff;
+            border-color: #1d1d1f;
+        }
+
+        .compare-section { display: none; margin-top: 24px; }
+        .compare-section.visible { display: block; }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .compare-card {
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .compare-card-header {
+            padding: 12px 16px;
+            background: #f5f5f7;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .compare-card-header .size-badge {
+            font-size: 12px;
+            font-weight: 500;
+            color: #86868b;
+        }
+
+        .compare-card img {
+            width: 100%;
+            max-height: 240px;
+            object-fit: contain;
+            display: block;
+            background: repeating-conic-gradient(#e0e0e0 0% 25%, #fff 0% 50%) 0 0 / 16px 16px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 110px;
+            padding: 16px;
+            background: #f5f5f7;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card .stat-label { font-size: 12px; color: #86868b; margin-bottom: 6px; }
+        .stat-card .stat-value { font-size: 20px; font-weight: 700; color: #1d1d1f; }
+        .stat-card.highlight .stat-value { color: #10B981; }
+
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            padding: 12px 28px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: #3a3a3c; }
+        .btn-primary:disabled { background: #86868b; cursor: not-allowed; }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: #e8e8ed;
+            color: #1d1d1f;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover { background: #d2d2d7; }
+
+        @media (max-width: 640px) {
+            .compare-grid { grid-template-columns: 1fr; }
+            .options-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="imgCompressHeading">이미지 압축기</h1>
+        <p data-i18n="imgCompressSubheading">이미지를 JPEG, PNG, WebP로 압축하여 파일 크기를 줄이세요</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <div class="drop-zone-icon">🖼️</div>
+                <p>이미지를 여기에 드래그하거나 클릭하여 선택</p>
+                <small>JPG, PNG, WebP, GIF 지원 · 최대 20MB</small>
+                <input type="file" id="file-input" accept="image/*" onchange="handleFile(this.files[0])">
+            </div>
+
+            <div class="options-row">
+                <div class="option-group">
+                    <label>출력 형식</label>
+                    <div class="format-tabs">
+                        <button class="format-tab active" onclick="setFormat('image/jpeg', this)">JPEG</button>
+                        <button class="format-tab" onclick="setFormat('image/png', this)">PNG</button>
+                        <button class="format-tab" onclick="setFormat('image/webp', this)">WebP</button>
+                    </div>
+                    <p class="hint" id="format-hint">손실 압축, 사진에 적합</p>
+                </div>
+                <div class="option-group">
+                    <label>품질 <span id="quality-val-label" style="color:#86868b;font-weight:400;">80%</span></label>
+                    <div class="quality-row">
+                        <input type="range" id="quality-slider" min="1" max="100" value="80" oninput="updateQualityLabel()">
+                        <span class="quality-val" id="quality-display">80</span>
+                    </div>
+                    <p class="hint">낮을수록 파일 크기 감소, 화질 저하</p>
+                </div>
+            </div>
+
+            <div class="action-row" style="margin-top:20px;">
+                <button class="btn-primary" data-i18n="imgCompressBtn" id="compress-btn" disabled onclick="compressImage()">압축하기</button>
+                <button class="btn-secondary" data-i18n="imgCompressResetBtn" id="reset-btn" style="display:none;" onclick="resetTool()">초기화</button>
+            </div>
+        </div>
+
+        <div class="compare-section" id="compare-section">
+            <div class="panel">
+                <div class="panel-title" data-i18n="imgCompressResultTitle">압축 결과</div>
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">원본 크기</div>
+                        <div class="stat-value" id="stat-original">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">압축 후 크기</div>
+                        <div class="stat-value" id="stat-compressed">-</div>
+                    </div>
+                    <div class="stat-card highlight">
+                        <div class="stat-label">절감률</div>
+                        <div class="stat-value" id="stat-saving">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">해상도</div>
+                        <div class="stat-value" id="stat-dims">-</div>
+                    </div>
+                </div>
+
+                <div class="compare-grid">
+                    <div class="compare-card">
+                        <div class="compare-card-header">
+                            원본
+                            <span class="size-badge" id="orig-badge">-</span>
+                        </div>
+                        <img id="original-preview" src="" alt="원본">
+                    </div>
+                    <div class="compare-card">
+                        <div class="compare-card-header">
+                            압축 결과
+                            <span class="size-badge" id="comp-badge">-</span>
+                        </div>
+                        <img id="compressed-preview" src="" alt="압축됨">
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn-primary" data-i18n="imgCompressDownloadBtn" onclick="downloadCompressed()">압축 이미지 다운로드</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let originalFile = null;
+        let compressedBlob = null;
+        let currentFormat = 'image/jpeg';
+        let originalImage = null;
+
+        const formatHints = {
+            'image/jpeg': '손실 압축, 사진에 적합',
+            'image/png': '무손실 압축, 투명 배경 지원',
+            'image/webp': '최신 포맷, 가장 작은 파일 크기'
+        };
+
+        const formatExts = {
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/webp': 'webp'
+        };
+
+        function setFormat(fmt, btn) {
+            currentFormat = fmt;
+            document.querySelectorAll('.format-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('format-hint').textContent = formatHints[fmt];
+        }
+
+        function updateQualityLabel() {
+            const val = document.getElementById('quality-slider').value;
+            document.getElementById('quality-display').textContent = val;
+            document.getElementById('quality-val-label').textContent = val + '%';
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                showStatus('이미지 파일을 선택해주세요.');
+                return;
+            }
+            if (file.size > 20 * 1024 * 1024) {
+                showStatus('파일 크기가 20MB를 초과합니다.');
+                return;
+            }
+
+            originalFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalImage = new Image();
+                originalImage.onload = () => {
+                    document.getElementById('compress-btn').disabled = false;
+                    document.getElementById('reset-btn').style.display = 'inline-block';
+                    document.getElementById('drop-zone').querySelector('p').textContent = '선택된 파일: ' + file.name;
+                    document.getElementById('drop-zone').querySelector('small').textContent = '크기: ' + formatBytes(file.size) + ' · ' + originalImage.width + '×' + originalImage.height + 'px';
+                };
+                originalImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function compressImage() {
+            if (!originalFile || !originalImage) return;
+
+            const quality = parseInt(document.getElementById('quality-slider').value) / 100;
+            const canvas = document.createElement('canvas');
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            const ctx = canvas.getContext('2d');
+
+            if (currentFormat === 'image/jpeg') {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            ctx.drawImage(originalImage, 0, 0);
+
+            canvas.toBlob((blob) => {
+                compressedBlob = blob;
+                const compressedUrl = URL.createObjectURL(blob);
+                const saving = ((1 - blob.size / originalFile.size) * 100).toFixed(1);
+
+                document.getElementById('original-preview').src = originalImage.src;
+                document.getElementById('compressed-preview').src = compressedUrl;
+
+                document.getElementById('stat-original').textContent = formatBytes(originalFile.size);
+                document.getElementById('stat-compressed').textContent = formatBytes(blob.size);
+                document.getElementById('stat-saving').textContent = saving + '%';
+                document.getElementById('stat-dims').textContent = originalImage.width + '×' + originalImage.height;
+
+                document.getElementById('orig-badge').textContent = formatBytes(originalFile.size);
+                document.getElementById('comp-badge').textContent = formatBytes(blob.size);
+
+                document.getElementById('compare-section').classList.add('visible');
+                document.getElementById('compare-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, currentFormat, quality);
+        }
+
+        function downloadCompressed() {
+            if (!compressedBlob) return;
+            const ext = formatExts[currentFormat];
+            const baseName = originalFile.name.replace(/\.[^.]+$/, '');
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(compressedBlob);
+            link.download = baseName + '_compressed.' + ext;
+            link.click();
+        }
+
+        function resetTool() {
+            originalFile = null;
+            compressedBlob = null;
+            originalImage = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('compress-btn').disabled = true;
+            document.getElementById('reset-btn').style.display = 'none';
+            document.getElementById('compare-section').classList.remove('visible');
+            document.getElementById('drop-zone').querySelector('p').textContent = '이미지를 여기에 드래그하거나 클릭하여 선택';
+            document.getElementById('drop-zone').querySelector('small').textContent = 'JPG, PNG, WebP, GIF 지원 · 최대 20MB';
+        }
+
+        function showStatus(msg) {
+            const s = document.getElementById('status');
+            s.textContent = msg;
+            s.classList.add('show');
+            setTimeout(() => { s.classList.remove('show'); }, 3000);
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

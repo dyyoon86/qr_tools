@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="emojiStylerTitle">이모지 텍스트 스타일러 - ionflow.xyz</title>
-    <meta name="description" content="텍스트를 유니코드 특수문자 스타일로 변환합니다. 볼드, 이탤릭, 모노스페이스 등 10가지 이상 스타일.">
+    <title data-i18n="emojiPageTitle">이모지 텍스트 스타일러 - ionflow.xyz</title>
+    <meta name="description" data-i18n="emojiPageDesc" content="텍스트를 유니코드 특수문자 스타일로 변환합니다. 볼드, 이탤릭, 모노스페이스 등 10가지 이상 스타일.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/emoji-styler.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
@@ -15,12 +23,383 @@
     <meta property="og:url" content="https://ionflow.xyz/tools/emoji-styler.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="이모지 텍스트 스타일러 - ionflow.xyz">
+    <meta name="twitter:description" content="텍스트를 유니코드 특수문자 스타일로 변환합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/emoji-styler.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/emoji-styler.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/emoji-styler.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        .input-area {
+            margin-bottom: 24px;
+        }
+        .input-area textarea {
+            width: 100%;
+            height: 90px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .style-card {
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.15s;
+        }
+        .style-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .style-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg-secondary, #f8f9fa);
+            border-bottom: 1px solid var(--border-color, #e2e8f0);
+        }
+        .style-name {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary, #718096);
+        }
+        .style-preview-label {
+            font-size: 11px;
+            color: var(--text-secondary, #718096);
+        }
+        .style-card-body {
+            padding: 14px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+        }
+        .style-output {
+            font-size: 18px;
+            word-break: break-all;
+            flex: 1;
+            line-height: 1.5;
+            color: var(--text-primary, #1a202c);
+        }
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--text-secondary, #718096);
+            flex-shrink: 0;
+            margin-left: 10px;
+            transition: 0.15s;
+        }
+        .copy-btn:hover {
+            background: var(--accent-color, #3b82f6);
+            color: #fff;
+            border-color: var(--accent-color, #3b82f6);
+        }
+        .copy-btn.copied {
+            background: #1d7324;
+            color: #fff;
+            border-color: #1d7324;
+        }
+        .placeholder-text {
+            color: var(--text-secondary, #718096);
+            font-size: 14px;
+        }
+        .all-copy-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="emojiHeading">이모지 텍스트 스타일러</h1>
+        <p data-i18n="emojiSubheading">텍스트를 유니코드 수학 기호 알파벳으로 다양한 스타일로 변환합니다.</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel input-area">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="emojiInputTitle">텍스트 입력</span>
+                <div class="panel-actions">
+                    <button data-i18n="clearBtn" onclick="clearInput()">지우기</button>
+                </div>
+            </div>
+            <textarea id="style-input" data-i18n-placeholder="emojiInputPlaceholder" placeholder="스타일을 적용할 텍스트를 입력하세요 (영문/숫자)..." spellcheck="false"></textarea>
+        </div>
+
+        <div class="all-copy-row">
+            <button class="action-btn primary" data-i18n="emojiCopyAllBtn" onclick="copyAll()">전체 결과 복사</button>
+        </div>
+
+        <div class="style-grid" id="style-grid"></div>
+    </main>
+
+    <script>
+        // Unicode Mathematical Alphanumeric Symbol mappings
+        // Each map covers A-Z (index 0-25), a-z (26-51), 0-9 (52-61)
+        var STYLES = [
+            {
+                name: '굵은체 (Bold)',
+                preview: '𝐀𝐁𝐂',
+                upper: '𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙'.split(''),
+                lower: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳'.split(''),
+                digit: '𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗'.split('')
+            },
+            {
+                name: '이탤릭체 (Italic)',
+                preview: '𝐴𝐵𝐶',
+                upper: '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍'.split(''),
+                lower: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧'.split(''),
+                digit: null
+            },
+            {
+                name: '굵은 이탤릭 (Bold Italic)',
+                preview: '𝑨𝑩𝑪',
+                upper: '𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁'.split(''),
+                lower: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛'.split(''),
+                digit: null
+            },
+            {
+                name: '산세리프 (Sans-Serif)',
+                preview: '𝖠𝖡𝖢',
+                upper: '𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹'.split(''),
+                lower: '𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓'.split(''),
+                digit: '𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫'.split('')
+            },
+            {
+                name: '산세리프 굵은체',
+                preview: '𝗔𝗕𝗖',
+                upper: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭'.split(''),
+                lower: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇'.split(''),
+                digit: '𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵'.split('')
+            },
+            {
+                name: '모노스페이스 (Monospace)',
+                preview: '𝙰𝙱𝙲',
+                upper: '𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉'.split(''),
+                lower: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣'.split(''),
+                digit: '𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿'.split('')
+            },
+            {
+                name: '프락투어 (Fraktur)',
+                preview: '𝔄𝔅ℭ',
+                upper: '𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ'.split(''),
+                lower: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷'.split(''),
+                digit: null
+            },
+            {
+                name: '프락투어 굵은체',
+                preview: '𝕬𝕭𝕮',
+                upper: '𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅'.split(''),
+                lower: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟'.split(''),
+                digit: null
+            },
+            {
+                name: '이중선 (Double-struck)',
+                preview: '𝔸𝔹ℂ',
+                upper: '𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ'.split(''),
+                lower: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫'.split(''),
+                digit: '𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡'.split('')
+            },
+            {
+                name: '스크립트 (Script)',
+                preview: '𝒜ℬ𝒞',
+                upper: '𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'.split(''),
+                lower: '𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏'.split(''),
+                digit: null
+            },
+            {
+                name: '원형 (Circled)',
+                preview: 'ⒶⒷⒸ',
+                upper: 'ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ'.split(''),
+                lower: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ'.split(''),
+                digit: '⓪①②③④⑤⑥⑦⑧⑨'.split('')
+            },
+            {
+                name: '채워진 원형 (Negative Circled)',
+                preview: '🅐🅑🅒',
+                upper: '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩'.split(''),
+                lower: '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩'.split(''),
+                digit: null
+            },
+            {
+                name: '사각형 (Squared)',
+                preview: '🄰🄱🄲',
+                upper: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉'.split(''),
+                lower: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉'.split(''),
+                digit: null
+            },
+            {
+                name: '위첨자 (Superscript)',
+                preview: 'ᴬᴮᶜ',
+                map: {
+                    'A':'ᴬ','B':'ᴮ','C':'ᶜ','D':'ᴰ','E':'ᴱ','F':'ᶠ','G':'ᴳ','H':'ᴴ',
+                    'I':'ᴵ','J':'ᴶ','K':'ᴷ','L':'ᴸ','M':'ᴹ','N':'ᴺ','O':'ᴼ','P':'ᴾ',
+                    'Q':'Q','R':'ᴿ','S':'ˢ','T':'ᵀ','U':'ᵁ','V':'ⱽ','W':'ᵂ','X':'ˣ',
+                    'Y':'ʸ','Z':'ᶻ',
+                    'a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','f':'ᶠ','g':'ᵍ','h':'ʰ',
+                    'i':'ⁱ','j':'ʲ','k':'ᵏ','l':'ˡ','m':'ᵐ','n':'ⁿ','o':'ᵒ','p':'ᵖ',
+                    'q':'q','r':'ʳ','s':'ˢ','t':'ᵗ','u':'ᵘ','v':'ᵛ','w':'ʷ','x':'ˣ',
+                    'y':'ʸ','z':'ᶻ',
+                    '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'
+                }
+            },
+            {
+                name: '아래첨자 (Subscript)',
+                preview: 'ₐᵦ꜀',
+                map: {
+                    'A':'ₐ','B':'B','C':'C','D':'D','E':'ₑ','F':'F','G':'G','H':'ₕ',
+                    'I':'ᵢ','J':'ⱼ','K':'ₖ','L':'ₗ','M':'ₘ','N':'ₙ','O':'ₒ','P':'ₚ',
+                    'Q':'Q','R':'ᵣ','S':'ₛ','T':'ₜ','U':'ᵤ','V':'ᵥ','W':'W','X':'ₓ',
+                    'Y':'Y','Z':'Z',
+                    'a':'ₐ','b':'ᵦ','c':'꜀','d':'ᑯ','e':'ₑ','f':'բ','g':'ᵍ','h':'ₕ',
+                    'i':'ᵢ','j':'ⱼ','k':'ₖ','l':'ₗ','m':'ₘ','n':'ₙ','o':'ₒ','p':'ₚ',
+                    'q':'q','r':'ᵣ','s':'ₛ','t':'ₜ','u':'ᵤ','v':'ᵥ','w':'w','x':'ₓ',
+                    'y':'y','z':'z',
+                    '0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'
+                }
+            },
+            {
+                name: '뒤집기 (Upside Down)',
+                map: {
+                    'A':'∀','B':'q','C':'Ɔ','D':'p','E':'Ǝ','F':'Ⅎ','G':'פ','H':'H',
+                    'I':'I','J':'ɾ','K':'ʞ','L':'˥','M':'W','N':'N','O':'O','P':'d',
+                    'Q':'b','R':'ɹ','S':'S','T':'┴','U':'∩','V':'Λ','W':'M','X':'X',
+                    'Y':'⅄','Z':'Z',
+                    'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ',
+                    'i':'ᴉ','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','o':'o','p':'d',
+                    'q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x',
+                    'y':'ʎ','z':'z',
+                    '0':'0','1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ᔭ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6',
+                    ' ':' '
+                },
+                reverse: true
+            },
+            {
+                name: '소문자 작은 대문자',
+                map: {
+                    'A':'ᴀ','B':'ʙ','C':'ᴄ','D':'ᴅ','E':'ᴇ','F':'ꜰ','G':'ɢ','H':'ʜ',
+                    'I':'ɪ','J':'ᴊ','K':'ᴋ','L':'ʟ','M':'ᴍ','N':'ɴ','O':'ᴏ','P':'ᴘ',
+                    'Q':'Q','R':'ʀ','S':'ꜱ','T':'ᴛ','U':'ᴜ','V':'ᴠ','W':'ᴡ','X':'x',
+                    'Y':'ʏ','Z':'ᴢ',
+                    'a':'ᴀ','b':'ʙ','c':'ᴄ','d':'ᴅ','e':'ᴇ','f':'ꜰ','g':'ɢ','h':'ʜ',
+                    'i':'ɪ','j':'ᴊ','k':'ᴋ','l':'ʟ','m':'ᴍ','n':'ɴ','o':'ᴏ','p':'ᴘ',
+                    'q':'q','r':'ʀ','s':'ꜱ','t':'ᴛ','u':'ᴜ','v':'ᴠ','w':'ᴡ','x':'x',
+                    'y':'ʏ','z':'ᴢ',
+                    '0':'0','1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7','8':'8','9':'9'
+                }
+            }
+        ];
+
+        var AZ_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var AZ_LOWER = 'abcdefghijklmnopqrstuvwxyz';
+        var DIGITS = '0123456789';
+
+        function convertChar(style, ch) {
+            if (style.map) {
+                return style.map[ch] !== undefined ? style.map[ch] : ch;
+            }
+            var ui = AZ_UPPER.indexOf(ch);
+            if (ui !== -1 && style.upper && style.upper[ui]) return style.upper[ui];
+            var li = AZ_LOWER.indexOf(ch);
+            if (li !== -1 && style.lower && style.lower[li]) return style.lower[li];
+            var di = DIGITS.indexOf(ch);
+            if (di !== -1 && style.digit && style.digit[di]) return style.digit[di];
+            return ch;
+        }
+
+        function convert(style, text) {
+            var result = text.split('').map(function(ch){ return convertChar(style, ch); }).join('');
+            if (style.reverse) result = result.split('').reverse().join('');
+            return result;
+        }
+
+        function renderCards() {
+            var text = document.getElementById('style-input').value;
+            var grid = document.getElementById('style-grid');
+
+            grid.innerHTML = STYLES.map(function(style, idx) {
+                var output = text ? convert(style, text) : '';
+                var displayText = output || '<span class="placeholder-text">텍스트를 입력하면 여기에 변환 결과가 표시됩니다</span>';
+                var hasOutput = !!output;
+
+                return '<div class="style-card">'
+                    + '<div class="style-card-header">'
+                    + '<span class="style-name">' + style.name + '</span>'
+                    + '<span class="style-preview-label">' + style.preview + '</span>'
+                    + '</div>'
+                    + '<div class="style-card-body">'
+                    + '<span class="style-output" id="out-'+idx+'">' + (hasOutput ? escHtml(output) : displayText) + '</span>'
+                    + (hasOutput ? '<button class="copy-btn" id="copybtn-'+idx+'" onclick="copyStyle('+idx+')">복사</button>' : '')
+                    + '</div>'
+                    + '</div>';
+            }).join('');
+        }
+
+        function escHtml(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function copyStyle(idx) {
+            var el = document.getElementById('out-'+idx);
+            var text = el.textContent || '';
+            var btn = document.getElementById('copybtn-'+idx);
+            navigator.clipboard.writeText(text).then(function(){
+                btn.textContent = '✓ 복사됨';
+                btn.classList.add('copied');
+                setTimeout(function(){ btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+                showStatus('복사되었습니다');
+            });
+        }
+
+        function copyAll() {
+            var text = document.getElementById('style-input').value;
+            if (!text.trim()) { showStatus('텍스트를 입력하세요.', true); return; }
+            var lines = STYLES.map(function(style){
+                return style.name + ':\n' + convert(style, text);
+            }).join('\n\n');
+            navigator.clipboard.writeText(lines).then(function(){
+                showStatus('전체 결과가 복사되었습니다');
+            });
+        }
+
+        function clearInput() {
+            document.getElementById('style-input').value = '';
+            renderCards();
+        }
+
+        function showStatus(msg, isError) {
+            var s = document.getElementById('status');
+            s.textContent = msg;
+            s.className = 'status ' + (isError ? 'error' : 'success');
+            setTimeout(function(){ s.className = 'status'; }, 3000);
+        }
+
+        document.getElementById('style-input').addEventListener('input', function(){
+            clearTimeout(window._styleTimer);
+            window._styleTimer = setTimeout(renderCards, 150);
+        });
+
+        renderCards();
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

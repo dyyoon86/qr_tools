@@ -1,26 +1,513 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="uaTitle">User-Agent 분석기 - ionflow.xyz</title>
-    <meta name="description" content="브라우저의 User-Agent 문자열을 분석합니다. OS, 브라우저, 디바이스 정보를 파싱합니다.">
+    <title data-i18n="userAgentPageTitle">User-Agent 분석기 - ionflow.xyz</title>
+    <meta name="description" data-i18n="userAgentPageDesc" content="브라우저 User-Agent를 분석하여 브라우저, OS, 엔진, 기기 종류를 확인하세요.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/user-agent.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
     <meta property="og:title" content="User-Agent 분석기 - ionflow.xyz">
-    <meta property="og:description" content="브라우저의 User-Agent 문자열을 분석합니다.">
+    <meta property="og:description" content="브라우저 User-Agent를 분석하여 브라우저, OS, 엔진, 기기 종류를 확인하세요.">
     <meta property="og:url" content="https://ionflow.xyz/tools/user-agent.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="User-Agent 분석기 - ionflow.xyz">
+    <meta name="twitter:description" content="브라우저 User-Agent를 분석하여 브라우저, OS, 엔진, 기기 종류를 확인하세요.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/user-agent.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/user-agent.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/user-agent.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        main { max-width: 860px; }
+
+        .ua-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .ua-input-row textarea {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', 'Pretendard', monospace;
+            resize: vertical;
+            min-height: 72px;
+            background: #fff;
+            color: #1d1d1f;
+            line-height: 1.5;
+        }
+
+        .ua-input-row textarea:focus {
+            outline: none;
+            border-color: #86868b;
+        }
+
+        .ua-btn {
+            padding: 0 22px;
+            background: #1d1d1f;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .ua-btn:hover { background: #3a3a3c; }
+
+        .ua-btn-secondary {
+            padding: 10px 18px;
+            background: #e8e8ed;
+            color: #1d1d1f;
+            border: none;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .ua-btn-secondary:hover { background: #d2d2d7; }
+
+        .ua-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 4px;
+        }
+
+        .result-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            background: #f5f5f7;
+            border-radius: 12px;
+            border: 1px solid #e8e8ed;
+        }
+
+        .result-icon {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .r-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .r-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .r-sub {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 2px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-purple { background: #ede9fe; color: #5b21b6; }
+        .badge-gray { background: #e8e8ed; color: #3a3a3c; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-orange { background: #ffedd5; color: #9a3412; }
+
+        .raw-ua-box {
+            margin-top: 16px;
+            padding: 14px;
+            background: #1d1d1f;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #e8e8ed;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+
+        .detail-table tr:not(:last-child) td { border-bottom: 1px solid #f0f0f5; }
+
+        .detail-table td {
+            padding: 10px 12px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .detail-table td:first-child {
+            font-weight: 600;
+            color: #86868b;
+            font-size: 13px;
+            width: 140px;
+        }
+
+        .detail-table td:last-child {
+            color: #1d1d1f;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .presets-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .preset-chip {
+            padding: 6px 12px;
+            background: #f0f0f5;
+            border: 1px solid #d2d2d7;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Pretendard', sans-serif;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+
+        .preset-chip:hover { background: #e0e0e8; }
+
+        @media (max-width: 640px) {
+            .result-grid { grid-template-columns: 1fr; }
+            .ua-input-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="userAgentHeading">User-Agent 분석기</h1>
+        <p data-i18n="userAgentSubheading">브라우저 UA 문자열을 파싱하여 브라우저, OS, 엔진, 기기 정보를 확인하세요</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel">
+            <div class="panel-title" data-i18n="userAgentInputTitle">User-Agent 입력</div>
+            <div class="ua-input-row">
+                <textarea id="ua-input" data-i18n-placeholder="userAgentPlaceholder" placeholder="User-Agent 문자열을 입력하거나 아래 버튼으로 현재 브라우저 UA를 불러오세요..."></textarea>
+                <button class="ua-btn" onclick="parseUA()" data-i18n="userAgentAnalyzeBtn">분석</button>
+            </div>
+            <div class="ua-actions">
+                <button class="ua-btn-secondary" onclick="loadCurrentUA()" data-i18n="userAgentLoadCurrentBtn">현재 브라우저 UA 불러오기</button>
+                <button class="ua-btn-secondary" onclick="clearUA()" data-i18n="clearBtn">초기화</button>
+            </div>
+            <div style="margin-top:12px;">
+                <div style="font-size:12px;font-weight:600;color:#86868b;margin-bottom:6px;">테스트용 UA 예시</div>
+                <div class="presets-row" id="presets-row"></div>
+            </div>
+        </div>
+
+        <div class="panel" id="result-panel" style="display:none;">
+            <div class="panel-title" data-i18n="userAgentResultTitle">분석 결과</div>
+            <div class="result-grid" id="result-grid"></div>
+            <div class="raw-ua-box" id="raw-ua-display"></div>
+        </div>
+
+        <div class="panel" id="detail-panel" style="display:none;">
+            <div class="panel-title" data-i18n="userAgentDetailTitle">상세 파싱 정보</div>
+            <table class="detail-table" id="detail-table"></table>
+        </div>
+    </main>
+
+    <script>
+        const presets = [
+            { label: 'Chrome / Windows', ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' },
+            { label: 'Safari / macOS', ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15' },
+            { label: 'Firefox / Linux', ua: 'Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0' },
+            { label: 'Edge / Windows', ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0' },
+            { label: 'Chrome / Android', ua: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36' },
+            { label: 'Safari / iPhone', ua: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1' },
+            { label: 'Googlebot', ua: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
+        ];
+
+        function initPresets() {
+            const row = document.getElementById('presets-row');
+            presets.forEach(p => {
+                const chip = document.createElement('button');
+                chip.className = 'preset-chip';
+                chip.textContent = p.label;
+                chip.onclick = () => {
+                    document.getElementById('ua-input').value = p.ua;
+                    parseUA();
+                };
+                row.appendChild(chip);
+            });
+        }
+
+        function loadCurrentUA() {
+            document.getElementById('ua-input').value = navigator.userAgent;
+            parseUA();
+        }
+
+        function clearUA() {
+            document.getElementById('ua-input').value = '';
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('detail-panel').style.display = 'none';
+        }
+
+        function parseUAString(ua) {
+            const result = {
+                browser: 'Unknown', browserVersion: '',
+                engine: 'Unknown', engineVersion: '',
+                os: 'Unknown', osVersion: '',
+                deviceType: 'Desktop', deviceBrand: '',
+                isBot: false, botName: ''
+            };
+
+            // Bot detection
+            const botMatch = ua.match(/(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|Semrushbot|AhrefsBot|MJ12bot|DotBot)[\s/]*([\d.]*)/i);
+            if (botMatch) {
+                result.isBot = true;
+                result.botName = botMatch[1];
+                result.browser = botMatch[1];
+                result.browserVersion = botMatch[2] || '';
+                result.deviceType = 'Bot';
+            }
+
+            if (!result.isBot) {
+                // Device type
+                if (/Mobile|Android.*Mobile|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+                    result.deviceType = 'Mobile';
+                } else if (/iPad|Tablet|Android(?!.*Mobile)/i.test(ua)) {
+                    result.deviceType = 'Tablet';
+                } else {
+                    result.deviceType = 'Desktop';
+                }
+
+                // Device brand
+                if (/iPhone|iPad|iPod/i.test(ua)) result.deviceBrand = 'Apple';
+                else if (/Samsung/i.test(ua)) result.deviceBrand = 'Samsung';
+                else if (/Pixel/i.test(ua)) result.deviceBrand = 'Google';
+                else if (/Huawei/i.test(ua)) result.deviceBrand = 'Huawei';
+                else if (/OnePlus/i.test(ua)) result.deviceBrand = 'OnePlus';
+                else if (/Xiaomi|Redmi/i.test(ua)) result.deviceBrand = 'Xiaomi';
+
+                // Browser detection (order matters)
+                let m;
+                if ((m = ua.match(/Edg\/([\d.]+)/))) {
+                    result.browser = 'Microsoft Edge'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/OPR\/([\d.]+)/)) || (m = ua.match(/Opera\/([\d.]+)/))) {
+                    result.browser = 'Opera'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/YaBrowser\/([\d.]+)/))) {
+                    result.browser = 'Yandex Browser'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/SamsungBrowser\/([\d.]+)/))) {
+                    result.browser = 'Samsung Internet'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/Firefox\/([\d.]+)/))) {
+                    result.browser = 'Firefox'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/Chrome\/([\d.]+)/))) {
+                    result.browser = 'Chrome'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/Version\/([\d.]+).*Safari/))) {
+                    result.browser = 'Safari'; result.browserVersion = m[1];
+                } else if ((m = ua.match(/MSIE ([\d.]+)/)) || (m = ua.match(/Trident\/.*rv:([\d.]+)/))) {
+                    result.browser = 'Internet Explorer'; result.browserVersion = m[1];
+                }
+
+                // Engine detection
+                if (/Firefox/.test(ua)) {
+                    result.engine = 'Gecko';
+                    const rv = ua.match(/rv:([\d.]+)/);
+                    result.engineVersion = rv ? rv[1] : '';
+                } else if ((m = ua.match(/AppleWebKit\/([\d.]+)/))) {
+                    result.engine = 'WebKit/Blink';
+                    result.engineVersion = m[1];
+                } else if ((m = ua.match(/Trident\/([\d.]+)/))) {
+                    result.engine = 'Trident';
+                    result.engineVersion = m[1];
+                } else if (/Gecko/.test(ua)) {
+                    result.engine = 'Gecko';
+                    const rv = ua.match(/rv:([\d.]+)/);
+                    result.engineVersion = rv ? rv[1] : '';
+                }
+
+                // OS detection
+                if ((m = ua.match(/Windows NT ([\d.]+)/))) {
+                    result.os = 'Windows';
+                    const ntMap = { '10.0': '10/11', '6.3': '8.1', '6.2': '8', '6.1': '7', '6.0': 'Vista', '5.1': 'XP' };
+                    result.osVersion = ntMap[m[1]] || m[1];
+                } else if ((m = ua.match(/Mac OS X ([\d_.]+)/))) {
+                    result.os = 'macOS';
+                    result.osVersion = m[1].replace(/_/g, '.');
+                } else if ((m = ua.match(/Android ([\d.]+)/))) {
+                    result.os = 'Android'; result.osVersion = m[1];
+                } else if ((m = ua.match(/iPhone OS ([\d_]+)/)) || (m = ua.match(/CPU OS ([\d_]+)/))) {
+                    result.os = 'iOS'; result.osVersion = m[1].replace(/_/g, '.');
+                } else if (/CrOS/i.test(ua)) {
+                    result.os = 'Chrome OS'; result.osVersion = '';
+                } else if (/Linux/i.test(ua)) {
+                    result.os = 'Linux'; result.osVersion = '';
+                }
+            }
+
+            return result;
+        }
+
+        const browserIcons = {
+            'Chrome': '🌐', 'Safari': '🧭', 'Firefox': '🦊',
+            'Microsoft Edge': '🌊', 'Opera': '🔴', 'Internet Explorer': '🔵',
+            'Samsung Internet': '📱', 'Yandex Browser': '🟡', 'Unknown': '❓'
+        };
+
+        const osIcons = {
+            'Windows': '🪟', 'macOS': '🍎', 'Linux': '🐧',
+            'Android': '🤖', 'iOS': '📱', 'Chrome OS': '💻', 'Unknown': '❓'
+        };
+
+        const deviceIcons = { 'Mobile': '📱', 'Tablet': '📟', 'Desktop': '🖥️', 'Bot': '🤖' };
+
+        function deviceBadgeClass(type) {
+            const map = { 'Mobile': 'badge-green', 'Tablet': 'badge-purple', 'Desktop': 'badge-blue', 'Bot': 'badge-red' };
+            return map[type] || 'badge-gray';
+        }
+
+        function engineBadgeClass(engine) {
+            const map = { 'WebKit/Blink': 'badge-blue', 'Gecko': 'badge-orange', 'Trident': 'badge-gray' };
+            return map[engine] || 'badge-gray';
+        }
+
+        function parseUA() {
+            const ua = document.getElementById('ua-input').value.trim();
+            if (!ua) {
+                const s = document.getElementById('status');
+                s.textContent = 'User-Agent 문자열을 입력해주세요.';
+                s.classList.add('show');
+                setTimeout(() => s.classList.remove('show'), 2500);
+                return;
+            }
+
+            const r = parseUAString(ua);
+
+            const cards = [
+                {
+                    icon: browserIcons[r.browser] || '🌐',
+                    label: '브라우저',
+                    value: r.browser,
+                    sub: r.browserVersion ? 'v' + r.browserVersion : '버전 불명',
+                    badgeClass: '', badgeText: ''
+                },
+                {
+                    icon: osIcons[r.os] || '💻',
+                    label: '운영체제',
+                    value: r.os,
+                    sub: r.osVersion || '',
+                    badgeClass: '', badgeText: ''
+                },
+                {
+                    icon: '⚙️',
+                    label: '렌더링 엔진',
+                    value: r.engine,
+                    sub: r.engineVersion ? 'v' + r.engineVersion : '',
+                    badgeClass: engineBadgeClass(r.engine),
+                    badgeText: r.engine !== 'Unknown' ? r.engine : ''
+                },
+                {
+                    icon: deviceIcons[r.deviceType] || '🖥️',
+                    label: '기기 유형',
+                    value: r.deviceType === 'Bot' ? (r.botName || 'Bot') : r.deviceType,
+                    sub: r.deviceBrand || (r.deviceType === 'Bot' ? '크롤러/봇' : ''),
+                    badgeClass: deviceBadgeClass(r.deviceType),
+                    badgeText: r.deviceType
+                },
+            ];
+
+            const grid = document.getElementById('result-grid');
+            grid.innerHTML = '';
+            cards.forEach(card => {
+                const el = document.createElement('div');
+                el.className = 'result-card';
+                el.innerHTML =
+                    '<div class="result-icon">' + card.icon + '</div>' +
+                    '<div>' +
+                        '<div class="r-label">' + card.label + '</div>' +
+                        '<div class="r-value">' + card.value + '</div>' +
+                        (card.sub ? '<div class="r-sub">' + card.sub + '</div>' : '') +
+                        (card.badgeText ? '<span class="badge ' + card.badgeClass + '">' + card.badgeText + '</span>' : '') +
+                    '</div>';
+                grid.appendChild(el);
+            });
+
+            document.getElementById('raw-ua-display').textContent = ua;
+            document.getElementById('result-panel').style.display = 'block';
+
+            const details = [
+                ['브라우저', r.browser + (r.browserVersion ? ' ' + r.browserVersion : '')],
+                ['엔진', r.engine + (r.engineVersion ? ' ' + r.engineVersion : '')],
+                ['운영체제', r.os + (r.osVersion ? ' ' + r.osVersion : '')],
+                ['기기 유형', r.deviceType],
+                ['기기 브랜드', r.deviceBrand || '알 수 없음'],
+                ['봇 여부', r.isBot ? '예 (' + r.botName + ')' : '아니오'],
+                ['모바일 여부', /Mobile|Android.*Mobile|iPhone|iPod/i.test(ua) ? '예' : '아니오'],
+                ['UA 길이', ua.length + ' 글자'],
+            ];
+
+            const table = document.getElementById('detail-table');
+            table.innerHTML = details.map(([k, v]) => '<tr><td>' + k + '</td><td>' + v + '</td></tr>').join('');
+            document.getElementById('detail-panel').style.display = 'block';
+        }
+
+        initPresets();
+        document.getElementById('ua-input').value = navigator.userAgent;
+        parseUA();
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

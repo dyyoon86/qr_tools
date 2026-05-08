@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="cronTitle">Cron 표현식 해석기 - ionflow.xyz</title>
-    <meta name="description" content="Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다. 비주얼 빌더를 제공합니다.">
+    <title data-i18n="cronPageTitle">Cron 표현식 해석기 - ionflow.xyz</title>
+    <meta name="description" data-i18n="cronPageDesc" content="Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다. 비주얼 빌더를 제공합니다.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/cron.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
@@ -15,12 +23,409 @@
     <meta property="og:url" content="https://ionflow.xyz/tools/cron.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cron 표현식 해석기 - ionflow.xyz">
+    <meta name="twitter:description" content="Cron 표현식을 자연어로 해석하고 다음 실행 시각을 확인합니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/cron.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/cron.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/cron.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        .cron-input-row {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+            margin-bottom: 20px;
+        }
+        .cron-input-row input {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            letter-spacing: 0.05em;
+        }
+        .cron-fields {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cron-field {
+            background: var(--bg-secondary, #f8f9fa);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 8px;
+            padding: 10px 12px;
+            text-align: center;
+        }
+        .cron-field-label {
+            font-size: 11px;
+            color: var(--text-secondary, #718096);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+        .cron-field-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-color, #3b82f6);
+        }
+        .cron-desc {
+            background: linear-gradient(135deg, #ebf8ff, #f0fff4);
+            border: 1px solid #bee3f8;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #2d3748;
+            text-align: center;
+            min-height: 58px;
+        }
+        .cron-desc.error-desc {
+            background: #fff5f5;
+            border-color: #fed7d7;
+            color: #c53030;
+        }
+        .presets-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .preset-btn {
+            padding: 7px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color, #e2e8f0);
+            background: var(--bg-secondary, #f8f9fa);
+            cursor: pointer;
+            font-size: 13px;
+            font-family: inherit;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .preset-btn:hover {
+            background: var(--accent-color, #3b82f6);
+            color: #fff;
+            border-color: var(--accent-color, #3b82f6);
+        }
+        .preset-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-secondary, #718096);
+            display: block;
+            margin-top: 2px;
+        }
+        .next-runs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .next-runs-list li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border-color, #e2e8f0);
+            font-size: 14px;
+        }
+        .next-runs-list li:last-child { border-bottom: none; }
+        .run-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent-color, #3b82f6);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .run-time { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .run-rel { color: var(--text-secondary, #718096); font-size: 12px; }
+        @media (max-width: 640px) {
+            .cron-fields { grid-template-columns: repeat(3, 1fr); }
+            .cron-input-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="cronHeading">Cron 표현식 해석기</h1>
+        <p data-i18n="cronSubheading">Cron 표현식을 자연어로 해석하고, 다음 실행 시각을 확인합니다.</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="cronInputTitle">Cron 표현식</span>
+            </div>
+            <div class="cron-input-row">
+                <input type="text" id="cron-input" class="code-font" value="0 9 * * 1-5" spellcheck="false" placeholder="분 시 일 월 요일">
+                <button class="action-btn primary" data-i18n="cronParseBtn" onclick="parseCron()">분석</button>
+            </div>
+            <div class="cron-fields" id="cron-fields"></div>
+        </div>
+
+        <div id="cron-desc" class="cron-desc">Cron 표현식을 입력하세요.</div>
+
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="cronPresetTitle">빠른 프리셋</span>
+            </div>
+            <div class="presets-grid" id="presets"></div>
+        </div>
+
+        <div class="panel" id="next-runs-panel" style="display:none;">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="cronNextRunsTitle">다음 5회 실행 시각</span>
+            </div>
+            <ul class="next-runs-list" id="next-runs-list"></ul>
+        </div>
+    </main>
+
+    <script>
+        var PRESETS = [
+            { label: '매분', code: '* * * * *' },
+            { label: '매시간', code: '0 * * * *' },
+            { label: '매일 자정', code: '0 0 * * *' },
+            { label: '매일 오전 9시', code: '0 9 * * *' },
+            { label: '매일 오전 6시', code: '0 6 * * *' },
+            { label: '매주 월요일 9시', code: '0 9 * * 1' },
+            { label: '평일 오전 9시', code: '0 9 * * 1-5' },
+            { label: '매월 1일', code: '0 0 1 * *' },
+            { label: '매년 1월 1일', code: '0 0 1 1 *' },
+            { label: '30분마다', code: '*/30 * * * *' },
+            { label: '6시간마다', code: '0 */6 * * *' },
+            { label: '매주 일요일 자정', code: '0 0 * * 0' },
+        ];
+
+        var FIELD_NAMES = ['분', '시', '일', '월', '요일'];
+        var FIELD_RANGES = ['0-59', '0-23', '1-31', '1-12', '0-6'];
+
+        function renderPresets() {
+            var container = document.getElementById('presets');
+            container.innerHTML = PRESETS.map(function(p){
+                return '<button class="preset-btn" onclick="applyPreset(\''+p.code+'\')">'
+                    + p.label + '<span class="preset-code">' + p.code + '</span></button>';
+            }).join('');
+        }
+
+        function applyPreset(code) {
+            document.getElementById('cron-input').value = code;
+            parseCron();
+        }
+
+        function renderFields(parts) {
+            var html = '';
+            for (var i = 0; i < 5; i++) {
+                html += '<div class="cron-field">'
+                    + '<div class="cron-field-label">' + FIELD_NAMES[i] + '<br><span style="font-size:10px;font-weight:400;">' + FIELD_RANGES[i] + '</span></div>'
+                    + '<div class="cron-field-value">' + (parts[i] || '?') + '</div>'
+                    + '</div>';
+            }
+            document.getElementById('cron-fields').innerHTML = html;
+        }
+
+        function describeField(val, type) {
+            if (val === '*') return null;
+            if (type === 'min') {
+                if (/^\*\/(\d+)$/.test(val)) return '매 ' + val.split('/')[1] + '분마다';
+                if (/^\d+$/.test(val)) return val + '분';
+                if (/^(\d+)-(\d+)$/.test(val)) { var m = val.match(/^(\d+)-(\d+)$/); return m[1]+'분~'+m[2]+'분'; }
+                if (/^(\d+,)+\d+$/.test(val)) return val + '분';
+            }
+            if (type === 'hour') {
+                if (/^\*\/(\d+)$/.test(val)) return '매 ' + val.split('/')[1] + '시간마다';
+                if (/^\d+$/.test(val)) { var h = parseInt(val); return (h < 12 ? '오전 ' : '오후 ') + (h === 0 ? 12 : h > 12 ? h-12 : h) + '시'; }
+                if (/^(\d+)-(\d+)$/.test(val)) { var m2 = val.match(/^(\d+)-(\d+)$/); return m2[1]+'시~'+m2[2]+'시'; }
+                if (/^(\d+,)+\d+$/.test(val)) return val.split(',').map(function(h){ var n=parseInt(h); return (n<12?'오전 ':'오후 ')+(n===0?12:n>12?n-12:n)+'시'; }).join(', ');
+            }
+            if (type === 'day') {
+                if (/^\*\/(\d+)$/.test(val)) return '매 ' + val.split('/')[1] + '일마다';
+                if (/^\d+$/.test(val)) return val + '일';
+                if (/^(\d+)-(\d+)$/.test(val)) { var m3 = val.match(/^(\d+)-(\d+)$/); return m3[1]+'일~'+m3[2]+'일'; }
+            }
+            if (type === 'month') {
+                var MONTHS = ['','1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+                if (/^\d+$/.test(val)) return MONTHS[parseInt(val)] || val+'월';
+                if (/^(\d+)-(\d+)$/.test(val)) { var m4 = val.match(/^(\d+)-(\d+)$/); return (MONTHS[parseInt(m4[1])]||m4[1]+'월')+'~'+(MONTHS[parseInt(m4[2])]||m4[2]+'월'); }
+            }
+            if (type === 'dow') {
+                var DAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+                if (/^\d+$/.test(val)) return DAYS[parseInt(val)] || val;
+                if (/^(\d+)-(\d+)$/.test(val)) { var m5 = val.match(/^(\d+)-(\d+)$/); return (DAYS[parseInt(m5[1])]||m5[1])+'~'+(DAYS[parseInt(m5[2])]||m5[2]); }
+                if (/^(\d+,)+\d+$/.test(val)) return val.split(',').map(function(d){ return DAYS[parseInt(d)]||d; }).join(', ');
+            }
+            return val;
+        }
+
+        function buildDescription(parts) {
+            var min = parts[0], hour = parts[1], day = parts[2], month = parts[3], dow = parts[4];
+            var desc = '';
+
+            // frequency prefix
+            if (min === '*' && hour === '*') {
+                desc = '매분';
+            } else if (min !== '*' && hour === '*') {
+                var md = describeField(min, 'min');
+                desc = '매시간 ' + (md || min) + '에';
+            } else {
+                var hd = describeField(hour, 'hour') || hour + '시';
+                var md2 = (min === '0') ? '' : ' ' + (describeField(min,'min') || min+'분');
+                desc = hd + md2 + '에';
+                if (/^\*\//.test(hour)) desc = describeField(hour,'hour') + '마다';
+            }
+
+            // day of week
+            if (dow !== '*') {
+                var dowd = describeField(dow, 'dow');
+                desc = '매주 ' + dowd + ' ' + desc;
+            } else if (day !== '*') {
+                var dd = describeField(day, 'day');
+                desc = '매월 ' + dd + ' ' + desc;
+            } else {
+                if (hour !== '*' || min === '0') {
+                    if (dow === '*' && day === '*') desc = '매일 ' + desc;
+                }
+            }
+
+            // month restriction
+            if (month !== '*') {
+                var modd = describeField(month, 'month');
+                desc = modd + '의 ' + desc;
+            }
+
+            return desc || '매분 실행';
+        }
+
+        function validateCron(parts) {
+            if (parts.length !== 5) return '5개의 필드가 필요합니다 (분 시 일 월 요일)';
+            var ranges = [[0,59],[0,23],[1,31],[1,12],[0,6]];
+            var names = ['분','시','일','월','요일'];
+            for (var i = 0; i < 5; i++) {
+                var v = parts[i];
+                if (v === '*') continue;
+                if (/^\*\/\d+$/.test(v)) {
+                    var step = parseInt(v.split('/')[1]);
+                    if (step < 1) return names[i] + ' 필드의 스텝 값이 유효하지 않습니다.';
+                    continue;
+                }
+                if (/^\d+$/.test(v)) {
+                    var n = parseInt(v);
+                    if (n < ranges[i][0] || n > ranges[i][1]) return names[i] + ' 필드 값 ' + n + '은 범위(' + ranges[i][0] + '-' + ranges[i][1] + ')를 벗어났습니다.';
+                    continue;
+                }
+                if (/^\d+-\d+$/.test(v)) {
+                    var m = v.match(/^(\d+)-(\d+)$/);
+                    var a = parseInt(m[1]), b = parseInt(m[2]);
+                    if (a > b) return names[i] + ' 필드의 범위가 올바르지 않습니다.';
+                    if (a < ranges[i][0] || b > ranges[i][1]) return names[i] + ' 필드 범위가 허용 범위를 벗어났습니다.';
+                    continue;
+                }
+                if (/^(\d+,)+\d+$/.test(v)) continue;
+                return names[i] + ' 필드 "' + v + '"를 인식할 수 없습니다.';
+            }
+            return null;
+        }
+
+        function getNextRuns(parts, count) {
+            var results = [];
+            var now = new Date();
+            var cur = new Date(now);
+            cur.setSeconds(0, 0);
+            cur.setMinutes(cur.getMinutes() + 1);
+
+            function matchField(val, n, min, max) {
+                if (val === '*') return true;
+                if (/^\*\/(\d+)$/.test(val)) { var step = parseInt(val.split('/')[1]); return (n - min) % step === 0; }
+                if (/^\d+$/.test(val)) return parseInt(val) === n;
+                if (/^\d+-\d+$/.test(val)) { var m = val.match(/^(\d+)-(\d+)$/); return n >= parseInt(m[1]) && n <= parseInt(m[2]); }
+                if (/^(\d+,)+\d+$/.test(val)) return val.split(',').map(Number).indexOf(n) !== -1;
+                return false;
+            }
+
+            var attempts = 0;
+            while (results.length < count && attempts < 500000) {
+                attempts++;
+                var mn = cur.getMinutes(), hr = cur.getHours(), dy = cur.getDate(),
+                    mo = cur.getMonth() + 1, dw = cur.getDay();
+                if (matchField(parts[3], mo, 1, 12) &&
+                    matchField(parts[2], dy, 1, 31) &&
+                    matchField(parts[4], dw, 0, 6) &&
+                    matchField(parts[1], hr, 0, 23) &&
+                    matchField(parts[0], mn, 0, 59)) {
+                    results.push(new Date(cur));
+                }
+                cur.setMinutes(cur.getMinutes() + 1);
+            }
+            return results;
+        }
+
+        function relativeTime(d) {
+            var diff = Math.round((d - Date.now()) / 1000);
+            if (diff < 60) return diff + '초 후';
+            if (diff < 3600) return Math.round(diff/60) + '분 후';
+            if (diff < 86400) return Math.round(diff/3600) + '시간 후';
+            return Math.round(diff/86400) + '일 후';
+        }
+
+        function parseCron() {
+            var expr = document.getElementById('cron-input').value.trim();
+            var parts = expr.split(/\s+/);
+
+            renderFields(parts);
+
+            var err = validateCron(parts);
+            var descEl = document.getElementById('cron-desc');
+            if (err) {
+                descEl.textContent = '오류: ' + err;
+                descEl.className = 'cron-desc error-desc';
+                document.getElementById('next-runs-panel').style.display = 'none';
+                return;
+            }
+
+            var desc = buildDescription(parts);
+            descEl.textContent = desc;
+            descEl.className = 'cron-desc';
+
+            var runs = getNextRuns(parts, 5);
+            var panel = document.getElementById('next-runs-panel');
+            var list = document.getElementById('next-runs-list');
+            if (runs.length === 0) {
+                panel.style.display = 'none';
+                return;
+            }
+            panel.style.display = 'block';
+            list.innerHTML = runs.map(function(d, i){
+                return '<li><span class="run-num">'+(i+1)+'</span>'
+                    + '<span class="run-time">'+d.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+'</span>'
+                    + '<span class="run-rel">'+relativeTime(d)+'</span></li>';
+            }).join('');
+        }
+
+        renderPresets();
+        parseCron();
+
+        document.getElementById('cron-input').addEventListener('input', function(){
+            clearTimeout(window._cronTimer);
+            window._cronTimer = setTimeout(parseCron, 300);
+        });
+        document.getElementById('cron-input').addEventListener('keydown', function(e){
+            if (e.key === 'Enter') parseCron();
+        });
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>

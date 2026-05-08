@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXJSQD3KBJ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YXJSQD3KBJ');</script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YXJSQD3KBJ');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="checklistTitle">체크리스트 관리자 - ionflow.xyz</title>
-    <meta name="description" content="간편한 온라인 체크리스트입니다. 할일 목록을 관리하고 브라우저에 자동 저장됩니다.">
+    <title data-i18n="checklistPageTitle">체크리스트 관리자 - ionflow.xyz</title>
+    <meta name="description" data-i18n="checklistPageDesc" content="간편한 온라인 체크리스트입니다. 할일 목록을 관리하고 브라우저에 자동 저장됩니다.">
+
     <link rel="canonical" href="https://ionflow.xyz/tools/checklist.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="ionflow.xyz">
@@ -15,12 +23,364 @@
     <meta property="og:url" content="https://ionflow.xyz/tools/checklist.html">
     <meta property="og:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="체크리스트 관리자 - ionflow.xyz">
+    <meta name="twitter:description" content="간편한 온라인 체크리스트. 할일 목록을 관리하고 자동 저장됩니다.">
+    <meta name="twitter:image" content="https://ionflow.xyz/assets/images/og-image.png">
     <link rel="alternate" hreflang="ko" href="https://ionflow.xyz/tools/checklist.html">
     <link rel="alternate" hreflang="en" href="https://ionflow.xyz/tools/checklist.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://ionflow.xyz/tools/checklist.html">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/common.css">
+
+    <style>
+        .add-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .add-row input {
+            flex: 1;
+            font-size: 15px;
+        }
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color, #e2e8f0);
+            background: var(--bg-secondary, #f8f9fa);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.15s;
+        }
+        .filter-btn.active {
+            background: var(--accent-color, #3b82f6);
+            color: #fff;
+            border-color: var(--accent-color, #3b82f6);
+        }
+        .filter-btn:hover:not(.active) {
+            border-color: var(--accent-color, #3b82f6);
+        }
+        .stats {
+            font-size: 13px;
+            color: var(--text-secondary, #718096);
+            margin-left: auto;
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border-color, #e2e8f0);
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+        .todo-item:last-child { border-bottom: none; }
+        .todo-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color, #e2e8f0);
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+            background: transparent;
+        }
+        .todo-check:hover { border-color: var(--accent-color, #3b82f6); }
+        .todo-check.done {
+            background: var(--accent-color, #3b82f6);
+            border-color: var(--accent-color, #3b82f6);
+        }
+        .todo-check.done::after {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 10px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translate(-1px, -1px);
+        }
+        .todo-text {
+            flex: 1;
+            font-size: 15px;
+            word-break: break-word;
+            outline: none;
+            cursor: text;
+        }
+        .todo-text.done-text {
+            text-decoration: line-through;
+            color: var(--text-secondary, #718096);
+        }
+        .todo-date {
+            font-size: 11px;
+            color: var(--text-secondary, #718096);
+            flex-shrink: 0;
+        }
+        .todo-del {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary, #718096);
+            font-size: 18px;
+            padding: 0 4px;
+            line-height: 1;
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .todo-item:hover .todo-del { opacity: 1; }
+        .todo-del:hover { color: #c53030; }
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-secondary, #718096);
+        }
+        .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+        .bottom-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .bottom-bar .clear-done {
+            font-size: 13px;
+            color: var(--text-secondary, #718096);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+        }
+        .bottom-bar .clear-done:hover { color: #c53030; text-decoration: underline; }
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-secondary, #f0f0f0);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color, #3b82f6);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 data-i18n="checklistHeading">체크리스트</h1>
+        <p data-i18n="checklistSubheading">할일 목록을 관리합니다. 브라우저에 자동으로 저장됩니다.</p>
+    </div>
+
+    <main>
+        <div id="status" class="status"></div>
+
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="checklistAddTitle">할일 추가</span>
+            </div>
+            <div class="add-row">
+                <input type="text" id="todo-input" placeholder="새 할일을 입력하세요..." maxlength="200">
+                <button class="action-btn primary" data-i18n="checklistAddBtn" onclick="addTodo()">추가</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title" data-i18n="checklistListTitle">목록</span>
+                <div class="panel-actions">
+                    <button onclick="exportTodos()">내보내기</button>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">전체</button>
+                <button class="filter-btn" id="filter-active" onclick="setFilter('active')">미완료</button>
+                <button class="filter-btn" id="filter-done" onclick="setFilter('done')">완료</button>
+                <span class="stats" id="stats-text"></span>
+            </div>
+
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+            <ul class="todo-list" id="todo-list"></ul>
+
+            <div class="bottom-bar">
+                <button class="clear-done" onclick="clearDone()">완료된 항목 삭제</button>
+                <span style="flex:1;"></span>
+                <button class="filter-btn" onclick="clearAll()" style="color:#c53030;border-color:#fed7d7;">전체 삭제</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var STORAGE_KEY = 'ionflow_checklist_v1';
+        var todos = [];
+        var currentFilter = 'all';
+
+        function load() {
+            try {
+                var raw = localStorage.getItem(STORAGE_KEY);
+                todos = raw ? JSON.parse(raw) : [];
+            } catch(e) { todos = []; }
+        }
+
+        function save() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(todos)); } catch(e) {}
+        }
+
+        function addTodo() {
+            var input = document.getElementById('todo-input');
+            var text = input.value.trim();
+            if (!text) { input.focus(); return; }
+            todos.unshift({ id: Date.now(), text: text, done: false, created: new Date().toLocaleDateString('ko-KR') });
+            input.value = '';
+            save();
+            render();
+            showStatus('추가되었습니다');
+        }
+
+        function toggleTodo(id) {
+            var item = todos.find(function(t){ return t.id === id; });
+            if (item) { item.done = !item.done; save(); render(); }
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(function(t){ return t.id !== id; });
+            save();
+            render();
+        }
+
+        function updateText(id, text) {
+            var item = todos.find(function(t){ return t.id === id; });
+            if (item) { item.text = text; save(); }
+        }
+
+        function clearDone() {
+            var before = todos.length;
+            todos = todos.filter(function(t){ return !t.done; });
+            save();
+            render();
+            showStatus('완료된 ' + (before - todos.length) + '개 항목이 삭제되었습니다');
+        }
+
+        function clearAll() {
+            if (!todos.length) return;
+            if (!confirm('모든 할일을 삭제하시겠습니까?')) return;
+            todos = [];
+            save();
+            render();
+        }
+
+        function setFilter(f) {
+            currentFilter = f;
+            ['all','active','done'].forEach(function(ff){
+                document.getElementById('filter-'+ff).className = 'filter-btn' + (ff === f ? ' active' : '');
+            });
+            render();
+        }
+
+        function filtered() {
+            if (currentFilter === 'active') return todos.filter(function(t){ return !t.done; });
+            if (currentFilter === 'done') return todos.filter(function(t){ return t.done; });
+            return todos;
+        }
+
+        function render() {
+            var list = document.getElementById('todo-list');
+            var items = filtered();
+            var total = todos.length;
+            var done = todos.filter(function(t){ return t.done; }).length;
+
+            // stats
+            document.getElementById('stats-text').textContent = done + ' / ' + total + ' 완료';
+            var pct = total ? Math.round(done / total * 100) : 0;
+            document.getElementById('progress-fill').style.width = pct + '%';
+
+            if (items.length === 0) {
+                var msg = currentFilter === 'all' ? '할일이 없습니다. 새 항목을 추가해보세요!' :
+                          currentFilter === 'active' ? '미완료 항목이 없습니다.' : '완료된 항목이 없습니다.';
+                list.innerHTML = '<li><div class="empty-state"><div class="empty-state-icon">' +
+                    (currentFilter === 'done' ? '✅' : '📋') + '</div>' + msg + '</div></li>';
+                return;
+            }
+
+            list.innerHTML = items.map(function(item){
+                return '<li class="todo-item" id="item-'+item.id+'">'
+                    + '<div class="todo-check'+(item.done?' done':'')+'" onclick="toggleTodo('+item.id+')"></div>'
+                    + '<span class="todo-text'+(item.done?' done-text':'')+'" contenteditable="true" '
+                    + 'onblur="updateText('+item.id+', this.textContent.trim())" '
+                    + 'onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">'
+                    + esc(item.text) + '</span>'
+                    + '<span class="todo-date">' + (item.created || '') + '</span>'
+                    + '<button class="todo-del" onclick="deleteTodo('+item.id+')" title="삭제">&times;</button>'
+                    + '</li>';
+            }).join('');
+        }
+
+        function esc(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function exportTodos() {
+            if (!todos.length) { showStatus('내보낼 항목이 없습니다.', true); return; }
+            var lines = ['체크리스트 - ' + new Date().toLocaleDateString('ko-KR'), ''];
+            todos.forEach(function(t){
+                lines.push((t.done ? '[✓] ' : '[ ] ') + t.text);
+            });
+            var done = todos.filter(function(t){ return t.done; }).length;
+            lines.push('');
+            lines.push('진행률: ' + done + ' / ' + todos.length + ' (' + Math.round(done/todos.length*100) + '%)');
+            var blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'checklist-' + new Date().toISOString().slice(0,10) + '.txt';
+            a.click();
+            showStatus('내보내기 완료');
+        }
+
+        function showStatus(msg, isError) {
+            var s = document.getElementById('status');
+            s.textContent = msg;
+            s.className = 'status ' + (isError ? 'error' : 'success');
+            setTimeout(function(){ s.className = 'status'; }, 3000);
+        }
+
+        document.getElementById('todo-input').addEventListener('keydown', function(e){
+            if (e.key === 'Enter') addTodo();
+        });
+
+        load();
+        render();
+    </script>
     <script src="/assets/js/i18n.js?v=4"></script>
     <script src="/assets/js/layout.js?v=3"></script>
 </body>
