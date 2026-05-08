@@ -41,7 +41,7 @@
                     </a>
                     <a href="/downloads/" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#0071e3;text-decoration:none;padding:6px 14px;border-radius:980px;background:rgba(0,113,227,0.08);transition:background 0.2s;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        다운로드
+                        자료실
                     </a>
                     ${langSelector}
                 </div>
